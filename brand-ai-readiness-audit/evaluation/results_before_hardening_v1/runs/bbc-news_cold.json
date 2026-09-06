@@ -1,0 +1,94 @@
+{
+  "site_id": "bbc-news",
+  "site": "https://www.bbc.com/news",
+  "site_type": "news",
+  "tags": [
+    "news",
+    "large",
+    "many-urls",
+    "stress"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T13:19:10Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 49519.69003677368,
+    "wall_ms": 49526.96919441223,
+    "crawl_ms": 38606.68087005615,
+    "render_ms": 704.9517631530762,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 1.020193099975586,
+      "crawl-access-audit": 0.5791187286376953,
+      "render-extract-audit": 3519.9790000915527,
+      "citation-extractability-audit": 0.012874603271484375,
+      "entity-identity-audit": 3583.7340354919434,
+      "freshness-audit": 55.00912666320801,
+      "ai-answerability-audit": 32.134056091308594,
+      "engagement-handoff-audit": 842.6430225372314,
+      "corroboration-consistency-audit": 2876.6441345214844
+    },
+    "external_fetch_ms": 958.9779376983643,
+    "report_ms": 0.5462169647216797,
+    "merge_ms": 0.07915496826171875
+  },
+  "counts": {
+    "http_requests": 57,
+    "pages_crawled": 40,
+    "pages_rendered": 13,
+    "render_count": 13,
+    "llm_calls": 0,
+    "external_fetches": 5,
+    "findings": 5,
+    "critical": 0,
+    "high": 2,
+    "medium": 3,
+    "low": 0,
+    "templates": 33
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 2,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "A",
+    "secondary": [],
+    "ymyl": true,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 3,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "48601ec4-23ff-4c9b-afe0-9818bf595f6b",
+  "error": null
+}

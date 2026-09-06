@@ -1,0 +1,92 @@
+{
+  "site_id": "example-small",
+  "site": "https://example.com/",
+  "site_type": "static",
+  "tags": [
+    "static",
+    "small"
+  ],
+  "phase": "warm",
+  "timestamp": "2026-09-06T19:07:43Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 595.5319404602051,
+    "wall_ms": 608.5140705108643,
+    "crawl_ms": 579.9627304077148,
+    "render_ms": 0.17571449279785156,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.08702278137207031,
+      "crawl-access-audit": 0.04029273986816406,
+      "render-extract-audit": 4.794120788574219,
+      "citation-extractability-audit": 2.276182174682617,
+      "entity-identity-audit": 2.084016799926758,
+      "freshness-audit": 0.03886222839355469,
+      "ai-answerability-audit": 0.19478797912597656,
+      "engagement-handoff-audit": 3.729104995727539,
+      "corroboration-consistency-audit": 2.0461082458496094
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.36525726318359375,
+    "merge_ms": 0.1270771026611328
+  },
+  "counts": {
+    "http_requests": 3,
+    "pages_crawled": 1,
+    "pages_rendered": 1,
+    "render_count": 1,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 3,
+    "critical": 0,
+    "high": 1,
+    "medium": 2,
+    "low": 0,
+    "templates": 1
+  },
+  "robots_status": "missing",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "budget",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "D",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 3,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "2725c016-b5ab-47cc-8048-f0bbd5c308a2",
+  "error": null
+}

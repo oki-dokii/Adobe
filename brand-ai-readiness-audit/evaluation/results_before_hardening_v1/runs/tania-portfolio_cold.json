@@ -1,0 +1,95 @@
+{
+  "site_id": "tania-portfolio",
+  "site": "https://www.taniarascia.com/",
+  "site_type": "portfolio",
+  "tags": [
+    "portfolio",
+    "blog",
+    "small"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T13:29:04Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 69004.01091575623,
+    "wall_ms": 69010.39695739746,
+    "crawl_ms": 59752.93684005737,
+    "render_ms": 418.4424877166748,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.6539821624755859,
+      "crawl-access-audit": 0.347137451171875,
+      "render-extract-audit": 1912.0750427246094,
+      "citation-extractability-audit": 23.714065551757812,
+      "entity-identity-audit": 2308.090925216675,
+      "freshness-audit": 43.630123138427734,
+      "ai-answerability-audit": 36.60702705383301,
+      "engagement-handoff-audit": 435.344934463501,
+      "corroboration-consistency-audit": 4490.17596244812
+    },
+    "external_fetch_ms": 2390.5727863311768,
+    "report_ms": 0.24700164794921875,
+    "merge_ms": 0.047206878662109375
+  },
+  "counts": {
+    "http_requests": 52,
+    "pages_crawled": 40,
+    "pages_rendered": 11,
+    "render_count": 11,
+    "llm_calls": 0,
+    "external_fetches": 6,
+    "findings": 2,
+    "critical": 0,
+    "high": 1,
+    "medium": 1,
+    "low": 0,
+    "templates": 28
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "D",
+    "secondary": [
+      "F"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": false,
+    "saas": true,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 3,
+      "E": 0,
+      "F": 2
+    }
+  },
+  "run_id": "bd56d94f-66f2-4357-beb5-a85fb790c5e3",
+  "error": null
+}

@@ -1,0 +1,93 @@
+{
+  "site_id": "redcross",
+  "site": "https://www.redcross.org/",
+  "site_type": "nonprofit",
+  "tags": [
+    "nonprofit",
+    "medium"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T19:19:35Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 589.465856552124,
+    "wall_ms": 595.8898067474365,
+    "crawl_ms": 589.2279148101807,
+    "render_ms": 0.0,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.03790855407714844,
+      "crawl-access-audit": 0.010967254638671875,
+      "render-extract-audit": 0.005245208740234375,
+      "citation-extractability-audit": 0.0073909759521484375,
+      "entity-identity-audit": 0.008821487426757812,
+      "freshness-audit": 0.007867813110351562,
+      "ai-answerability-audit": 0.0457763671875,
+      "engagement-handoff-audit": 0.005245208740234375,
+      "corroboration-consistency-audit": 0.010013580322265625
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.18310546875,
+    "merge_ms": 0.02384185791015625
+  },
+  "counts": {
+    "http_requests": 3,
+    "pages_crawled": 1,
+    "pages_rendered": 0,
+    "render_count": 0,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 1,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 1,
+    "templates": 1
+  },
+  "robots_status": "fail_open",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "budget",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Access limitation: https://www.redcross.org/: HTTP 403 (HTTP 403 forbidden (body not used as public brand evidence)). These bodies were not used as brand/answerability evidence.",
+    "Headless render unavailable or skipped; dual-fetch used raw HTML as rendered unless tests injected rendered_html."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "partial",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "unknown",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "low",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "fbbe3719-a17b-454c-8689-30c522a72ae9",
+  "error": null
+}

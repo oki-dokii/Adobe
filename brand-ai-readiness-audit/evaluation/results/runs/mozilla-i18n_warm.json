@@ -1,0 +1,94 @@
+{
+  "site_id": "mozilla-i18n",
+  "site": "https://www.mozilla.org/",
+  "site_type": "multilingual",
+  "tags": [
+    "multilingual",
+    "nonprofit",
+    "medium"
+  ],
+  "phase": "warm",
+  "timestamp": "2026-09-06T19:20:15Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 13137.748003005981,
+    "wall_ms": 13144.02985572815,
+    "crawl_ms": 10468.667984008789,
+    "render_ms": 64.30912017822266,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.4749298095703125,
+      "crawl-access-audit": 0.40984153747558594,
+      "render-extract-audit": 1138.658046722412,
+      "citation-extractability-audit": 508.8677406311035,
+      "entity-identity-audit": 12.031078338623047,
+      "freshness-audit": 21.800994873046875,
+      "ai-answerability-audit": 27.781963348388672,
+      "engagement-handoff-audit": 480.11302947998047,
+      "corroboration-consistency-audit": 478.68895530700684
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.15878677368164062,
+    "merge_ms": 0.032901763916015625
+  },
+  "counts": {
+    "http_requests": 48,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 3,
+    "critical": 0,
+    "high": 0,
+    "medium": 3,
+    "low": 0,
+    "templates": 4
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 4,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=30, protected_requests=40. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "F",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": false,
+    "saas": true,
+    "confidence": "medium",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 2
+    }
+  },
+  "run_id": "08f0e6ad-97c9-40be-871a-2bd9d60f74bd",
+  "error": null
+}

@@ -1,0 +1,95 @@
+{
+  "site_id": "etsy",
+  "site": "https://www.etsy.com/",
+  "site_type": "marketplace",
+  "tags": [
+    "marketplace",
+    "ecommerce",
+    "large",
+    "stress"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T19:20:25Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 1288.9599800109863,
+    "wall_ms": 1298.8190650939941,
+    "crawl_ms": 1277.7118682861328,
+    "render_ms": 0.0,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.050067901611328125,
+      "crawl-access-audit": 10.696887969970703,
+      "render-extract-audit": 0.0059604644775390625,
+      "citation-extractability-audit": 0.008106231689453125,
+      "entity-identity-audit": 0.007152557373046875,
+      "freshness-audit": 0.009059906005859375,
+      "ai-answerability-audit": 0.06008148193359375,
+      "engagement-handoff-audit": 0.010967254638671875,
+      "corroboration-consistency-audit": 0.010967254638671875
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.19407272338867188,
+    "merge_ms": 0.025033950805664062
+  },
+  "counts": {
+    "http_requests": 3,
+    "pages_crawled": 1,
+    "pages_rendered": 0,
+    "render_count": 0,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 1,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 1,
+    "templates": 1
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "budget",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Access limitation: https://www.etsy.com/: HTTP 403 (captcha / bot verification). These bodies were not used as brand/answerability evidence.",
+    "Headless render unavailable or skipped; dual-fetch used raw HTML as rendered unless tests injected rendered_html."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "partial",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "unknown",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "low",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "c548f6db-e220-4ef8-a520-16917de0fa70",
+  "error": null
+}

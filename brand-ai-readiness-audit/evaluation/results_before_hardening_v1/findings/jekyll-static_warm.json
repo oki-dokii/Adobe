@@ -1,0 +1,419 @@
+{
+  "site": "jekyllrb.com",
+  "summary": {
+    "total_findings": 4,
+    "critical": 0,
+    "high": 2,
+    "medium": 2,
+    "low": 0
+  },
+  "findings": [
+    {
+      "id": "F-004",
+      "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "severity": "high",
+      "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 21, 'k_categories_hit': ['K3', 'K6'], 'stopped_reason': 'early_stop', 'pages_verified_per_template': {'t-1': 1, 't-2': 11, 't-3': 6, 't-4': 1, 't-5': 1, 't-6': 1, 't-7': 1, 't-8': 4, 't-9': 1, 't-10': 1, 't-11': 1, 't-12': 2, 't-13': 1, 't-14': 1, 't-15': 1, 't-16': 1, 't-17': 1, 't-18': 1, 't-19': 1, 't-20': 1, 't-21': 1}, 'render_max': 10, 'http_requests': 42, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 0, 'ssrf_blocks': 0}. ",
+      "suggested_action": "Add a visible, extractable sentence that answers this question on the intent-matched page."
+    },
+    {
+      "id": "F-003",
+      "title": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+      "severity": "high",
+      "evidence": "short/common-looking name 'Assets'; no 'we are a {category}' sentence on https://jekyllrb.com/docs/assets/. No web search was used.",
+      "suggested_action": "Add an early sentence of the form \u201c{Brand} is a {category} in {geo}.\u201d"
+    },
+    {
+      "id": "F-001",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "severity": "medium",
+      "evidence": "0 in-edges for https://jekyllrb.com/docs/code_of_conduct/. Coverage 40/200. Isolation may be a coverage artifact.",
+      "suggested_action": "Add an inbound link from a higher-centrality page to this URL."
+    },
+    {
+      "id": "F-002",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "severity": "medium",
+      "evidence": "0 in-edges for https://jekyllrb.com/docs/history/. Coverage 40/200. Isolation may be a coverage artifact.",
+      "suggested_action": "Add an inbound link from a higher-centrality page to this URL."
+    }
+  ],
+  "findings_internal": [
+    {
+      "id": "F-004",
+      "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "severity": "high",
+      "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 21, 'k_categories_hit': ['K3', 'K6'], 'stopped_reason': 'early_stop', 'pages_verified_per_template': {'t-1': 1, 't-2': 11, 't-3': 6, 't-4': 1, 't-5': 1, 't-6': 1, 't-7': 1, 't-8': 4, 't-9': 1, 't-10': 1, 't-11': 1, 't-12': 2, 't-13': 1, 't-14': 1, 't-15': 1, 't-16': 1, 't-17': 1, 't-18': 1, 't-19': 1, 't-20': 1, 't-21': 1}, 'render_max': 10, 'http_requests': 42, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 0, 'ssrf_blocks': 0}. ",
+      "suggested_action": {
+        "summary": "Add a visible, extractable sentence that answers this question on the intent-matched page.",
+        "priority": "medium",
+        "what": "What does this organization offer or do?",
+        "where": "",
+        "how": "",
+        "why": "Completeness gap, not a quotation-window issue.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "unanswerable",
+      "finding_key": "2100c760894284ad",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "description": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://jekyllrb.com/docs/assets/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K3"
+      },
+      "status": "found"
+    },
+    {
+      "id": "F-003",
+      "title": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+      "severity": "high",
+      "evidence": "short/common-looking name 'Assets'; no 'we are a {category}' sentence on https://jekyllrb.com/docs/assets/. No web search was used.",
+      "suggested_action": {
+        "summary": "Add an early sentence of the form \u201c{Brand} is a {category} in {geo}.\u201d",
+        "priority": "medium",
+        "what": "",
+        "where": "https://jekyllrb.com/docs/assets/",
+        "how": "",
+        "why": "WhoQA-style mix-ups; Wikidata absence is not a defect.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "entity-identity-audit",
+      "finding_type": "collision_risk",
+      "finding_key": "b95fc9a0a7d077c9",
+      "category": "entity",
+      "confidence": "low",
+      "confidence_basis": "on-page heuristic only; no search API",
+      "evidence_tier": "OBS",
+      "root_cause": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+      "description": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://jekyllrb.com/docs/assets/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "entity-identity-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-001",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "severity": "medium",
+      "evidence": "0 in-edges for https://jekyllrb.com/docs/code_of_conduct/. Coverage 40/200. Isolation may be a coverage artifact.",
+      "suggested_action": {
+        "summary": "Add an inbound link from a higher-centrality page to this URL.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://jekyllrb.com/docs/code_of_conduct/",
+        "how": "",
+        "why": "Orphans are hard for crawlers to discover.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "crawl-access-audit",
+      "finding_type": "orphan",
+      "finding_key": "dfcd9630a50cfaf6",
+      "category": "access",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "High-value URL has no inbound links in the crawled graph",
+      "description": "High-value URL has no inbound links in the crawled graph",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://jekyllrb.com/docs/code_of_conduct/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "crawl-access-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-002",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "severity": "medium",
+      "evidence": "0 in-edges for https://jekyllrb.com/docs/history/. Coverage 40/200. Isolation may be a coverage artifact.",
+      "suggested_action": {
+        "summary": "Add an inbound link from a higher-centrality page to this URL.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://jekyllrb.com/docs/history/",
+        "how": "",
+        "why": "Orphans are hard for crawlers to discover.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "crawl-access-audit",
+      "finding_type": "orphan",
+      "finding_key": "286cc986506c4a74",
+      "category": "access",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "High-value URL has no inbound links in the crawled graph",
+      "description": "High-value URL has no inbound links in the crawled graph",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://jekyllrb.com/docs/history/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "crawl-access-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    }
+  ],
+  "suppressed": [],
+  "coverage": {
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "estimated_pages": 200,
+    "templates": 21,
+    "k_categories_hit": [
+      "K3",
+      "K6"
+    ],
+    "stopped_reason": "early_stop",
+    "pages_verified_per_template": {
+      "t-1": 1,
+      "t-2": 11,
+      "t-3": 6,
+      "t-4": 1,
+      "t-5": 1,
+      "t-6": 1,
+      "t-7": 1,
+      "t-8": 4,
+      "t-9": 1,
+      "t-10": 1,
+      "t-11": 1,
+      "t-12": 2,
+      "t-13": 1,
+      "t-14": 1,
+      "t-15": 1,
+      "t-16": 1,
+      "t-17": 1,
+      "t-18": 1,
+      "t-19": 1,
+      "t-20": 1,
+      "t-21": 1
+    },
+    "render_max": 10,
+    "http_requests": 42,
+    "robots_status": "ok",
+    "timeout_count": 0,
+    "redirect_hops_total": 0,
+    "ssrf_blocks": 0
+  },
+  "site_type": {
+    "cluster": "D",
+    "secondary": [
+      "B"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 2,
+      "C": 0,
+      "D": 3,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "skill_status": {
+    "successful_skills": [
+      "site-type-classifier",
+      "crawl-access-audit",
+      "render-extract-audit",
+      "citation-extractability-audit",
+      "entity-identity-audit",
+      "freshness-audit",
+      "ai-answerability-audit",
+      "engagement-handoff-audit",
+      "corroboration-consistency-audit"
+    ],
+    "failed_skills": [],
+    "skipped_dependent_skills": [],
+    "completed_findings": [
+      "F-004",
+      "F-003",
+      "F-001",
+      "F-002"
+    ],
+    "incomplete_areas": [],
+    "failures": [],
+    "by_skill": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    }
+  },
+  "limitations": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "timing": {
+    "crawl_ms": 9126.521110534668,
+    "render_ms": 33.88619422912598,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.4143714904785156,
+      "crawl-access-audit": 0.3979206085205078,
+      "render-extract-audit": 1075.1948356628418,
+      "citation-extractability-audit": 0.012159347534179688,
+      "entity-identity-audit": 9.782075881958008,
+      "freshness-audit": 23.127079010009766,
+      "ai-answerability-audit": 25.166034698486328,
+      "engagement-handoff-audit": 513.9281749725342,
+      "corroboration-consistency-audit": 455.9211730957031
+    },
+    "llm_ms": 0.0,
+    "llm_calls": 0,
+    "external_fetch_ms": 0.0,
+    "merge_ms": 0.027179718017578125,
+    "report_ms": 0.15878677368164062,
+    "total_ms": 11230.75819015503,
+    "skipped": [],
+    "http_requests": 42,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "external_requests": 0
+  },
+  "metrics": {
+    "answerability": {
+      "per_question": {
+        "K3": "unanswerable",
+        "K6": "answered",
+        "K13": "answered"
+      },
+      "CoreAnswerabilityRate": 0.6666666666666666,
+      "AnswerConcentration": 4.5,
+      "note": "Weights uncalibrated; per-question outcomes are primary. Composite citability is not a finding."
+    },
+    "skills": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    },
+    "skill_status": {
+      "successful_skills": [
+        "site-type-classifier",
+        "crawl-access-audit",
+        "render-extract-audit",
+        "citation-extractability-audit",
+        "entity-identity-audit",
+        "freshness-audit",
+        "ai-answerability-audit",
+        "engagement-handoff-audit",
+        "corroboration-consistency-audit"
+      ],
+      "failed_skills": [],
+      "skipped_dependent_skills": [],
+      "completed_findings": [
+        "F-004",
+        "F-003",
+        "F-001",
+        "F-002"
+      ],
+      "incomplete_areas": [],
+      "failures": [],
+      "by_skill": {
+        "site-type-classifier": "ok",
+        "crawl-access-audit": "ok",
+        "render-extract-audit": "ok",
+        "citation-extractability-audit": "ok",
+        "entity-identity-audit": "ok",
+        "freshness-audit": "ok",
+        "ai-answerability-audit": "ok",
+        "engagement-handoff-audit": "ok",
+        "corroboration-consistency-audit": "ok"
+      }
+    },
+    "audit_status": "ok",
+    "protect_list": [
+      "K3",
+      "admit",
+      "citation-extractability-audit-det",
+      "coverage",
+      "dual-fetch-facts",
+      "report",
+      "site-type-classifier"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+# Phase 20 — marketplace.json
+
+```json
+{
+  "name": "brand-ai-readiness-audit",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "audit-orchestrator",
+      "path": "skills/audit-orchestrator",
+      "entrypoint": true
+    },
+    { "id": "site-type-classifier", "path": "skills/site-type-classifier" },
+    { "id": "crawl-access-audit", "path": "skills/crawl-access-audit" },
+    { "id": "render-extract-audit", "path": "skills/render-extract-audit" },
+    { "id": "citation-extractability-audit", "path": "skills/citation-extractability-audit" },
+    { "id": "entity-identity-audit", "path": "skills/entity-identity-audit" },
+    { "id": "ai-answerability-audit", "path": "skills/ai-answerability-audit" },
+    { "id": "freshness-audit", "path": "skills/freshness-audit" },
+    { "id": "corroboration-consistency-audit", "path": "skills/corroboration-consistency-audit" },
+    { "id": "engagement-handoff-audit", "path": "skills/engagement-handoff-audit" }
+  ]
+}
+```
+
+- Exactly one entrypoint.
+- No padding skills.
+- `id` matches `name` in SKILL.md and folder.
+- Version 1.0.0 until first scored submission.

@@ -1,0 +1,1014 @@
+{
+  "site": "www.gov.uk",
+  "summary": {
+    "total_findings": 15,
+    "critical": 0,
+    "high": 1,
+    "medium": 14,
+    "low": 0
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "title": "YMYL pages lack a named reviewer or license disclosure",
+      "severity": "high",
+      "evidence": "Cluster A lexicon matched; sampled pages have no 'reviewed by' / license strings.",
+      "suggested_action": "Add a named reviewer, license, and jurisdiction in visible text on advice pages."
+    },
+    {
+      "id": "F-023",
+      "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "severity": "medium",
+      "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 40, 'templates': 8, 'k_categories_hit': ['K3'], 'stopped_reason': 'early_stop', 'pages_verified_per_template': {'t-1': 1, 't-2': 2, 't-3': 1, 't-4': 20, 't-5': 9, 't-6': 1, 't-7': 5, 't-8': 1}, 'render_max': 10, 'renders_requested': 40, 'renders_performed': 10, 'renders_skipped_budget': 30, 'protected_render_requests': 33, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 40}, 'http_requests': 65, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 13, 'ssrf_blocks': 0}. K6",
+      "suggested_action": "Add a visible, extractable sentence that answers this question on the intent-matched page."
+    },
+    {
+      "id": "F-022",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://www.gov.uk/government/organisations/department-for-work-pensions/about: 'ring against our objectives. Who we are We provide our services in a number of ways, for example through J'; homepage lacks it.",
+      "suggested_action": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer."
+    },
+    {
+      "id": "F-002",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025', '2025', '2025'] schema=['2026-08-14T18:31:16+01:00', '2025-06-30T09:07:49+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/tax-credits-agent-priority-line",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-003",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025', '1900', '2025'] schema=['2026-08-14T19:01:31+01:00', '2025-12-19T15:22:09+00:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-004",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025'] schema=['2026-08-14T18:59:16+01:00', '2025-05-14T17:51:58+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/agent-dedicated-line-debt-management",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-005",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025'] schema=['2026-08-14T18:52:47+01:00', '2025-05-14T17:51:31+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/central-agent-authorisation-team",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-006",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025', '2025', '2025'] schema=['2026-08-14T18:39:14+01:00', '2025-12-19T15:23:35+00:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-customs-and-excise-and-duties-enquiries-for-welsh-speaking-customers",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-007",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '1900', '1900', '2025'] schema=['2026-08-14T18:56:01+01:00', '2025-05-16T09:38:43+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/budd-dal-plant-ymholiadau-cyffredinol",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-008",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['1979', '2012', '2012', '1948'] schema=['2026-09-04T10:35:03+01:00', '2026-08-20T15:34:57+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-009",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['1979', '2012', '2012', '1948'] schema=['2026-09-04T10:35:03+01:00', '2026-08-20T15:34:57+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure.cy",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-010",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2018', '2024', '2018', '2024'] schema=['2026-09-04T10:32:24+01:00', '2024-01-31T15:33:59+00:00'] on https://www.gov.uk/guidance/contact-the-department-for-work-and-pensions-about-its-policies",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-011",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2023', '2025', '2022', '2023'] schema=['2026-09-04T10:35:04+01:00', '2023-11-02T09:30:01+00:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-012",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2018', '2018', '2018', '2018'] schema=['2026-09-04T10:36:15+01:00', '2021-09-13T13:37:25+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/accessible-documents-policy",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-013",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2023', '2025', '2010', '2014'] schema=['2026-09-04T10:35:02+01:00', '2024-04-22T10:22:13+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/equality-and-diversity",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    }
+  ],
+  "findings_internal": [
+    {
+      "id": "F-001",
+      "title": "YMYL pages lack a named reviewer or license disclosure",
+      "severity": "high",
+      "evidence": "Cluster A lexicon matched; sampled pages have no 'reviewed by' / license strings.",
+      "suggested_action": {
+        "summary": "Add a named reviewer, license, and jurisdiction in visible text on advice pages.",
+        "priority": "high",
+        "what": "Visible reviewer/license/jurisdiction",
+        "where": "YMYL topic pages",
+        "how": "Plain text near the advice, not only in footer chrome.",
+        "why": "YMYL harm and mix-up risk; hedges remain appropriate.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "site-type-classifier",
+      "finding_type": "ymy_disclosure",
+      "finding_key": "bad5188c1ecc248a",
+      "category": "site_type",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "YMYL pages lack a named reviewer or license disclosure",
+      "description": "YMYL pages lack a named reviewer or license disclosure",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/",
+        "https://www.gov.uk/contact/govuk",
+        "https://www.gov.uk/contact"
+      ],
+      "affected_pages_count": 3,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "site-type-classifier"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-023",
+      "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "severity": "medium",
+      "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 40, 'templates': 8, 'k_categories_hit': ['K3'], 'stopped_reason': 'early_stop', 'pages_verified_per_template': {'t-1': 1, 't-2': 2, 't-3': 1, 't-4': 20, 't-5': 9, 't-6': 1, 't-7': 5, 't-8': 1}, 'render_max': 10, 'renders_requested': 40, 'renders_performed': 10, 'renders_skipped_budget': 30, 'protected_render_requests': 33, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 40}, 'http_requests': 65, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 13, 'ssrf_blocks': 0}. K6",
+      "suggested_action": {
+        "summary": "Add a visible, extractable sentence that answers this question on the intent-matched page.",
+        "priority": "medium",
+        "what": "What does it cost / how is it priced?",
+        "where": "",
+        "how": "",
+        "why": "Completeness gap, not a quotation-window issue.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "unanswerable",
+      "finding_key": "8d46df5bb328345a",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "description": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K6"
+      },
+      "status": "found"
+    },
+    {
+      "id": "F-022",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://www.gov.uk/government/organisations/department-for-work-pensions/about: 'ring against our objectives. Who we are We provide our services in a number of ways, for example through J'; homepage lacks it.",
+      "suggested_action": {
+        "summary": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/department-for-work-pensions/about",
+        "how": "",
+        "why": "W: right fact, wrong page.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "wrong_page",
+      "finding_key": "192a75b1beb862f4",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "K3 is answered on an inner page, not the likely landing page",
+      "description": "K3 is answered on an inner page, not the likely landing page",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/",
+        "https://www.gov.uk/government/organisations/department-for-work-pensions/about"
+      ],
+      "affected_pages_count": 2,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K3"
+      },
+      "status": "found"
+    },
+    {
+      "id": "F-002",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025', '2025', '2025'] schema=['2026-08-14T18:31:16+01:00', '2025-06-30T09:07:49+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/tax-credits-agent-priority-line",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/tax-credits-agent-priority-line",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "a94f7ad340c11a05",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/tax-credits-agent-priority-line"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-003",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025', '1900', '2025'] schema=['2026-08-14T19:01:31+01:00', '2025-12-19T15:22:09+00:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "a15e0e15dc717b1c",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-004",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025'] schema=['2026-08-14T18:59:16+01:00', '2025-05-14T17:51:58+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/agent-dedicated-line-debt-management",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/agent-dedicated-line-debt-management",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "3902ecf4ca83061a",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/agent-dedicated-line-debt-management"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-005",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025'] schema=['2026-08-14T18:52:47+01:00', '2025-05-14T17:51:31+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/central-agent-authorisation-team",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/central-agent-authorisation-team",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "cce12f157941f0ba",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/central-agent-authorisation-team"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-006",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '2025', '2025', '2025'] schema=['2026-08-14T18:39:14+01:00', '2025-12-19T15:23:35+00:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-customs-and-excise-and-duties-enquiries-for-welsh-speaking-customers",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-customs-and-excise-and-duties-enquiries-for-welsh-speaking-customers",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "e60a5236ce287918",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-customs-and-excise-and-duties-enquiries-for-welsh-speaking-customers"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-007",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2025', '1900', '1900', '2025'] schema=['2026-08-14T18:56:01+01:00', '2025-05-16T09:38:43+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/budd-dal-plant-ymholiadau-cyffredinol",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/budd-dal-plant-ymholiadau-cyffredinol",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "53d574d9d556a55c",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/budd-dal-plant-ymholiadau-cyffredinol"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-008",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['1979', '2012', '2012', '1948'] schema=['2026-09-04T10:35:03+01:00', '2026-08-20T15:34:57+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "dd42de4f92711b15",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-009",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['1979', '2012', '2012', '1948'] schema=['2026-09-04T10:35:03+01:00', '2026-08-20T15:34:57+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure.cy",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure.cy",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "587ff595b9a20e27",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure.cy"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-010",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2018', '2024', '2018', '2024'] schema=['2026-09-04T10:32:24+01:00', '2024-01-31T15:33:59+00:00'] on https://www.gov.uk/guidance/contact-the-department-for-work-and-pensions-about-its-policies",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/guidance/contact-the-department-for-work-and-pensions-about-its-policies",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "98f8c47de7672895",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/guidance/contact-the-department-for-work-and-pensions-about-its-policies"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-011",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2023', '2025', '2022', '2023'] schema=['2026-09-04T10:35:04+01:00', '2023-11-02T09:30:01+00:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/department-for-work-pensions/about",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "26cdcac8f6c75902",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/department-for-work-pensions/about"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-012",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2018', '2018', '2018', '2018'] schema=['2026-09-04T10:36:15+01:00', '2021-09-13T13:37:25+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/accessible-documents-policy",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/department-for-work-pensions/about/accessible-documents-policy",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "a6701c756c8c131f",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/department-for-work-pensions/about/accessible-documents-policy"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-013",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2023', '2025', '2010', '2014'] schema=['2026-09-04T10:35:02+01:00', '2024-04-22T10:22:13+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/equality-and-diversity",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.gov.uk/government/organisations/department-for-work-pensions/about/equality-and-diversity",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "46374fe427531e20",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.gov.uk/government/organisations/department-for-work-pensions/about/equality-and-diversity"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    }
+  ],
+  "suppressed": [],
+  "coverage": {
+    "pages_fetched": 40,
+    "pages_content_usable": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "estimated_pages": 40,
+    "templates": 8,
+    "k_categories_hit": [
+      "K3"
+    ],
+    "stopped_reason": "early_stop",
+    "pages_verified_per_template": {
+      "t-1": 1,
+      "t-2": 2,
+      "t-3": 1,
+      "t-4": 20,
+      "t-5": 9,
+      "t-6": 1,
+      "t-7": 5,
+      "t-8": 1
+    },
+    "render_max": 10,
+    "renders_requested": 40,
+    "renders_performed": 10,
+    "renders_skipped_budget": 30,
+    "protected_render_requests": 33,
+    "protected_render_exceptions": 0,
+    "access_kinds": {
+      "ok": 40
+    },
+    "http_requests": 65,
+    "robots_status": "ok",
+    "timeout_count": 0,
+    "redirect_hops_total": 13,
+    "ssrf_blocks": 0
+  },
+  "site_type": {
+    "cluster": "A",
+    "secondary": [
+      "C"
+    ],
+    "ymyl": true,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 3,
+      "B": 0,
+      "C": 3,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "skill_status": {
+    "successful_skills": [
+      "site-type-classifier",
+      "crawl-access-audit",
+      "render-extract-audit",
+      "citation-extractability-audit",
+      "entity-identity-audit",
+      "freshness-audit",
+      "ai-answerability-audit",
+      "engagement-handoff-audit",
+      "corroboration-consistency-audit"
+    ],
+    "failed_skills": [],
+    "skipped_dependent_skills": [],
+    "completed_findings": [
+      "F-001",
+      "F-023",
+      "F-022",
+      "F-002",
+      "F-003",
+      "F-004",
+      "F-005",
+      "F-006",
+      "F-007",
+      "F-008",
+      "F-009",
+      "F-010",
+      "F-011",
+      "F-012",
+      "F-013"
+    ],
+    "incomplete_areas": [],
+    "failures": [],
+    "by_skill": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    }
+  },
+  "limitations": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=30, protected_requests=33. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "timing": {
+    "crawl_ms": 49238.27505111694,
+    "render_ms": 122.39956855773926,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.514984130859375,
+      "crawl-access-audit": 0.37789344787597656,
+      "render-extract-audit": 1345.0980186462402,
+      "citation-extractability-audit": 454.24485206604004,
+      "entity-identity-audit": 12.602090835571289,
+      "freshness-audit": 18.478870391845703,
+      "ai-answerability-audit": 23.1170654296875,
+      "engagement-handoff-audit": 487.7660274505615,
+      "corroboration-consistency-audit": 491.64795875549316
+    },
+    "llm_ms": 0.0,
+    "llm_calls": 0,
+    "external_fetch_ms": 0.0,
+    "merge_ms": 0.09083747863769531,
+    "report_ms": 0.40721893310546875,
+    "total_ms": 52072.71718978882,
+    "skipped": [],
+    "http_requests": 65,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "external_requests": 0
+  },
+  "metrics": {
+    "answerability": {
+      "per_question": {
+        "K3": "wrong_page",
+        "K6": "unanswerable",
+        "K13": "answered"
+      },
+      "CoreAnswerabilityRate": 0.5,
+      "AnswerConcentration": 23.0,
+      "note": "Weights uncalibrated; per-question outcomes are primary. Composite citability is not a finding."
+    },
+    "skills": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    },
+    "skill_status": {
+      "successful_skills": [
+        "site-type-classifier",
+        "crawl-access-audit",
+        "render-extract-audit",
+        "citation-extractability-audit",
+        "entity-identity-audit",
+        "freshness-audit",
+        "ai-answerability-audit",
+        "engagement-handoff-audit",
+        "corroboration-consistency-audit"
+      ],
+      "failed_skills": [],
+      "skipped_dependent_skills": [],
+      "completed_findings": [
+        "F-001",
+        "F-023",
+        "F-022",
+        "F-002",
+        "F-003",
+        "F-004",
+        "F-005",
+        "F-006",
+        "F-007",
+        "F-008",
+        "F-009",
+        "F-010",
+        "F-011",
+        "F-012",
+        "F-013"
+      ],
+      "incomplete_areas": [],
+      "failures": [],
+      "by_skill": {
+        "site-type-classifier": "ok",
+        "crawl-access-audit": "ok",
+        "render-extract-audit": "ok",
+        "citation-extractability-audit": "ok",
+        "entity-identity-audit": "ok",
+        "freshness-audit": "ok",
+        "ai-answerability-audit": "ok",
+        "engagement-handoff-audit": "ok",
+        "corroboration-consistency-audit": "ok"
+      }
+    },
+    "audit_status": "ok",
+    "protect_list": [
+      "K3",
+      "admit",
+      "citation-extractability-audit-det",
+      "coverage",
+      "dual-fetch-facts",
+      "report",
+      "site-type-classifier"
+    ]
+  }
+}

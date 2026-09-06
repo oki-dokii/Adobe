@@ -1,0 +1,97 @@
+{
+  "site_id": "nasa",
+  "site": "https://www.nasa.gov/",
+  "site_type": "government",
+  "tags": [
+    "government",
+    "large"
+  ],
+  "phase": "warm",
+  "timestamp": "2026-09-06T19:18:10Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 24665.571928024292,
+    "wall_ms": 24672.4112033844,
+    "crawl_ms": 18275.861024856567,
+    "render_ms": 429.2728900909424,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.32711029052734375,
+      "crawl-access-audit": 0.2281665802001953,
+      "render-extract-audit": 3767.5421237945557,
+      "citation-extractability-audit": 278.3811092376709,
+      "entity-identity-audit": 29.881715774536133,
+      "freshness-audit": 30.816078186035156,
+      "ai-answerability-audit": 36.03816032409668,
+      "engagement-handoff-audit": 1122.3747730255127,
+      "corroboration-consistency-audit": 1123.169183731079
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.27298927307128906,
+    "merge_ms": 0.04887580871582031
+  },
+  "counts": {
+    "http_requests": 68,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 9,
+    "critical": 0,
+    "high": 2,
+    "medium": 7,
+    "low": 0,
+    "templates": 2
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 24,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Access limitation: https://www.nasa.gov/centers/glenn/about/history/namechng.html: HTTP 404 (HTTP error document). These bodies were not used as brand/answerability evidence.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=29, protected_requests=10. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "A",
+    "secondary": [
+      "C",
+      "E"
+    ],
+    "ymyl": true,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 3,
+      "B": 0,
+      "C": 3,
+      "D": 0,
+      "E": 2,
+      "F": 0
+    }
+  },
+  "run_id": "16ab8db5-2c33-4956-9645-759353676e07",
+  "error": null
+}

@@ -1,0 +1,19 @@
+{
+  "no_auto_redirect": true,
+  "ssrf_policy": true,
+  "get_head_only": true,
+  "redirect_cap": 5,
+  "timeout_s": 8.0,
+  "max_bytes": 2000000,
+  "page_cap": 40,
+  "no_cookie_jar": true,
+  "protect_list": [
+    "K3",
+    "admit",
+    "citation-extractability-audit-det",
+    "coverage",
+    "dual-fetch-facts",
+    "report",
+    "site-type-classifier"
+  ]
+}

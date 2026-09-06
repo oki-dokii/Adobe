@@ -1,0 +1,97 @@
+{
+  "site_id": "react-dev",
+  "site": "https://react.dev/",
+  "site_type": "developer_platform",
+  "tags": [
+    "developer-platform",
+    "js-heavy",
+    "medium",
+    "stress"
+  ],
+  "phase": "warm",
+  "timestamp": "2026-09-06T13:15:58Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 21706.03108406067,
+    "wall_ms": 21712.440729141235,
+    "crawl_ms": 17514.920949935913,
+    "render_ms": 336.7645740509033,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.3371238708496094,
+      "crawl-access-audit": 0.2467632293701172,
+      "render-extract-audit": 2677.1340370178223,
+      "citation-extractability-audit": 22.57990837097168,
+      "entity-identity-audit": 22.030115127563477,
+      "freshness-audit": 26.732921600341797,
+      "ai-answerability-audit": 44.34609413146973,
+      "engagement-handoff-audit": 696.342945098877,
+      "corroboration-consistency-audit": 701.0619640350342
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.22983551025390625,
+    "merge_ms": 0.03910064697265625
+  },
+  "counts": {
+    "http_requests": 42,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 1,
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 0,
+    "templates": 40
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "D",
+    "secondary": [
+      "E",
+      "F"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": false,
+    "saas": true,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 3,
+      "E": 2,
+      "F": 2
+    }
+  },
+  "run_id": "43ff6c08-b91c-4176-93f1-624dd4be6e5a",
+  "error": null
+}

@@ -1,0 +1,685 @@
+{
+  "site": "www.nasa.gov",
+  "summary": {
+    "total_findings": 9,
+    "critical": 0,
+    "high": 2,
+    "medium": 7,
+    "low": 0
+  },
+  "findings": [
+    {
+      "id": "F-002",
+      "title": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+      "severity": "high",
+      "evidence": "short/common-looking name 'NASA'; no 'we are a {category}' sentence on https://www.nasa.gov/. No web search was used.",
+      "suggested_action": "Add an early sentence of the form \u201c{Brand} is a {category} in {geo}.\u201d"
+    },
+    {
+      "id": "F-001",
+      "title": "YMYL pages lack a named reviewer or license disclosure",
+      "severity": "high",
+      "evidence": "Cluster A lexicon matched; sampled pages have no 'reviewed by' / license strings.",
+      "suggested_action": "Add a named reviewer, license, and jurisdiction in visible text on advice pages."
+    },
+    {
+      "id": "F-009",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://www.nasa.gov/privacy/: 'nsent from the child\u2019s parent. Finally, we provide many on-line tools and services in support of NASA\u2019s mission. A child under 13 years old m'; homepage lacks it.",
+      "suggested_action": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer."
+    },
+    {
+      "id": "F-003",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2012', '1959', '1963'] schema=['2023-07-25T11:19:07-04:00', '2023-07-25T11:19:07-04:00', '2012-02-16T16:30:00Z'] on https://www.nasa.gov/history/glenn-orbits-the-earth/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-004",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2019', '2019', '2019'] schema=['2023-07-26T15:17:08-04:00', '2023-07-26T15:17:08-04:00', '2019-04-09T21:00:00Z'] on https://www.nasa.gov/centers-and-facilities/glenn/from-sky-gazing-to-astronaut-janet-kavandi-reaches-the-astronaut-hall-of-fame/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-005",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2019', '1946', '1946'] schema=['2024-06-28T12:48:33-04:00', '2024-06-28T12:48:33-04:00', '2019-08-29T17:00:00Z'] on https://www.nasa.gov/history/naca-test-pilot-competed-in-cleveland-national-air-races/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-006",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2008', '1947', '1949'] schema=['2024-03-13T14:28:37-04:00', '2024-03-13T14:28:37-04:00', '2008-04-10T22:46:00Z'] on https://www.nasa.gov/centers/glenn/about/history/crashtst.html",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-007",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2012', '1964', '1957'] schema=['2025-05-22T15:52:35-04:00', '2025-05-22T15:52:35-04:00', '2012-12-12T19:56:00Z'] on https://www.nasa.gov/centers/glenn/about/history/centaur.html",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-008",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2013', '1966', '1962'] schema=['2024-03-14T09:38:53-04:00', '2024-03-14T09:38:53-04:00', '2013-03-01T23:13:00Z'] on https://www.nasa.gov/centers/glenn/about/history/centaur_anniv.html",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    }
+  ],
+  "findings_internal": [
+    {
+      "id": "F-002",
+      "title": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+      "severity": "high",
+      "evidence": "short/common-looking name 'NASA'; no 'we are a {category}' sentence on https://www.nasa.gov/. No web search was used.",
+      "suggested_action": {
+        "summary": "Add an early sentence of the form \u201c{Brand} is a {category} in {geo}.\u201d",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.nasa.gov/",
+        "how": "",
+        "why": "WhoQA-style mix-ups; Wikidata absence is not a defect.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "entity-identity-audit",
+      "finding_type": "collision_risk",
+      "finding_key": "a35b1ac3e37156c4",
+      "category": "entity",
+      "confidence": "low",
+      "confidence_basis": "on-page heuristic only; no search API",
+      "evidence_tier": "OBS",
+      "root_cause": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+      "description": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.nasa.gov/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "entity-identity-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-001",
+      "title": "YMYL pages lack a named reviewer or license disclosure",
+      "severity": "high",
+      "evidence": "Cluster A lexicon matched; sampled pages have no 'reviewed by' / license strings.",
+      "suggested_action": {
+        "summary": "Add a named reviewer, license, and jurisdiction in visible text on advice pages.",
+        "priority": "high",
+        "what": "Visible reviewer/license/jurisdiction",
+        "where": "YMYL topic pages",
+        "how": "Plain text near the advice, not only in footer chrome.",
+        "why": "YMYL harm and mix-up risk; hedges remain appropriate.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "site-type-classifier",
+      "finding_type": "ymy_disclosure",
+      "finding_key": "6ba24994505ce23f",
+      "category": "site_type",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "YMYL pages lack a named reviewer or license disclosure",
+      "description": "YMYL pages lack a named reviewer or license disclosure",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.nasa.gov/",
+        "https://www.nasa.gov/about/",
+        "https://www.nasa.gov/contact/"
+      ],
+      "affected_pages_count": 3,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "site-type-classifier"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-009",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://www.nasa.gov/privacy/: 'nsent from the child\u2019s parent. Finally, we provide many on-line tools and services in support of NASA\u2019s mission. A child under 13 years old m'; homepage lacks it.",
+      "suggested_action": {
+        "summary": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.nasa.gov/privacy/",
+        "how": "",
+        "why": "W: right fact, wrong page.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "wrong_page",
+      "finding_key": "ad05d46377e466e8",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "K3 is answered on an inner page, not the likely landing page",
+      "description": "K3 is answered on an inner page, not the likely landing page",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.nasa.gov/",
+        "https://www.nasa.gov/privacy/"
+      ],
+      "affected_pages_count": 2,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K3"
+      },
+      "status": "found"
+    },
+    {
+      "id": "F-003",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2012', '1959', '1963'] schema=['2023-07-25T11:19:07-04:00', '2023-07-25T11:19:07-04:00', '2012-02-16T16:30:00Z'] on https://www.nasa.gov/history/glenn-orbits-the-earth/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.nasa.gov/history/glenn-orbits-the-earth/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "4b0077326caf4e44",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.nasa.gov/history/glenn-orbits-the-earth/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-004",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2019', '2019', '2019'] schema=['2023-07-26T15:17:08-04:00', '2023-07-26T15:17:08-04:00', '2019-04-09T21:00:00Z'] on https://www.nasa.gov/centers-and-facilities/glenn/from-sky-gazing-to-astronaut-janet-kavandi-reaches-the-astronaut-hall-of-fame/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.nasa.gov/centers-and-facilities/glenn/from-sky-gazing-to-astronaut-janet-kavandi-reaches-the-astronaut-hall-of-fame/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "0bed31bdae0bd374",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.nasa.gov/centers-and-facilities/glenn/from-sky-gazing-to-astronaut-janet-kavandi-reaches-the-astronaut-hall-of-fame/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-005",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2019', '1946', '1946'] schema=['2024-06-28T12:48:33-04:00', '2024-06-28T12:48:33-04:00', '2019-08-29T17:00:00Z'] on https://www.nasa.gov/history/naca-test-pilot-competed-in-cleveland-national-air-races/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.nasa.gov/history/naca-test-pilot-competed-in-cleveland-national-air-races/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "bb211604872f158d",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.nasa.gov/history/naca-test-pilot-competed-in-cleveland-national-air-races/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-006",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2008', '1947', '1949'] schema=['2024-03-13T14:28:37-04:00', '2024-03-13T14:28:37-04:00', '2008-04-10T22:46:00Z'] on https://www.nasa.gov/centers/glenn/about/history/crashtst.html",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.nasa.gov/centers/glenn/about/history/crashtst.html",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "e26f0624a8155fe4",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.nasa.gov/centers/glenn/about/history/crashtst.html"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-007",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2012', '1964', '1957'] schema=['2025-05-22T15:52:35-04:00', '2025-05-22T15:52:35-04:00', '2012-12-12T19:56:00Z'] on https://www.nasa.gov/centers/glenn/about/history/centaur.html",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.nasa.gov/centers/glenn/about/history/centaur.html",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "9eb469718be1938f",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.nasa.gov/centers/glenn/about/history/centaur.html"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-008",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2013', '1966', '1962'] schema=['2024-03-14T09:38:53-04:00', '2024-03-14T09:38:53-04:00', '2013-03-01T23:13:00Z'] on https://www.nasa.gov/centers/glenn/about/history/centaur_anniv.html",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.nasa.gov/centers/glenn/about/history/centaur_anniv.html",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "ecf4edf89ea745e1",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.nasa.gov/centers/glenn/about/history/centaur_anniv.html"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    }
+  ],
+  "suppressed": [],
+  "coverage": {
+    "pages_fetched": 40,
+    "pages_content_usable": 39,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "estimated_pages": 200,
+    "templates": 2,
+    "k_categories_hit": [
+      "K3"
+    ],
+    "stopped_reason": "early_stop",
+    "pages_verified_per_template": {
+      "t-1": 39,
+      "t-2": 1
+    },
+    "render_max": 10,
+    "renders_requested": 39,
+    "renders_performed": 10,
+    "renders_skipped_budget": 29,
+    "protected_render_requests": 10,
+    "protected_render_exceptions": 0,
+    "access_kinds": {
+      "ok": 39,
+      "error_document": 1
+    },
+    "http_requests": 68,
+    "robots_status": "ok",
+    "timeout_count": 0,
+    "redirect_hops_total": 24,
+    "ssrf_blocks": 0
+  },
+  "site_type": {
+    "cluster": "A",
+    "secondary": [
+      "C",
+      "E"
+    ],
+    "ymyl": true,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 3,
+      "B": 0,
+      "C": 3,
+      "D": 0,
+      "E": 2,
+      "F": 0
+    }
+  },
+  "skill_status": {
+    "successful_skills": [
+      "site-type-classifier",
+      "crawl-access-audit",
+      "render-extract-audit",
+      "citation-extractability-audit",
+      "entity-identity-audit",
+      "freshness-audit",
+      "ai-answerability-audit",
+      "engagement-handoff-audit",
+      "corroboration-consistency-audit"
+    ],
+    "failed_skills": [],
+    "skipped_dependent_skills": [],
+    "completed_findings": [
+      "F-002",
+      "F-001",
+      "F-009",
+      "F-003",
+      "F-004",
+      "F-005",
+      "F-006",
+      "F-007",
+      "F-008"
+    ],
+    "incomplete_areas": [],
+    "failures": [],
+    "by_skill": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    }
+  },
+  "limitations": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Access limitation: https://www.nasa.gov/centers/glenn/about/history/namechng.html: HTTP 404 (HTTP error document). These bodies were not used as brand/answerability evidence.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=29, protected_requests=10. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "timing": {
+    "crawl_ms": 21003.43918800354,
+    "render_ms": 428.8911819458008,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.33092498779296875,
+      "crawl-access-audit": 0.225067138671875,
+      "render-extract-audit": 3766.0670280456543,
+      "citation-extractability-audit": 278.1059741973877,
+      "entity-identity-audit": 29.834270477294922,
+      "freshness-audit": 30.802011489868164,
+      "ai-answerability-audit": 35.93301773071289,
+      "engagement-handoff-audit": 1125.1909732818604,
+      "corroboration-consistency-audit": 1120.7070350646973
+    },
+    "llm_ms": 0.0,
+    "llm_calls": 0,
+    "external_fetch_ms": 0.0,
+    "merge_ms": 0.05412101745605469,
+    "report_ms": 0.28395652770996094,
+    "total_ms": 27391.31188392639,
+    "skipped": [],
+    "http_requests": 68,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "external_requests": 0
+  },
+  "metrics": {
+    "answerability": {
+      "per_question": {
+        "K3": "wrong_page",
+        "K6": "answered",
+        "K13": "answered"
+      },
+      "CoreAnswerabilityRate": 0.8333333333333334,
+      "AnswerConcentration": 14.333333333333334,
+      "note": "Weights uncalibrated; per-question outcomes are primary. Composite citability is not a finding."
+    },
+    "skills": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    },
+    "skill_status": {
+      "successful_skills": [
+        "site-type-classifier",
+        "crawl-access-audit",
+        "render-extract-audit",
+        "citation-extractability-audit",
+        "entity-identity-audit",
+        "freshness-audit",
+        "ai-answerability-audit",
+        "engagement-handoff-audit",
+        "corroboration-consistency-audit"
+      ],
+      "failed_skills": [],
+      "skipped_dependent_skills": [],
+      "completed_findings": [
+        "F-002",
+        "F-001",
+        "F-009",
+        "F-003",
+        "F-004",
+        "F-005",
+        "F-006",
+        "F-007",
+        "F-008"
+      ],
+      "incomplete_areas": [],
+      "failures": [],
+      "by_skill": {
+        "site-type-classifier": "ok",
+        "crawl-access-audit": "ok",
+        "render-extract-audit": "ok",
+        "citation-extractability-audit": "ok",
+        "entity-identity-audit": "ok",
+        "freshness-audit": "ok",
+        "ai-answerability-audit": "ok",
+        "engagement-handoff-audit": "ok",
+        "corroboration-consistency-audit": "ok"
+      }
+    },
+    "audit_status": "ok",
+    "protect_list": [
+      "K3",
+      "admit",
+      "citation-extractability-audit-det",
+      "coverage",
+      "dual-fetch-facts",
+      "report",
+      "site-type-classifier"
+    ]
+  }
+}
