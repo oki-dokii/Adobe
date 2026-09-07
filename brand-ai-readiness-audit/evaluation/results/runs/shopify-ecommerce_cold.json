@@ -1,0 +1,96 @@
+{
+  "site_id": "shopify-ecommerce",
+  "site": "https://www.shopify.com/",
+  "site_type": "ecommerce",
+  "tags": [
+    "ecommerce",
+    "saas",
+    "large"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T19:11:42Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 53826.76362991333,
+    "wall_ms": 53841.387033462524,
+    "crawl_ms": 46007.73310661316,
+    "render_ms": 758.087158203125,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.2551078796386719,
+      "crawl-access-audit": 0.6420612335205078,
+      "render-extract-audit": 4576.770782470703,
+      "citation-extractability-audit": 1083.611011505127,
+      "entity-identity-audit": 25.70796012878418,
+      "freshness-audit": 24.567127227783203,
+      "ai-answerability-audit": 27.568817138671875,
+      "engagement-handoff-audit": 1053.7450313568115,
+      "corroboration-consistency-audit": 1024.8761177062988
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.13327598571777344,
+    "merge_ms": 0.02384185791015625
+  },
+  "counts": {
+    "http_requests": 46,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 2,
+    "critical": 0,
+    "high": 2,
+    "medium": 0,
+    "low": 0,
+    "templates": 3
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 2,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=30, protected_requests=40. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "F",
+    "secondary": [
+      "B"
+    ],
+    "ymyl": false,
+    "multilingual": true,
+    "product_like": true,
+    "ecommerce": true,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 2,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 5
+    }
+  },
+  "run_id": "11eb36bc-ec91-4010-9bff-1f534609556e",
+  "error": null
+}

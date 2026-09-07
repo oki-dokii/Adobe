@@ -1,0 +1,96 @@
+{
+  "site_id": "tania-portfolio",
+  "site": "https://www.taniarascia.com/",
+  "site_type": "portfolio",
+  "tags": [
+    "portfolio",
+    "blog",
+    "small"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T19:21:31Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 62549.384117126465,
+    "wall_ms": 62555.96303939819,
+    "crawl_ms": 53564.59307670593,
+    "render_ms": 360.2309226989746,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.5879402160644531,
+      "crawl-access-audit": 0.38909912109375,
+      "render-extract-audit": 1925.159215927124,
+      "citation-extractability-audit": 7.868289947509766,
+      "entity-identity-audit": 2075.7997035980225,
+      "freshness-audit": 47.69635200500488,
+      "ai-answerability-audit": 37.02092170715332,
+      "engagement-handoff-audit": 440.50121307373047,
+      "corroboration-consistency-audit": 4449.380874633789
+    },
+    "external_fetch_ms": 2082.8609466552734,
+    "report_ms": 0.308990478515625,
+    "merge_ms": 0.05602836608886719
+  },
+  "counts": {
+    "http_requests": 52,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 6,
+    "findings": 2,
+    "critical": 0,
+    "high": 1,
+    "medium": 1,
+    "low": 0,
+    "templates": 28
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=30, protected_requests=1. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "D",
+    "secondary": [
+      "F"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": false,
+    "saas": true,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 3,
+      "E": 0,
+      "F": 2
+    }
+  },
+  "run_id": "d73535a5-ee38-432b-93e7-4dcad553263e",
+  "error": null
+}

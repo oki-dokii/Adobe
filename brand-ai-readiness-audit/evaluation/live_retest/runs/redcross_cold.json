@@ -1,0 +1,34 @@
+{
+  "site_id": "redcross",
+  "url": "https://www.redcross.org/",
+  "labeled_type": "nonprofit",
+  "success": true,
+  "wall_ms": 1444.6446895599365,
+  "timing_total_ms": 1434.1988563537598,
+  "pages_fetched": 1,
+  "pages_rendered": 0,
+  "render_max": 10,
+  "access_kinds": {
+    "forbidden_content": 1
+  },
+  "stopped_reason": "budget",
+  "cluster": "unknown",
+  "finding_count": 1,
+  "by_severity": {
+    "low": 1
+  },
+  "by_type": {
+    "F-001": 1
+  },
+  "finding_titles": [
+    {
+      "id": "F-001",
+      "type": null,
+      "severity": "low",
+      "title": "Insufficient evidence: no usable public HTML for closed-book questions",
+      "evidence": "fetched_pages=0; access_kinds=['forbidden_content']; pages=1. Challenge/WAF/HTTP-error bodies are audit limitations, not missing-brand-content.",
+      "url": null
+    }
+  ],
+  "error": null
+}

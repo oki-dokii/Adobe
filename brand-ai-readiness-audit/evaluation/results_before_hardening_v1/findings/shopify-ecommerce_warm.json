@@ -1,0 +1,407 @@
+{
+  "site": "www.shopify.com",
+  "summary": {
+    "total_findings": 4,
+    "critical": 1,
+    "high": 2,
+    "medium": 1,
+    "low": 0
+  },
+  "findings": [
+    {
+      "id": "F-002",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$250,000' vs later qualifier in ement credit on up to US$250,000 of annual eligible purc\u2026 / later span on https://www.shopify.com/in/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-001",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "high",
+      "evidence": "Isolated '$200,000' vs later qualifier in am offers rewards up to $200,000 and bonuses for outstan\u2026 / later span on https://www.shopify.com/in/bugbounty/about",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-004",
+      "title": "On-site typed facts disagree (prices)",
+      "severity": "high",
+      "evidence": "values=['0', '1', '114', '19', '2.30', '200000'] urls=['https://www.shopify.com/in/about', 'https://www.shopify.com/in/bugbounty/about', 'https://www.shopify.com/in/pricing', 'https://www.shopify.com/in/pricing']",
+      "suggested_action": "Reconcile current prices and mark superseded pages (e.g. old press) as historical."
+    },
+    {
+      "id": "F-005",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://www.shopify.com/in/legal/privacy: 'vance, unless we are legally forbidden. We help merchants and partners meet their privacy obligations Many of the merchants and partners using Shopify do not ha'; homepage lacks it.",
+      "suggested_action": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer."
+    }
+  ],
+  "findings_internal": [
+    {
+      "id": "F-002",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$250,000' vs later qualifier in ement credit on up to US$250,000 of annual eligible purc\u2026 / later span on https://www.shopify.com/in/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://www.shopify.com/in/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "41b39c9fca0f7355",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.shopify.com/in/pricing",
+        "https://www.shopify.com/pricing"
+      ],
+      "affected_pages_count": 2,
+      "template_id": "t-3",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-001",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "high",
+      "evidence": "Isolated '$200,000' vs later qualifier in am offers rewards up to $200,000 and bonuses for outstan\u2026 / later span on https://www.shopify.com/in/bugbounty/about",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://www.shopify.com/in/bugbounty/about",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "7e23c78cb17631f8",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.shopify.com/in/bugbounty/about"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-2",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-004",
+      "title": "On-site typed facts disagree (prices)",
+      "severity": "high",
+      "evidence": "values=['0', '1', '114', '19', '2.30', '200000'] urls=['https://www.shopify.com/in/about', 'https://www.shopify.com/in/bugbounty/about', 'https://www.shopify.com/in/pricing', 'https://www.shopify.com/in/pricing']",
+      "suggested_action": {
+        "summary": "Reconcile current prices and mark superseded pages (e.g. old press) as historical.",
+        "priority": "medium",
+        "what": "",
+        "where": "",
+        "how": "",
+        "why": "Internal knowledge conflict; this is not an off-site corroboration finding.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "on_site_fact_conflict",
+      "finding_key": "f56db201b31da546",
+      "category": "freshness",
+      "confidence": "high",
+      "confidence_basis": "deterministic reproduced or RFC-grounded",
+      "evidence_tier": "OBS",
+      "root_cause": "On-site typed facts disagree (prices)",
+      "description": "On-site typed facts disagree (prices)",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.shopify.com/in/about",
+        "https://www.shopify.com/in/bugbounty/about",
+        "https://www.shopify.com/in/pricing",
+        "https://www.shopify.com/in/pricing",
+        "https://www.shopify.com/in/pricing"
+      ],
+      "affected_pages_count": 5,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-005",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://www.shopify.com/in/legal/privacy: 'vance, unless we are legally forbidden. We help merchants and partners meet their privacy obligations Many of the merchants and partners using Shopify do not ha'; homepage lacks it.",
+      "suggested_action": {
+        "summary": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.shopify.com/in/legal/privacy",
+        "how": "",
+        "why": "W: right fact, wrong page.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "wrong_page",
+      "finding_key": "0934e95d02857931",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "K3 is answered on an inner page, not the likely landing page",
+      "description": "K3 is answered on an inner page, not the likely landing page",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.shopify.com/in/about",
+        "https://www.shopify.com/in/legal/privacy"
+      ],
+      "affected_pages_count": 2,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K3"
+      },
+      "status": "found"
+    }
+  ],
+  "suppressed": [],
+  "coverage": {
+    "pages_fetched": 40,
+    "pages_rendered": 40,
+    "render_count": 40,
+    "estimated_pages": 200,
+    "templates": 3,
+    "k_categories_hit": [
+      "K3",
+      "K6"
+    ],
+    "stopped_reason": "early_stop",
+    "pages_verified_per_template": {
+      "t-1": 37,
+      "t-2": 1,
+      "t-3": 2
+    },
+    "render_max": 10,
+    "http_requests": 46,
+    "robots_status": "ok",
+    "timeout_count": 0,
+    "redirect_hops_total": 2,
+    "ssrf_blocks": 0
+  },
+  "site_type": {
+    "cluster": "F",
+    "secondary": [
+      "B"
+    ],
+    "ymyl": false,
+    "multilingual": true,
+    "product_like": true,
+    "ecommerce": true,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 2,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 5
+    }
+  },
+  "skill_status": {
+    "successful_skills": [
+      "site-type-classifier",
+      "crawl-access-audit",
+      "render-extract-audit",
+      "citation-extractability-audit",
+      "entity-identity-audit",
+      "freshness-audit",
+      "ai-answerability-audit",
+      "engagement-handoff-audit",
+      "corroboration-consistency-audit"
+    ],
+    "failed_skills": [],
+    "skipped_dependent_skills": [],
+    "completed_findings": [
+      "F-002",
+      "F-001",
+      "F-004",
+      "F-005"
+    ],
+    "incomplete_areas": [],
+    "failures": [],
+    "by_skill": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    }
+  },
+  "limitations": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "timing": {
+    "crawl_ms": 59506.052017211914,
+    "render_ms": 2653.7492275238037,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.2799034118652344,
+      "crawl-access-audit": 0.5922317504882812,
+      "render-extract-audit": 4516.056060791016,
+      "citation-extractability-audit": 1032.3243141174316,
+      "entity-identity-audit": 25.261878967285156,
+      "freshness-audit": 20.95818519592285,
+      "ai-answerability-audit": 18.85700225830078,
+      "engagement-handoff-audit": 1107.8729629516602,
+      "corroboration-consistency-audit": 1013.930082321167
+    },
+    "llm_ms": 0.0,
+    "llm_calls": 0,
+    "external_fetch_ms": 0.0,
+    "merge_ms": 0.04935264587402344,
+    "report_ms": 0.2779960632324219,
+    "total_ms": 67243.0191040039,
+    "skipped": [],
+    "http_requests": 46,
+    "pages_fetched": 40,
+    "pages_rendered": 40,
+    "render_count": 40,
+    "external_requests": 0
+  },
+  "metrics": {
+    "answerability": {
+      "per_question": {
+        "K3": "wrong_page",
+        "K6": "answered",
+        "K13": "answered"
+      },
+      "CoreAnswerabilityRate": 0.8333333333333334,
+      "AnswerConcentration": 17.666666666666668,
+      "note": "Weights uncalibrated; per-question outcomes are primary. Composite citability is not a finding."
+    },
+    "skills": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    },
+    "skill_status": {
+      "successful_skills": [
+        "site-type-classifier",
+        "crawl-access-audit",
+        "render-extract-audit",
+        "citation-extractability-audit",
+        "entity-identity-audit",
+        "freshness-audit",
+        "ai-answerability-audit",
+        "engagement-handoff-audit",
+        "corroboration-consistency-audit"
+      ],
+      "failed_skills": [],
+      "skipped_dependent_skills": [],
+      "completed_findings": [
+        "F-002",
+        "F-001",
+        "F-004",
+        "F-005"
+      ],
+      "incomplete_areas": [],
+      "failures": [],
+      "by_skill": {
+        "site-type-classifier": "ok",
+        "crawl-access-audit": "ok",
+        "render-extract-audit": "ok",
+        "citation-extractability-audit": "ok",
+        "entity-identity-audit": "ok",
+        "freshness-audit": "ok",
+        "ai-answerability-audit": "ok",
+        "engagement-handoff-audit": "ok",
+        "corroboration-consistency-audit": "ok"
+      }
+    },
+    "audit_status": "ok",
+    "protect_list": [
+      "K3",
+      "admit",
+      "citation-extractability-audit-det",
+      "coverage",
+      "dual-fetch-facts",
+      "report",
+      "site-type-classifier"
+    ]
+  }
+}

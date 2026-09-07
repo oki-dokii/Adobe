@@ -1,0 +1,94 @@
+{
+  "site_id": "wikipedia",
+  "site": "https://www.wikipedia.org/",
+  "site_type": "directory",
+  "tags": [
+    "directory",
+    "large",
+    "corroboration-heavy",
+    "stress"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T13:27:54Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 1599.4670391082764,
+    "wall_ms": 1612.584114074707,
+    "crawl_ms": 1458.9331150054932,
+    "render_ms": 18.392086029052734,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.05817413330078125,
+      "crawl-access-audit": 1.5270709991455078,
+      "render-extract-audit": 50.98581314086914,
+      "citation-extractability-audit": 17.848968505859375,
+      "entity-identity-audit": 17.339229583740234,
+      "freshness-audit": 0.41794776916503906,
+      "ai-answerability-audit": 0.6000995635986328,
+      "engagement-handoff-audit": 34.40093994140625,
+      "corroboration-consistency-audit": 17.222166061401367
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.11706352233886719,
+    "merge_ms": 0.02002716064453125
+  },
+  "counts": {
+    "http_requests": 4,
+    "pages_crawled": 1,
+    "pages_rendered": 1,
+    "render_count": 1,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 2,
+    "critical": 0,
+    "high": 1,
+    "medium": 1,
+    "low": 0,
+    "templates": 1
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "budget",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "unknown",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "low",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "d972ec8a-4ddc-40ab-bffb-ef2f4d98ea40",
+  "error": null
+}

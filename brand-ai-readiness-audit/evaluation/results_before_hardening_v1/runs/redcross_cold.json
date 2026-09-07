@@ -1,0 +1,92 @@
+{
+  "site_id": "redcross",
+  "site": "https://www.redcross.org/",
+  "site_type": "nonprofit",
+  "tags": [
+    "nonprofit",
+    "medium"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T13:25:08Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 1109.5118522644043,
+    "wall_ms": 1123.55375289917,
+    "crawl_ms": 1109.2801094055176,
+    "render_ms": 0.10180473327636719,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.03719329833984375,
+      "crawl-access-audit": 0.0059604644775390625,
+      "render-extract-audit": 0.0030994415283203125,
+      "citation-extractability-audit": 0.004291534423828125,
+      "entity-identity-audit": 0.0050067901611328125,
+      "freshness-audit": 0.003814697265625,
+      "ai-answerability-audit": 0.07390975952148438,
+      "engagement-handoff-audit": 0.0030994415283203125,
+      "corroboration-consistency-audit": 0.0069141387939453125
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.1900196075439453,
+    "merge_ms": 0.02193450927734375
+  },
+  "counts": {
+    "http_requests": 3,
+    "pages_crawled": 1,
+    "pages_rendered": 1,
+    "render_count": 1,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 3,
+    "critical": 0,
+    "high": 1,
+    "medium": 2,
+    "low": 0,
+    "templates": 1
+  },
+  "robots_status": "fail_open",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "budget",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "partial",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "unknown",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "low",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "e73ff548-548e-44fb-991c-4c07c833bd08",
+  "error": null
+}

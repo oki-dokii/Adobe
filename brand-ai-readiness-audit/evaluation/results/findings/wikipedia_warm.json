@@ -1,0 +1,353 @@
+{
+  "site": "www.wikipedia.org",
+  "summary": {
+    "total_findings": 3,
+    "critical": 0,
+    "high": 1,
+    "medium": 2,
+    "low": 0
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "severity": "high",
+      "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason': 'budget', 'pages_verified_per_template': {'t-1': 1}, 'render_max': 10, 'renders_requested': 1, 'renders_performed': 1, 'renders_skipped_budget': 0, 'protected_render_requests': 1, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 1}, 'http_requests': 4, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 0, 'ssrf_blocks': 0}. ",
+      "suggested_action": "Add a visible, extractable sentence that answers this question on the intent-matched page."
+    },
+    {
+      "id": "F-002",
+      "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "severity": "medium",
+      "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason': 'budget', 'pages_verified_per_template': {'t-1': 1}, 'render_max': 10, 'renders_requested': 1, 'renders_performed': 1, 'renders_skipped_budget': 0, 'protected_render_requests': 1, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 1}, 'http_requests': 4, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 0, 'ssrf_blocks': 0}. K6",
+      "suggested_action": "Add a visible, extractable sentence that answers this question on the intent-matched page."
+    },
+    {
+      "id": "F-003",
+      "title": "Closed-book: site does not answer K13 (How can a human contact the organization?)",
+      "severity": "medium",
+      "evidence": "No supporting span in crawled corpus for K13. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason': 'budget', 'pages_verified_per_template': {'t-1': 1}, 'render_max': 10, 'renders_requested': 1, 'renders_performed': 1, 'renders_skipped_budget': 0, 'protected_render_requests': 1, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 1}, 'http_requests': 4, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 0, 'ssrf_blocks': 0}. ",
+      "suggested_action": "Add a visible, extractable sentence that answers this question on the intent-matched page."
+    }
+  ],
+  "findings_internal": [
+    {
+      "id": "F-001",
+      "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "severity": "high",
+      "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason': 'budget', 'pages_verified_per_template': {'t-1': 1}, 'render_max': 10, 'renders_requested': 1, 'renders_performed': 1, 'renders_skipped_budget': 0, 'protected_render_requests': 1, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 1}, 'http_requests': 4, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 0, 'ssrf_blocks': 0}. ",
+      "suggested_action": {
+        "summary": "Add a visible, extractable sentence that answers this question on the intent-matched page.",
+        "priority": "medium",
+        "what": "What does this organization offer or do?",
+        "where": "",
+        "how": "",
+        "why": "Completeness gap, not a quotation-window issue.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "unanswerable",
+      "finding_key": "cb9000eb51a7e029",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "description": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.wikipedia.org/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K3"
+      },
+      "status": "found"
+    },
+    {
+      "id": "F-002",
+      "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "severity": "medium",
+      "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason': 'budget', 'pages_verified_per_template': {'t-1': 1}, 'render_max': 10, 'renders_requested': 1, 'renders_performed': 1, 'renders_skipped_budget': 0, 'protected_render_requests': 1, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 1}, 'http_requests': 4, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 0, 'ssrf_blocks': 0}. K6",
+      "suggested_action": {
+        "summary": "Add a visible, extractable sentence that answers this question on the intent-matched page.",
+        "priority": "medium",
+        "what": "What does it cost / how is it priced?",
+        "where": "",
+        "how": "",
+        "why": "Completeness gap, not a quotation-window issue.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "unanswerable",
+      "finding_key": "7f10adfa5655a78e",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "description": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.wikipedia.org/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K6"
+      },
+      "status": "found"
+    },
+    {
+      "id": "F-003",
+      "title": "Closed-book: site does not answer K13 (How can a human contact the organization?)",
+      "severity": "medium",
+      "evidence": "No supporting span in crawled corpus for K13. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason': 'budget', 'pages_verified_per_template': {'t-1': 1}, 'render_max': 10, 'renders_requested': 1, 'renders_performed': 1, 'renders_skipped_budget': 0, 'protected_render_requests': 1, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 1}, 'http_requests': 4, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 0, 'ssrf_blocks': 0}. ",
+      "suggested_action": {
+        "summary": "Add a visible, extractable sentence that answers this question on the intent-matched page.",
+        "priority": "medium",
+        "what": "How can a human contact the organization?",
+        "where": "",
+        "how": "",
+        "why": "Completeness gap, not a quotation-window issue.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "unanswerable",
+      "finding_key": "18706db674165a01",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Closed-book: site does not answer K13 (How can a human contact the organization?)",
+      "description": "Closed-book: site does not answer K13 (How can a human contact the organization?)",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.wikipedia.org/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K13"
+      },
+      "status": "found"
+    }
+  ],
+  "suppressed": [],
+  "coverage": {
+    "pages_fetched": 1,
+    "pages_content_usable": 1,
+    "pages_rendered": 1,
+    "render_count": 1,
+    "estimated_pages": 1,
+    "templates": 1,
+    "k_categories_hit": [],
+    "stopped_reason": "budget",
+    "pages_verified_per_template": {
+      "t-1": 1
+    },
+    "render_max": 10,
+    "renders_requested": 1,
+    "renders_performed": 1,
+    "renders_skipped_budget": 0,
+    "protected_render_requests": 1,
+    "protected_render_exceptions": 0,
+    "access_kinds": {
+      "ok": 1
+    },
+    "http_requests": 4,
+    "robots_status": "ok",
+    "timeout_count": 0,
+    "redirect_hops_total": 0,
+    "ssrf_blocks": 0
+  },
+  "site_type": {
+    "cluster": "unknown",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "low",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "skill_status": {
+    "successful_skills": [
+      "site-type-classifier",
+      "crawl-access-audit",
+      "render-extract-audit",
+      "citation-extractability-audit",
+      "entity-identity-audit",
+      "freshness-audit",
+      "ai-answerability-audit",
+      "engagement-handoff-audit",
+      "corroboration-consistency-audit"
+    ],
+    "failed_skills": [],
+    "skipped_dependent_skills": [],
+    "completed_findings": [
+      "F-001",
+      "F-002",
+      "F-003"
+    ],
+    "incomplete_areas": [],
+    "failures": [],
+    "by_skill": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    }
+  },
+  "limitations": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "timing": {
+    "crawl_ms": 1447.761058807373,
+    "render_ms": 17.75527000427246,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.05793571472167969,
+      "crawl-access-audit": 1.580953598022461,
+      "render-extract-audit": 51.31793022155762,
+      "citation-extractability-audit": 18.638134002685547,
+      "entity-identity-audit": 17.54593849182129,
+      "freshness-audit": 0.46515464782714844,
+      "ai-answerability-audit": 0.8211135864257812,
+      "engagement-handoff-audit": 34.83009338378906,
+      "corroboration-consistency-audit": 17.817974090576172
+    },
+    "llm_ms": 0.0,
+    "llm_calls": 0,
+    "external_fetch_ms": 0.0,
+    "merge_ms": 0.024080276489257812,
+    "report_ms": 0.16808509826660156,
+    "total_ms": 1590.9481048583984,
+    "skipped": [],
+    "http_requests": 4,
+    "pages_fetched": 1,
+    "pages_rendered": 1,
+    "render_count": 1,
+    "external_requests": 0
+  },
+  "metrics": {
+    "answerability": {
+      "per_question": {
+        "K3": "unanswerable",
+        "K6": "unanswerable",
+        "K13": "unanswerable"
+      },
+      "CoreAnswerabilityRate": 0.0,
+      "AnswerConcentration": 0.0,
+      "note": "Weights uncalibrated; per-question outcomes are primary. Composite citability is not a finding."
+    },
+    "skills": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    },
+    "skill_status": {
+      "successful_skills": [
+        "site-type-classifier",
+        "crawl-access-audit",
+        "render-extract-audit",
+        "citation-extractability-audit",
+        "entity-identity-audit",
+        "freshness-audit",
+        "ai-answerability-audit",
+        "engagement-handoff-audit",
+        "corroboration-consistency-audit"
+      ],
+      "failed_skills": [],
+      "skipped_dependent_skills": [],
+      "completed_findings": [
+        "F-001",
+        "F-002",
+        "F-003"
+      ],
+      "incomplete_areas": [],
+      "failures": [],
+      "by_skill": {
+        "site-type-classifier": "ok",
+        "crawl-access-audit": "ok",
+        "render-extract-audit": "ok",
+        "citation-extractability-audit": "ok",
+        "entity-identity-audit": "ok",
+        "freshness-audit": "ok",
+        "ai-answerability-audit": "ok",
+        "engagement-handoff-audit": "ok",
+        "corroboration-consistency-audit": "ok"
+      }
+    },
+    "audit_status": "ok",
+    "protect_list": [
+      "K3",
+      "admit",
+      "citation-extractability-audit-det",
+      "coverage",
+      "dual-fetch-facts",
+      "report",
+      "site-type-classifier"
+    ]
+  }
+}
