@@ -48,7 +48,7 @@ def parse_sitemap_xml(body: str, cap: int = SITEMAP_CAP) -> tuple[list[dict], li
     return urls, children
 
 
-def fetch_sitemaps(client: HttpClient, origin: str, robots_body: str = "", cap: int = SITEMAP_CAP) -> list[dict]:
+def fetch_sitemaps(client: HttpClient, origin: str, robots_body: str = "", cap: int = SITEMAP_CAP, max_requests: int = 8) -> list[dict]:
     seeds = []
     for line in robots_body.splitlines():
         if line.lower().startswith("sitemap:"):
@@ -57,14 +57,16 @@ def fetch_sitemaps(client: HttpClient, origin: str, robots_body: str = "", cap: 
         seeds.append(origin.rstrip("/") + "/sitemap.xml")
     seen = set()
     out: list[dict] = []
-    queue = list(seeds)
-    while queue and len(out) < cap:
+    queue = list(seeds[:5])
+    requests_made = 0
+    while queue and len(out) < cap and requests_made < max_requests:
         u = queue.pop(0)
         if u in seen:
             continue
         seen.add(u)
+        requests_made += 1
         try:
-            resp = client.request(u, method="GET")
+            resp = client.request(u, method="GET", timeout_s=3.0)
         except HttpError:
             continue
         if resp.status >= 400:
@@ -72,7 +74,7 @@ def fetch_sitemaps(client: HttpClient, origin: str, robots_body: str = "", cap: 
         body = resp.body.decode("utf-8", errors="replace")
         urls, children = parse_sitemap_xml(body, cap)
         out.extend(urls)
-        for c in children[:10]:
-            if urlparse(c).scheme in ("http", "https"):
+        for c in children[:5]:
+            if urlparse(c).scheme in ("http", "https") and c not in seen:
                 queue.append(c)
     return out[:cap]

@@ -35,6 +35,10 @@ K3_IDENTITY = [
     re.compile(r"\bhelps?\s+you\s+(?!need\b|want\b|get\b|have\b)[a-z]{3,}", re.I),
     re.compile(r"\bthe [a-z]{3,} for [a-z]{3,}", re.I),
     re.compile(r"\bwe (?:run|maintain|create|operate)\s+(?!service\b)[a-z]{3,}", re.I),
+    re.compile(r"\b(?:platform|infrastructure|framework|solution|cloud)\s+(?:for|to|that)\s+[a-z]{3,}", re.I),
+    re.compile(r"\b(?:build|deploy|create|scale|manage|run)\s+[a-z\s,-]{3,30}\s+(?:with|on|for)\b", re.I),
+    re.compile(r"\bthe (?:all-in-one|unified|enterprise|developer|modern)\s+[a-z]{3,}", re.I),
+    re.compile(r"\b(?:financial|developer|agentic|cloud)\s+infrastructure\b", re.I),
 ]
 
 # Clusters where "what does it cost?" is usually the wrong question.

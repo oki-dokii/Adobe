@@ -55,6 +55,33 @@ def date_signals_diverge(visible: list[str], schema: list[str], *, page_type: st
     return False
 
 
+def _is_true_price_conflict(scoped_facts: list, snapshot: CrawlSnapshot) -> bool:
+    urls = [g.url for g in scoped_facts]
+    path_keys = {_canonical_price_path(u) for u in urls}
+    if len(path_keys) < 2:
+        return False
+    # If any page has an explicit historical date (e.g. past press release / old news), it's a conflict
+    now_year = datetime.now(timezone.utc).year
+    has_historical_page = False
+    for g in scoped_facts:
+        pg = snapshot.page_by_url(g.url)
+        if pg and pg.dates:
+            years = _year_ints(pg.dates.get("schema") or []) + _year_ints(pg.dates.get("visible") or [])
+            if any(y <= now_year - 2 for y in years):
+                has_historical_page = True
+                break
+    if has_historical_page:
+        return True
+    # If pages are home vs pricing claiming conflicting single prices
+    types = {snapshot.page_by_url(g.url).page_type for g in scoped_facts if snapshot.page_by_url(g.url)}
+    if "home" in types and "pricing" in types:
+        home_prices = {g.value for g in scoped_facts if snapshot.page_by_url(g.url) and snapshot.page_by_url(g.url).page_type == "home"}
+        pricing_prices = {g.value for g in scoped_facts if snapshot.page_by_url(g.url) and snapshot.page_by_url(g.url).page_type == "pricing"}
+        if len(home_prices) == 1 and len(pricing_prices) == 1 and home_prices != pricing_prices:
+            return True
+    return False
+
+
 def run(snapshot: CrawlSnapshot) -> SkillResult:
     t0 = time.time()
     findings = []
@@ -93,7 +120,7 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
         scoped = []
         for g in group:
             pg = snapshot.page_by_url(g.url)
-            if pg is None or pg.page_type in ("pricing", "product", "home"):
+            if pg is None or pg.page_type in ("pricing", "product", "home", "article"):
                 scoped.append(g)
         if not scoped:
             continue
@@ -102,7 +129,7 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
         urls = [g.url for g in scoped]
         path_keys = {_canonical_price_path(u) for u in urls}
         # Same path after locale-strip = one catalog, not two competing prices.
-        if len(uniq) >= 2 and len(set(urls)) >= 2 and len(path_keys) >= 2:
+        if len(uniq) >= 2 and len(set(urls)) >= 2 and len(path_keys) >= 2 and _is_true_price_conflict(scoped, snapshot):
             f = make_finding(
                 skill_id="freshness-audit",
                 finding_type="on_site_fact_conflict",

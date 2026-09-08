@@ -10,11 +10,11 @@ from lib.findings import make_finding
 from lib.models import CrawlSnapshot, SiteType, SkillResult, SuggestedAction
 
 YMYL_ADVICE = re.compile(
-    r"\b(?:medical|healthcare|clinic|diagnosis|diagnosed|physician|prescription|"
+    r"\b(?:medical|clinic|diagnosis|diagnosed|physician|prescriptions?|"
     r"legal advice|attorney|malpractice)\b",
     re.I,
 )
-SAAS_TERMS = ("saas", "subscription", "workspace", "platform", "api", "cloud", "login")
+SAAS_TERMS = ("saas", "subscription", "workspace", "platform", "api", "cloud", "login", "pricing", "sign up", "signup", "developer platform", "infrastructure")
 ECOM_TERMS = ("add to cart", "add-to-cart", "sku", "checkout", "free shipping")
 DOCS_TERMS = ("documentation", "/docs", "api reference", "changelog", "version")
 NEWS_TERMS = ("subscribe to newsletter", "opinion", "byline", "published")
@@ -40,17 +40,20 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
         if "bookstore" in blob or "shop." in host:
             votes["B"] += 1  # hybrid shop
     if any(t in blob for t in DOCS_TERMS):
-        votes["D"] += 3
+        votes["D"] += 2
     if any(t in blob for t in NEWS_TERMS) or "/blog" in blob or "/news" in blob:
         votes["E"] += 2
-    if any(t in blob for t in SAAS_TERMS):
+    saas_matches = sum(1 for t in SAAS_TERMS if t in blob)
+    if saas_matches >= 2:
+        votes["F"] += 3
+    elif saas_matches == 1:
         votes["F"] += 2
     if any(t in blob for t in ECOM_TERMS):
         votes["F"] += 3
     ranked = sorted(votes.items(), key=lambda kv: -kv[1])
     primary = ranked[0][0] if ranked[0][1] > 0 else "unknown"
     secondary = [c for c, n in ranked[1:] if n > 0]
-    ymyl = ymyl_advice
+    ymyl = ymyl_advice and not (saas_matches >= 2)
     saas = votes["F"] > 0 and any(t in blob for t in SAAS_TERMS) and not any(t in blob for t in ECOM_TERMS)
     ecom = any(t in blob for t in ECOM_TERMS)
     st = SiteType(

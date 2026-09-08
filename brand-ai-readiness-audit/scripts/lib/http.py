@@ -254,7 +254,7 @@ class HttpClient:
 
     def _fetch_once(self, url: str, method: str, timeout: float, max_b: int, connect_ip: str) -> tuple[int, dict[str, str], bytes]:
         if self.opener is not None:
-            req = Request(url, method=method, headers={"User-Agent": USER_AGENT})
+            req = Request(url, method=method, headers={"User-Agent": USER_AGENT, "Accept-Encoding": "gzip, deflate"})
             resp = self.opener(req, timeout=timeout)
             with resp:
                 status = getattr(resp, "status", None) or resp.getcode()
@@ -262,10 +262,38 @@ class HttpClient:
                 body = b""
                 if method != "HEAD":
                     body = resp.read(max_b + 1)
+                    body = self._decompress_if_needed(body, headers)
                     if len(body) > max_b:
                         body = body[:max_b]
                 return int(status), headers, body
         return self._fetch_pinned(url, method, timeout, max_b, connect_ip)
+
+    @staticmethod
+    def _decompress_if_needed(body: bytes, headers: dict[str, str]) -> bytes:
+        if not body:
+            return body
+        ce = headers.get("content-encoding", "").lower()
+        if "gzip" in ce or "deflate" in ce:
+            try:
+                import gzip, zlib
+
+                if "gzip" in ce or (len(body) > 2 and body[:2] == b"\x1f\x8b"):
+                    return gzip.decompress(body)
+                if "deflate" in ce:
+                    try:
+                        return zlib.decompress(body)
+                    except zlib.error:
+                        return zlib.decompress(body, -zlib.MAX_WBITS)
+            except Exception:
+                pass
+        # Auto-detect gzip magic bytes even if header is missing/mangled
+        if len(body) > 2 and body[:2] == b"\x1f\x8b":
+            try:
+                import gzip
+                return gzip.decompress(body)
+            except Exception:
+                pass
+        return body
 
     def _fetch_pinned(self, url: str, method: str, timeout: float, max_b: int, connect_ip: str) -> tuple[int, dict[str, str], bytes]:
         parsed = urlparse(url)
@@ -276,17 +304,29 @@ class HttpClient:
             path = f"{path}?{parsed.query}"
         sock = socket.create_connection((connect_ip, port), timeout=timeout)
         try:
+            sock.settimeout(timeout)
             if parsed.scheme == "https":
                 ctx = ssl.create_default_context()
                 sock = ctx.wrap_socket(sock, server_hostname=hostname)
+                sock.settimeout(timeout)
             conn = http.client.HTTPConnection(hostname, port, timeout=timeout)
             conn.sock = sock
-            conn.request(method, path, headers={"Host": hostname, "User-Agent": USER_AGENT, "Connection": "close"})
+            conn.request(
+                method,
+                path,
+                headers={
+                    "Host": hostname,
+                    "User-Agent": USER_AGENT,
+                    "Accept-Encoding": "gzip, deflate",
+                    "Connection": "close",
+                },
+            )
             resp = conn.getresponse()
             headers = {k.lower(): v for k, v in resp.getheaders()}
             body = b""
             if method != "HEAD":
                 body = resp.read(max_b + 1)
+                body = self._decompress_if_needed(body, headers)
                 if len(body) > max_b:
                     body = body[:max_b]
             status = resp.status
