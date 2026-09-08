@@ -135,7 +135,6 @@ export function AuditExperience() {
           onFocusSite={setFocusedId}
           guideFocus={guideOpen ? guideFocus : null}
           viewMode={treeMode}
-          inspectorOpen={phase === 'results' && selectedSkill != null}
           className="absolute inset-0"
         />
       </div>

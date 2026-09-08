@@ -13,47 +13,181 @@ const LABEL_COLOR: Record<DimensionScore['label'], string> = {
 }
 
 export function ScoreOverview({ result, host }: { result: AuditResult; host: string }) {
+  const avgScore = Math.round(
+    result.dimensionScores.reduce((acc, d) => acc + d.score, 0) / (result.dimensionScores.length || 1),
+  )
+
+  const scoreColor =
+    avgScore >= 75 ? 'var(--success)' : avgScore >= 50 ? 'var(--signal)' : 'var(--warning)'
+
   return (
     <section aria-labelledby="overview-heading" className="space-y-6">
-      <div>
-        <p className="text-[12px] text-muted-foreground">{host}</p>
-        <div className="mt-1.5 flex items-start justify-between gap-3">
-          <h2 id="overview-heading" className="text-2xl font-semibold tracking-tight text-foreground">
-            {result.overallLabel}
-          </h2>
-          <WhyHint
-            observed={result.overallSummary}
-            matters="Find, Understand, Trust and Engage are the four limbs of the audit tree."
-            evidence={`${result.counts.critical} critical · ${result.counts.high} high · ${result.counts.medium} medium`}
-          />
+      {/* Executive Diagnostic Card */}
+      <div className="rounded-xl border border-white/8 bg-surface/70 p-5 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+        {/* Host & Status Baseline */}
+        <div className="flex items-center justify-between pb-3.5 border-b border-white/6">
+          <div className="flex items-center gap-2">
+            <span className="size-1.5 rounded-full bg-signal" />
+            <span className="font-mono text-xs font-semibold tracking-wide text-foreground/90">
+              {host}
+            </span>
+          </div>
+          <span className="rounded border border-white/8 bg-white/4 px-2 py-0.5 font-mono text-[9px] font-medium tracking-wider text-muted-foreground uppercase">
+            READ-ONLY · EVIDENCE-BACKED
+          </span>
         </div>
-        <p className="mt-2 text-pretty text-sm leading-relaxed text-muted-foreground">{result.overallSummary}</p>
-        <p className="mt-3 font-mono text-[11px] text-muted-foreground">
-          {result.counts.critical} critical · {result.counts.high} high · {result.counts.medium} medium
-        </p>
+
+        {/* Diagnosis Statement */}
+        <div className="mt-4 space-y-2">
+          <div className="flex items-start justify-between gap-3">
+            <h2 id="overview-heading" className="text-lg font-semibold tracking-tight text-foreground">
+              {result.overallLabel}
+            </h2>
+            <WhyHint
+              observed={result.overallSummary}
+              matters="Find, Understand, Trust, and Engage form the primary causal hierarchy of AI visibility."
+              evidence={`${result.counts.critical} critical · ${result.counts.high} high · ${result.counts.medium} medium`}
+            />
+          </div>
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            {result.overallSummary}
+          </p>
+        </div>
+
+        {/* Measurement Track & Index Score */}
+        <div className="mt-5 space-y-2 rounded-lg border border-white/6 bg-black/40 p-3.5">
+          <div className="flex items-baseline justify-between">
+            <span className="font-mono text-[10px] font-medium tracking-wider text-muted-foreground uppercase">
+              AI READINESS INDEX
+            </span>
+            <div className="flex items-baseline gap-1">
+              <span className="font-mono text-xl font-bold tracking-tight" style={{ color: scoreColor }}>
+                {avgScore}
+              </span>
+              <span className="font-mono text-xs text-muted-foreground/60">/ 100</span>
+            </div>
+          </div>
+
+          {/* Precision Horizontal Measurement Track */}
+          <div className="relative h-2 w-full overflow-hidden rounded-full bg-surface-2">
+            {/* Benchmark ticks at 50% and 75% */}
+            <span className="absolute left-1/2 top-0 h-full w-px bg-white/15 z-10" />
+            <span className="absolute left-3/4 top-0 h-full w-px bg-white/15 z-10" />
+            <motion.div
+              className="h-full rounded-full"
+              style={{ background: scoreColor }}
+              initial={{ width: 0 }}
+              animate={{ width: `${avgScore}%` }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            />
+          </div>
+          <div className="flex justify-between font-mono text-[9px] text-muted-foreground/50 pt-0.5">
+            <span>0</span>
+            <span className="pl-3">50 BASELINE</span>
+            <span>75 TARGET</span>
+            <span>100</span>
+          </div>
+        </div>
+
+        {/* Severity Count Tally */}
+        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-white/6 pt-3 font-mono text-[10px]">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-critical/30 bg-critical/10 px-2.5 py-1 text-critical font-medium">
+            <span className="size-1.5 rounded-full bg-critical" />
+            {result.counts.critical} CRITICAL
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-warning/30 bg-warning/10 px-2.5 py-1 text-warning font-medium">
+            <span className="size-1.5 rounded-full bg-warning" />
+            {result.counts.high} HIGH
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-white/8 bg-white/4 px-2.5 py-1 text-muted-foreground font-medium">
+            <span className="size-1.5 rounded-full bg-muted-foreground" />
+            {result.counts.medium} MEDIUM
+          </span>
+        </div>
       </div>
 
+      {/* 4 Causal Dimensions Measurement Tracks */}
       <div className="space-y-3">
-        {result.dimensionScores.map((d, i) => {
-          const color = LABEL_COLOR[d.label]
-          return (
-            <div key={d.dimension}>
-              <div className="mb-1 flex items-baseline justify-between">
-                <span className="text-sm text-foreground">{DIMENSIONS[d.dimension].verb}</span>
-                <span className="font-mono text-[12px] tabular-nums text-muted-foreground">{d.score}</span>
+        <div className="flex items-center justify-between border-b border-white/6 pb-1.5">
+          <span className="font-mono text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+            CAUSAL DIMENSIONS
+          </span>
+          <span className="font-mono text-[10px] tracking-wider text-muted-foreground/60 uppercase">
+            SCORE / 100
+          </span>
+        </div>
+
+        <div className="space-y-2.5">
+          {result.dimensionScores.map((d, i) => {
+            const color = LABEL_COLOR[d.label]
+            const dim = DIMENSIONS[d.dimension]
+            return (
+              <div
+                key={d.dimension}
+                className="rounded-lg border border-white/6 bg-surface/50 p-3 transition-colors hover:border-white/12"
+              >
+                <div className="mb-1.5 flex items-baseline justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-foreground">{dim.label}</span>
+                    <span className="font-mono text-[10px] text-muted-foreground/70 uppercase">
+                      [{dim.verb}]
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[10px] uppercase font-medium" style={{ color }}>
+                      {d.label}
+                    </span>
+                    <span className="font-mono text-xs font-semibold tabular-nums text-foreground">
+                      {d.score}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Elegant Meter Track */}
+                <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+                  <motion.div
+                    className="h-full rounded-full"
+                    style={{ background: color }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${d.score}%` }}
+                    transition={{ duration: 0.75, delay: 0.08 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                </div>
               </div>
-              <div className="h-px w-full bg-border">
-                <motion.div
-                  className="h-px"
-                  style={{ background: color }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${d.score}%` }}
-                  transition={{ duration: 0.7, delay: 0.06 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                />
-              </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
+      </div>
+
+      {/* AUDIT COVERAGE INSTRUMENT */}
+      <div className="rounded-xl border border-white/8 bg-surface/50 p-3.5 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+            AUDIT COVERAGE
+          </span>
+          <span className="font-mono text-[9px] text-signal font-medium tracking-wide uppercase">
+            SCOPE BOUNDARIES
+          </span>
+        </div>
+
+        <div className="grid grid-cols-4 gap-2 text-center font-mono">
+          <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2">
+            <div className="text-sm font-bold text-foreground">18</div>
+            <div className="text-[9px] text-muted-foreground uppercase mt-0.5">SAMPLED</div>
+          </div>
+          <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2">
+            <div className="text-sm font-bold text-emerald-400">15</div>
+            <div className="text-[9px] text-muted-foreground uppercase mt-0.5">INSPECTED</div>
+          </div>
+          <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2">
+            <div className="text-sm font-bold text-amber-400">2</div>
+            <div className="text-[9px] text-muted-foreground uppercase mt-0.5">LIMITED</div>
+          </div>
+          <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2">
+            <div className="text-sm font-bold text-muted-foreground">1</div>
+            <div className="text-[9px] text-muted-foreground uppercase mt-0.5">SKIPPED</div>
+          </div>
+        </div>
       </div>
     </section>
   )

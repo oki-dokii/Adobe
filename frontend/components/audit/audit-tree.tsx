@@ -1,16 +1,17 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { motion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import type { AppPhase, Site, SkillId, SkillStatus } from '@/lib/audit/types'
 import { DIMENSIONS, RUN_ORDER, SKILL_MAP } from '@/lib/audit/skills'
 import { buildInitialSkills } from '@/lib/audit/mock-data'
-import { computeTreeLayout, ROOT_Y } from '@/lib/audit/layout'
-import { STATUS_STYLE, isActive, isResolved } from '@/lib/audit/status'
+import { computeTreeLayout, computeAmbientRoots, ROOT_Y, type MicroNodeLayout } from '@/lib/audit/layout'
+import { isActive, isResolved, STATUS_STYLE } from '@/lib/audit/status'
+import { cn } from '@/lib/utils'
 import { TreeBranch } from './tree-branch'
-import { TreeNode } from './tree-node'
+import { TreeNode, type RootHeartbeatState } from './tree-node'
 import { SkillTooltip } from './skill-tooltip'
-import { SkillMark } from './skill-mark'
+import { DataPulse } from './data-pulse'
 
 export type TreeViewMode = 'diagnose' | 'chain' | 'findings'
 
@@ -34,7 +35,6 @@ export function AuditTree({
   onFocusSite,
   guideFocus = null,
   viewMode = 'diagnose',
-  inspectorOpen = false,
 }: {
   width: number
   height: number
@@ -55,18 +55,40 @@ export function AuditTree({
   onFocusSite?: (id: string) => void
   guideFocus?: 'root' | 'dimensions' | 'skills' | 'findings' | 'causes' | 'actions' | null
   viewMode?: TreeViewMode
-  inspectorOpen?: boolean
 }) {
   const [hovered, setHovered] = useState<SkillId | 'root' | null>(null)
+  const [hoveredMicro, setHoveredMicro] = useState<MicroNodeLayout | null>(null)
 
   const skills = site?.skills ?? buildInitialSkills()
   const sitePhase = site?.phase ?? 'dormant'
   const compact = width < 720
   const cx = width / 2
   const cy = height * ROOT_Y
-  const radius = Math.max(96, Math.min(width, height) * (compact ? 0.44 : 0.54) * radiusScale)
+
+  // Sizable spatial footprint extending naturally toward viewport bounds
+  const radius = Math.max(150, Math.min(width * (compact ? 0.39 : 0.43), height * (compact ? 0.41 : 0.45)) * radiusScale)
 
   const layout = useMemo(() => computeTreeLayout(RUN_ORDER, { cx, cy, radius }), [cx, cy, radius])
+  const ambientRoots = useMemo(() => computeAmbientRoots(cx, cy, radius * 1.34, 12, 19), [cx, cy, radius])
+
+  // Sparse, subtle environmental telemetry traces in canvas periphery
+  const ambientTraces = useMemo(() => {
+    const traces: { cx: number; cy: number; r: number; dur: number; delay: number }[] = []
+    const angles = [0.42, 1.15, 2.15, 3.48, 4.25, 5.08, 5.85]
+    const dists = [0.88, 1.14, 0.94, 1.22, 1.06, 0.86, 1.18]
+    for (let i = 0; i < angles.length; i++) {
+      const a = angles[i]
+      const d = radius * dists[i]
+      traces.push({
+        cx: cx + Math.cos(a) * d,
+        cy: cy + Math.sin(a) * d,
+        r: i % 2 === 0 ? 1.5 : 1.0,
+        dur: 15 + i * 2.2,
+        delay: i * 1.6,
+      })
+    }
+    return traces
+  }, [cx, cy, radius])
 
   if (width === 0 || height === 0) return null
 
@@ -82,6 +104,15 @@ export function AuditTree({
         : sitePhase === 'ingesting' && rootArrived
           ? 'initializing'
           : 'dormant'
+
+  const rootHeartbeat: RootHeartbeatState =
+    phase === 'landing' || sitePhase === 'dormant'
+      ? 'dormant'
+      : sitePhase === 'ingesting'
+        ? 'receiving'
+        : sitePhase === 'running' || sitePhase === 'validating' || sitePhase === 'consolidating'
+          ? 'processing'
+          : 'diagnosed'
 
   const awakened = sitePhase !== 'dormant' && sitePhase !== 'ingesting'
   const showRoot = phase !== 'landing' && (rootArrived || awakened)
@@ -111,6 +142,8 @@ export function AuditTree({
   const hasHighlight =
     highlightSet.size > 0 ||
     selectedSkillId != null ||
+    (hovered != null && hovered !== 'root') ||
+    hoveredMicro != null ||
     guideFocus === 'root' ||
     guideFocus === 'dimensions' ||
     (phase === 'results' && viewMode !== 'diagnose')
@@ -135,6 +168,40 @@ export function AuditTree({
     return 'dormant'
   }
 
+  // Causal Cascade Path (when root cause is selected or in chain mode)
+  const causalPath = useMemo(() => {
+    if (highlightSet.size < 2) return null
+    const activeNodes = layout.nodes.filter((n) => highlightSet.has(n.id))
+    if (activeNodes.length < 2) return null
+
+    const orderMap: Record<SkillId, number> = {
+      'crawl-access-audit': 0,
+      'render-extract-audit': 1,
+      'site-type-classifier': 2,
+      'entity-identity-audit': 3,
+      'ai-answerability-audit': 4,
+      'citation-extractability-audit': 5,
+      'freshness-audit': 6,
+      'corroboration-consistency-audit': 7,
+      'engagement-handoff-audit': 8,
+      'audit-orchestrator': 9,
+    }
+    const sorted = [...activeNodes].sort((a, b) => (orderMap[a.id] ?? 0) - (orderMap[b.id] ?? 0))
+
+    let d = `M ${sorted[0].x} ${sorted[0].y}`
+    for (let i = 1; i < sorted.length; i++) {
+      const prev = sorted[i - 1]
+      const cur = sorted[i]
+      const mx = (prev.x + cur.x) / 2
+      const my = (prev.y + cur.y) / 2
+      const bx = mx + (cx - mx) * 0.22
+      const by = my + (cy - my) * 0.22
+      d += ` Q ${bx} ${by} ${cur.x} ${cur.y}`
+    }
+    return d
+  }, [highlightSet, layout.nodes, cx, cy])
+
+  // Camera Spatial Framing
   const cameraTargetId =
     selectedSkillId && selectedSkillId !== 'audit-orchestrator'
       ? selectedSkillId
@@ -143,20 +210,17 @@ export function AuditTree({
         : null
   const cameraNode = cameraTargetId ? layout.nodes.find((n) => n.id === cameraTargetId) : null
 
-  let camScale = 0.84
+  let camScale = 0.94
   let camX = 0
   let camY = 0
-  if (phase === 'ingesting') camScale = 0.96
-  else if (phase === 'auditing') camScale = 1.08
-  else if (phase === 'results') {
-    camScale = viewMode === 'diagnose' ? 0.94 : viewMode === 'chain' ? 1.04 : 1.0
-  }
+  if (phase === 'ingesting') camScale = 0.97
+  else if (phase === 'auditing' || phase === 'results') camScale = 1.0
   if (cameraNode) {
-    camScale = Math.min(1.22, Math.max(camScale, 1.12))
-    camX = (cx - cameraNode.x) * 0.28
-    camY = (cy - cameraNode.y) * 0.28
+    camScale = 1.06
+    camX = (cx - cameraNode.x) * 0.16
+    camY = (cy - cameraNode.y) * 0.16
   } else if (selectedSkillId === 'audit-orchestrator') {
-    camScale = 1.14
+    camScale = 1.04
   }
   if (reduced) {
     camScale = 1
@@ -164,13 +228,7 @@ export function AuditTree({
     camY = 0
   }
 
-  const horizonR = radius * (0.22 + rootProgress * 0.78)
-  const selectedNode = selectedSkillId
-    ? selectedSkillId === 'audit-orchestrator'
-      ? { x: cx, y: cy }
-      : layout.nodes.find((n) => n.id === selectedSkillId)
-    : null
-
+  const horizonR = radius * (0.28 + rootProgress * 0.62)
   const others = sites.filter((s) => s.id !== focusedId)
   const rootStatusLabel =
     phase === 'landing'
@@ -191,125 +249,343 @@ export function AuditTree({
         transition={{ duration: reduced ? 0 : 0.85, ease: [0.22, 1, 0.36, 1] }}
         style={{ transformOrigin: `${cx}px ${cy}px` }}
       >
-        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="absolute inset-0" aria-hidden>
-          {(awakened || phase === 'auditing' || phase === 'results') && (
-            <motion.ellipse
+        {/* Living respiration wrapper (slow, calm organic breathing) */}
+        <motion.div
+          className="absolute inset-0"
+          animate={
+            reduced
+              ? {}
+              : {
+                  rotate: [0, 0.15, 0, -0.15, 0],
+                  scale: [1, 1.002, 1, 0.999, 1],
+                }
+          }
+          transition={{
+            duration: 18,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: 'easeInOut',
+          }}
+          style={{ transformOrigin: `${cx}px ${cy}px` }}
+        >
+          <svg
+            width={width}
+            height={height}
+            viewBox={`0 0 ${width} ${height}`}
+            className="absolute inset-0"
+            aria-hidden
+          >
+            {/* ================= DEPTH LAYER 1: AMBIENT BACKGROUND ROOTS ================= */}
+            <g className="pointer-events-none" opacity={phase === 'landing' ? 0.05 : 0.09}>
+              {ambientRoots.map((d, i) => (
+                <path
+                  key={`ambient-root-${i}`}
+                  d={d}
+                  fill="none"
+                  stroke="var(--line)"
+                  strokeWidth={0.8}
+                  strokeDasharray={i % 2 === 0 ? '3 6' : undefined}
+                />
+              ))}
+            </g>
+
+            {/* Ambient sparse telemetry points in periphery */}
+            <g className="pointer-events-none" opacity={phase === 'landing' ? 0.06 : 0.18}>
+              {ambientTraces.map((t, i) => (
+                <motion.circle
+                  key={`ambient-trace-${i}`}
+                  cx={t.cx}
+                  cy={t.cy}
+                  r={t.r}
+                  fill="var(--signal)"
+                  initial={{ opacity: 0.1 }}
+                  animate={
+                    reduced
+                      ? { opacity: 0.2 }
+                      : {
+                          opacity: [0.08, 0.35, 0.08],
+                          scale: [0.8, 1.3, 0.8],
+                        }
+                  }
+                  transition={{
+                    duration: t.dur,
+                    delay: t.delay,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: 'easeInOut',
+                  }}
+                />
+              ))}
+            </g>
+
+            {/* Diagnostic Horizon Ellipse */}
+            {(awakened || phase === 'auditing' || phase === 'results') && (
+              <motion.ellipse
+                cx={cx}
+                cy={cy}
+                rx={horizonR * 1.18}
+                ry={horizonR * 0.88}
+                fill="none"
+                stroke="var(--line)"
+                strokeWidth={1}
+                strokeDasharray="4 10"
+                initial={false}
+                animate={{ rx: horizonR * 1.12, ry: horizonR * 0.9, opacity: 0.38 }}
+                transition={{ duration: reduced ? 0 : 1.1, ease: [0.22, 1, 0.36, 1] }}
+              />
+            )}
+
+            {/* ================= DEPTH LAYER 2: ROOT ORIGIN ENERGY ================= */}
+            <g className="pointer-events-none">
+              {/* Inner optic ring */}
+              <circle
+                cx={cx}
+                cy={cy}
+                r={22}
+                fill="none"
+                stroke="var(--signal)"
+                strokeWidth={0.8}
+                opacity={phase === 'landing' ? 0.2 : 0.32}
+              />
+
+              {/* Intermediate telemetry ring */}
+              <motion.circle
+                cx={cx}
+                cy={cy}
+                r={compact ? 40 : 48}
+                fill="none"
+                stroke="var(--line)"
+                strokeWidth={0.9}
+                strokeDasharray="4 8"
+                opacity={showRoot ? 0.35 : 0.15}
+                animate={reduced ? {} : { rotate: 360 }}
+                transition={{ duration: 48, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+              />
+
+              {/* Outer boundary ring */}
+              <circle
+                cx={cx}
+                cy={cy}
+                r={compact ? 66 : 76}
+                fill="none"
+                stroke="var(--line)"
+                strokeWidth={0.7}
+                strokeDasharray="2 12"
+                opacity={showRoot ? 0.2 : 0.08}
+              />
+
+              {/* Soft expanding energy wave on active or receiving states */}
+              {!reduced && (isActive(rootStatus) || sitePhase === 'ingesting') && (
+                <motion.circle
+                  cx={cx}
+                  cy={cy}
+                  r={26}
+                  fill="none"
+                  stroke="var(--signal)"
+                  strokeWidth={1.2}
+                  initial={{ r: 24, opacity: 0.38 }}
+                  animate={{ r: [24, compact ? 75 : 92], opacity: [0.38, 0] }}
+                  transition={{ duration: 2.8, repeat: Number.POSITIVE_INFINITY, ease: 'easeOut' }}
+                />
+              )}
+            </g>
+
+            {/* ================= DEPTH LAYER 3: DIMENSION TRUNKS (FIND, UNDERSTAND, TRUST, ENGAGE) ================= */}
+            {phase !== 'landing' &&
+              layout.limbs.map((limb, i) => {
+                const st = limbStatus(limb.dimension)
+                const related = layout.nodes.filter((n) => n.limb === limb.dimension).map((n) => n.id)
+                const isHoveredLimb = hovered !== null && hovered !== 'root' && related.includes(hovered)
+                const dimmed =
+                  hasHighlight &&
+                  !related.some((id) => id === selectedSkillId || highlightSet.has(id) || id === hovered) &&
+                  selectedSkillId !== 'audit-orchestrator'
+                return (
+                  <TreeBranch
+                    key={limb.dimension}
+                    path={limb.path}
+                    status={st}
+                    grown
+                    reduced={reduced}
+                    index={i}
+                    dimmed={dimmed}
+                    emphasized={
+                      isHoveredLimb ||
+                      related.some((id) => id === selectedSkillId || highlightSet.has(id)) ||
+                      guideFocus === 'dimensions'
+                    }
+                    weight="trunk"
+                  />
+                )
+              })}
+
+            {/* ================= DEPTH LAYER 4: SKILL BRANCHES ================= */}
+            {phase !== 'landing' &&
+              layout.branches.map((branch, i) => {
+                const st = statusOf(branch.id)
+                const isHoveredBranch = hovered === branch.id
+                const isBranchHighlighted = highlightSet.has(branch.id)
+                const isBranchSelected = selectedSkillId === branch.id
+                const dimmed =
+                  hasHighlight &&
+                  !isBranchSelected &&
+                  !isBranchHighlighted &&
+                  !isHoveredBranch &&
+                  hoveredMicro?.skillId !== branch.id
+                const grown = awakened && st !== 'dormant'
+                return (
+                  <TreeBranch
+                    key={branch.id}
+                    path={branch.path}
+                    status={st}
+                    grown={grown}
+                    reduced={reduced}
+                    index={i + 4}
+                    dimmed={dimmed}
+                    emphasized={isHoveredBranch || isBranchSelected || isBranchHighlighted}
+                    evidenceFlow={findingOf(branch.id) && st === 'running'}
+                    weight="twig"
+                    flowPath={branch.flowPath}
+                  />
+                )
+              })}
+
+            {/* ================= DEPTH LAYER 5: SECONDARY & TERTIARY BRANCHING & CLUSTER TENDRILS ================= */}
+            {phase !== 'landing' &&
+              layout.clusters.map((cluster) => {
+                const parentStatus = statusOf(cluster.skillId)
+                const isParentSelected = selectedSkillId === cluster.skillId
+                const isParentHighlighted = highlightSet.has(cluster.skillId)
+                const isParentHovered = hovered === cluster.skillId
+                const isClusterRelevant =
+                  !hasHighlight ||
+                  isParentSelected ||
+                  isParentHighlighted ||
+                  isParentHovered ||
+                  hoveredMicro?.skillId === cluster.skillId ||
+                  selectedSkillId === 'audit-orchestrator'
+                const clusterDimmed = hasHighlight && !isClusterRelevant
+                const grown = awakened && parentStatus !== 'dormant'
+
+                return (
+                  <g key={`cluster-${cluster.skillId}`}>
+                    {/* Inter-cluster tendrils (Bridges, Constellations, Pipelines) */}
+                    {cluster.tendrils.map((t, idx) => {
+                      const stStyle = STATUS_STYLE[parentStatus]
+                      const tendrilColor = parentStatus === 'dormant' ? 'rgba(255, 255, 255, 0.08)' : stStyle.color
+                      return (
+                        <motion.path
+                          key={`${cluster.skillId}-tendril-${idx}`}
+                          d={t.path}
+                          fill="none"
+                          stroke={tendrilColor}
+                          strokeWidth={t.style === 'bridge' ? 1.4 : 0.9}
+                          strokeDasharray={t.style === 'dashed' ? '2 4' : t.style === 'bridge' ? '4 3' : undefined}
+                          strokeLinecap="round"
+                          initial={reduced ? { opacity: 0.25 } : { pathLength: 0, opacity: 0 }}
+                          animate={{
+                            pathLength: grown ? 1 : 0,
+                            opacity: grown ? (clusterDimmed ? 0.05 : t.style === 'bridge' ? 0.55 : 0.32) : 0,
+                          }}
+                          transition={{ duration: 0.8, delay: idx * 0.05 }}
+                        />
+                      )
+                    })}
+
+                    {/* Micro-node connecting tendrils */}
+                    {cluster.microNodes.map((mn, idx) => {
+                      const isEvidence = mn.kind === 'evidence'
+                      const isThisHovered = hoveredMicro?.id === mn.id
+                      const branchDimmed =
+                        hasHighlight &&
+                        !isParentSelected &&
+                        !isParentHighlighted &&
+                        !isParentHovered &&
+                        !isThisHovered &&
+                        selectedSkillId !== 'audit-orchestrator'
+                      const branchEmphasized = isParentSelected || isThisHovered || (isEvidence && isParentHighlighted)
+
+                      return (
+                        <TreeBranch
+                          key={`micro-branch-${mn.id}`}
+                          path={mn.path}
+                          status={parentStatus}
+                          grown={grown}
+                          reduced={reduced}
+                          index={idx + 12}
+                          dimmed={branchDimmed}
+                          emphasized={branchEmphasized}
+                          evidenceFlow={isEvidence && parentStatus === 'running'}
+                          weight="tendril"
+                          flowPath={mn.flowPath}
+                        />
+                      )
+                    })}
+                  </g>
+                )
+              })}
+
+            {/* ================= DEPTH LAYER 6: ROOT-CAUSE CAUSAL ROUTE VISUALIZATION ================= */}
+            {causalPath && (
+              <g className="pointer-events-none">
+                {/* Outer optic halo */}
+                <motion.path
+                  d={causalPath}
+                  fill="none"
+                  stroke="var(--warning)"
+                  strokeWidth={4.5}
+                  strokeLinecap="round"
+                  style={{ opacity: 0.22, filter: 'blur(3px)' }}
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                />
+                {/* Core animated causal conduit */}
+                <motion.path
+                  d={causalPath}
+                  fill="none"
+                  stroke="var(--warning)"
+                  strokeWidth={2.0}
+                  strokeLinecap="round"
+                  strokeDasharray="5 5"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                />
+                {/* Diagnostic telemetry pulse along causal vector */}
+                {!reduced && (
+                  <DataPulse path={causalPath} color="var(--destructive)" duration={2.2} delay={0.2} />
+                )}
+              </g>
+            )}
+
+            {/* Center Origin Ring */}
+            <motion.circle
               cx={cx}
               cy={cy}
-              rx={horizonR * 1.18}
-              ry={horizonR * 0.88}
-              fill="none"
-              stroke="var(--line)"
-              strokeWidth={0.7}
-              strokeDasharray="3 11"
-              initial={false}
-              animate={{ rx: horizonR * 1.18, ry: horizonR * 0.88, opacity: 0.28 }}
-              transition={{ duration: reduced ? 0 : 1.1, ease: [0.22, 1, 0.36, 1] }}
-            />
-          )}
-
-          {layout.limbs.map((limb, i) => {
-            const st = limbStatus(limb.dimension)
-            const related = layout.nodes.filter((n) => n.limb === limb.dimension).map((n) => n.id)
-            const dimmed =
-              hasHighlight &&
-              !related.some((id) => id === selectedSkillId || highlightSet.has(id)) &&
-              selectedSkillId !== 'audit-orchestrator'
-            return (
-              <TreeBranch
-                key={limb.dimension}
-                path={limb.path}
-                status={st}
-                grown
-                reduced={reduced}
-                index={i}
-                dimmed={dimmed}
-                emphasized={
-                  related.some((id) => id === selectedSkillId || highlightSet.has(id)) ||
-                  guideFocus === 'dimensions'
-                }
-                weight="trunk"
-              />
-            )
-          })}
-
-          {layout.branches.map((branch, i) => {
-            const st = statusOf(branch.id)
-            const dimmed = hasHighlight && selectedSkillId !== branch.id && !highlightSet.has(branch.id)
-            const grown = phase === 'landing' || (awakened && st !== 'dormant')
-            return (
-              <TreeBranch
-                key={branch.id}
-                path={branch.path}
-                status={st}
-                grown={grown}
-                reduced={reduced}
-                index={i + 4}
-                dimmed={dimmed}
-                emphasized={selectedSkillId === branch.id || highlightSet.has(branch.id)}
-                evidenceFlow={findingOf(branch.id) && st === 'running'}
-                weight="twig"
-                flowPath={branch.flowPath}
-              />
-            )
-          })}
-
-          {phase !== 'landing' &&
-            layout.nodes.map((node) => {
-            const st = statusOf(node.id)
-            const visible = awakened || st !== 'dormant'
-            if (!visible) return null
-            const color = STATUS_STYLE[st].color
-            const dimmed = hasHighlight && selectedSkillId !== node.id && !highlightSet.has(node.id)
-            return (
-              <SkillMark
-                key={`mark-${node.id}`}
-                id={node.id}
-                x={node.x}
-                y={node.y}
-                color={st === 'dormant' ? 'var(--muted-foreground)' : color}
-                opacity={dimmed ? 0.12 : isActive(st) || selectedSkillId === node.id ? 0.7 : 0.32}
-              />
-            )
-          })}
-
-          {selectedNode && inspectorOpen && phase === 'results' && (
-            <path
-              d={`M ${selectedNode.x} ${selectedNode.y} L ${width - 8} ${selectedNode.y}`}
-              fill="none"
+              r={phase === 'landing' ? 34 : 48}
+              fill="transparent"
               stroke="var(--signal)"
-              strokeWidth={0.7}
-              opacity={0.35}
-              strokeDasharray="2 6"
+              strokeWidth={phase === 'landing' ? 1.05 : 1.2}
+              opacity={phase === 'landing' ? 0.34 : showRoot ? 0.3 : 0}
+              animate={
+                reduced
+                  ? { opacity: phase === 'landing' ? 0.34 : 0.28 }
+                  : isActive(rootStatus)
+                    ? { opacity: [0.22, 0.42, 0.22], r: phase === 'landing' ? 34 : [46, 50, 46] }
+                    : { opacity: phase === 'landing' ? 0.34 : showRoot ? 0.3 : 0 }
+              }
+              transition={{ duration: 4.8, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
             />
-          )}
-
-          <motion.circle
-            cx={cx}
-            cy={cy}
-            r={phase === 'landing' ? 34 : 48}
-            fill="transparent"
-            stroke="var(--signal)"
-            strokeWidth={phase === 'landing' ? 1.05 : 1.2}
-            opacity={phase === 'landing' ? 0.34 : showRoot ? 0.3 : 0}
-            animate={
-              reduced
-                ? { opacity: phase === 'landing' ? 0.34 : 0.28 }
-                : isActive(rootStatus)
-                  ? { opacity: [0.22, 0.42, 0.22], r: phase === 'landing' ? 34 : [46, 50, 46] }
-                  : { opacity: phase === 'landing' ? 0.34 : showRoot ? 0.3 : 0 }
-            }
-            transition={{ duration: 4.8, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
-          />
-          {phase === 'landing' && (
-            <>
-              <circle cx={cx} cy={cy} r={14} fill="none" stroke="var(--foreground)" strokeWidth={0.6} opacity={0.18} />
-              <circle cx={cx} cy={cy} r={5.5} fill="var(--signal)" opacity={0.55} />
-            </>
-          )}
-        </svg>
+            {phase === 'landing' && (
+              <>
+                <circle cx={cx} cy={cy} r={14} fill="none" stroke="var(--foreground)" strokeWidth={0.6} opacity={0.18} />
+                <circle cx={cx} cy={cy} r={5.5} fill="var(--signal)" opacity={0.55} />
+              </>
+            )}
+          </svg>
 
         <div className="absolute inset-0">
+          {/* ROOT: Heartbeat Center of the Diagnostic System */}
           {showRoot && (
             <>
               <TreeNode
@@ -317,13 +593,14 @@ export function AuditTree({
                 y={cy}
                 status={rootStatus}
                 label={labelOf || 'Origin'}
-                size={compact ? 32 : 42}
+                size={compact ? 32 : 38}
                 visible
                 reduced={reduced}
                 interactive={Boolean(onSelectRoot)}
                 progress={rootProgress}
                 selected={selectedSkillId === 'audit-orchestrator'}
                 variant="root"
+                rootState={rootHeartbeat}
                 onClick={onSelectRoot}
                 onHover={() => setHovered('root')}
                 onLeave={() => setHovered((h) => (h === 'root' ? null : h))}
@@ -334,7 +611,7 @@ export function AuditTree({
                   className="pointer-events-none absolute -translate-x-1/2 text-center"
                   style={{ left: cx, top: cy + 32 }}
                 >
-                  <motion.p className="text-[13px] tracking-tight text-foreground">{labelOf}</motion.p>
+                  <motion.p className="text-[13px] font-semibold tracking-tight text-foreground">{labelOf}</motion.p>
                   <p className="mt-0.5 font-mono text-[10px] tracking-wide text-muted-foreground">
                     {awakened && sitePhase !== 'completed' && sitePhase !== 'partial'
                       ? `${Math.round(rootProgress * 100)}% · ${rootStatusLabel}`
@@ -345,84 +622,223 @@ export function AuditTree({
             </>
           )}
 
-          {layout.limbs.map((limb) => {
-            const st = limbStatus(limb.dimension)
-            const emphasize = guideFocus === 'dimensions' || guideFocus === 'root'
-            return (
-              <div
-                key={`limb-${limb.dimension}`}
-                className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 text-[11px] tracking-wide text-muted-foreground"
-                style={{
-                  left: limb.joint.x,
-                  top: limb.joint.y,
-                  opacity: emphasize ? 1 : phase === 'landing' ? 0.45 : 0.85,
-                  color: st !== 'dormant' && st !== 'queued' ? STATUS_STYLE[st].color : undefined,
-                }}
-              >
-                {DIMENSIONS[limb.dimension].verb}
-              </div>
-            )
-          })}
+          {/* DIMENSION HUBS: Visually prominent intermediate hubs (Find, Understand, Trust, Engage) */}
+          {phase !== 'landing' &&
+            layout.limbs.map((limb) => {
+              const st = limbStatus(limb.dimension)
+              const related = layout.nodes.filter((n) => n.limb === limb.dimension).map((n) => n.id)
+              const isHoveredLimb = hovered !== null && hovered !== 'root' && related.includes(hovered)
+              const isSelectedLimb = related.some((id) => id === selectedSkillId)
+              const isHighlightedLimb = related.some((id) => highlightSet.has(id))
+              const dimmed =
+                hasHighlight &&
+                !isSelectedLimb &&
+                !isHighlightedLimb &&
+                !isHoveredLimb &&
+                selectedSkillId !== 'audit-orchestrator'
 
-          {layout.nodes.map((node) => {
-            const st = statusOf(node.id)
-            const visible = phase === 'landing' || awakened || st !== 'dormant'
-            const dimmed = hasHighlight && selectedSkillId !== node.id && !highlightSet.has(node.id)
-            const outward = rad(node.angle)
-            const lx = node.x + Math.cos(outward) * (compact ? 16 : 22)
-            const ly = node.y + Math.sin(outward) * (compact ? 16 : 22)
-            const align: 'left' | 'right' | 'center' =
-              Math.cos(outward) > 0.35 ? 'left' : Math.cos(outward) < -0.35 ? 'right' : 'center'
-            const showSkillLabel =
-              showLabels &&
-              visible &&
-              phase !== 'landing' &&
-              (hovered === node.id ||
-                selectedSkillId === node.id ||
-                highlightSet.has(node.id) ||
-                isActive(st) ||
-                guideFocus === 'skills')
+              const a = rad(limb.angle)
+              const side = a > 0.2 && a < Math.PI - 0.2 ? 1 : -1
+              const lx = limb.joint.x + Math.cos(a + Math.PI / 2) * 24 * side
+              const ly = limb.joint.y + Math.sin(a + Math.PI / 2) * 24 * side
 
-            return (
-              <div key={node.id}>
-                <TreeNode
-                  x={node.x}
-                  y={node.y}
-                  status={st}
-                  label={SKILL_MAP[node.id].label}
-                  size={compact ? 9 : node.depth === 'near' ? 12 : 10}
-                  visible={visible}
-                  dimmed={dimmed}
-                  selected={selectedSkillId === node.id}
-                  reduced={reduced}
-                  progress={progressOf(node.id)}
-                  interactive={interactive && awakened}
-                  onHover={() => setHovered(node.id)}
-                  onFocus={() => setHovered(node.id)}
-                  onLeave={() => setHovered((h) => (h === node.id ? null : h))}
-                  onClick={() => onSelectSkill?.(node.id)}
-                />
-                {showSkillLabel && (
+              return (
+                <div key={`dim-hub-${limb.dimension}`}>
+                  <TreeNode
+                    x={limb.joint.x}
+                    y={limb.joint.y}
+                    status={st}
+                    label={DIMENSIONS[limb.dimension].label}
+                    size={compact ? 24 : 28}
+                    visible={awakened || phase !== 'landing'}
+                    dimmed={dimmed}
+                    selected={isSelectedLimb || isHighlightedLimb}
+                    reduced={reduced}
+                    interactive={interactive && awakened}
+                    variant="dimension"
+                    onClick={() => {
+                       const firstChild = limb.skillIds[0]
+                       if (firstChild) onSelectSkill?.(firstChild)
+                    }}
+                  />
                   <div
-                    className="pointer-events-none absolute text-[10px] leading-tight text-muted-foreground"
+                    className={cn(
+                      'pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 font-mono text-[10px] font-bold tracking-[0.16em] uppercase transition-opacity duration-200',
+                      dimmed ? 'opacity-30' : 'opacity-95',
+                    )}
                     style={{
                       left: lx,
                       top: ly,
-                      transform:
-                        align === 'left'
-                          ? 'translate(0, -50%)'
-                          : align === 'right'
-                            ? 'translate(-100%, -50%)'
-                            : 'translate(-50%, 0)',
-                      opacity: dimmed ? 0.3 : 0.85,
+                      color: STATUS_STYLE[st].color,
                     }}
                   >
-                    {SKILL_MAP[node.id].label}
+                    <span className="rounded border border-white/12 bg-black/90 px-2 py-0.5 backdrop-blur-md shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
+                      {DIMENSIONS[limb.dimension].verb}
+                    </span>
                   </div>
-                )}
+                </div>
+              )
+            })}
+
+          {/* SKILL SATELLITES: Compact, subordinate satellite nodes */}
+          {phase !== 'landing' &&
+            layout.nodes.map((node) => {
+              const st = statusOf(node.id)
+              const isSkillSelected = selectedSkillId === node.id
+              const isSkillHovered = hovered === node.id
+              const isSkillHighlighted = highlightSet.has(node.id)
+              const visible = awakened || st !== 'dormant'
+              const dimmed =
+                hasHighlight && !isSkillSelected && !isSkillHighlighted && !isSkillHovered
+              const outward = rad(node.angle)
+              const lx = node.x + Math.cos(outward) * (compact ? 18 : 22)
+              const ly = node.y + Math.sin(outward) * (compact ? 18 : 22)
+              const align: 'left' | 'right' | 'center' =
+                Math.cos(outward) > 0.35 ? 'left' : Math.cos(outward) < -0.35 ? 'right' : 'center'
+              const showSkillLabel =
+                showLabels &&
+                visible &&
+                (phase === 'results' ||
+                  phase === 'auditing' ||
+                  isSkillHovered ||
+                  isSkillSelected ||
+                  isSkillHighlighted ||
+                  isActive(st) ||
+                  guideFocus === 'skills')
+
+              return (
+                <div key={node.id}>
+                  <TreeNode
+                    x={node.x}
+                    y={node.y}
+                    status={st}
+                    label={SKILL_MAP[node.id].label}
+                    size={compact ? 15 : 18}
+                    visible={visible}
+                    dimmed={dimmed}
+                    selected={isSkillSelected}
+                    reduced={reduced}
+                    progress={progressOf(node.id)}
+                    interactive={interactive && awakened}
+                    variant="skill"
+                    hasFinding={findingOf(node.id)}
+                    onHover={() => setHovered(node.id)}
+                    onFocus={() => setHovered(node.id)}
+                    onLeave={() => setHovered((h) => (h === node.id ? null : h))}
+                    onClick={() => onSelectSkill?.(node.id)}
+                  />
+                  {showSkillLabel && (
+                    <div
+                      className="pointer-events-none absolute text-[10px] font-medium leading-tight tracking-tight transition-all duration-200"
+                      style={{
+                        left: lx,
+                        top: ly,
+                        transform:
+                          align === 'left'
+                            ? 'translate(0, -50%)'
+                            : align === 'right'
+                              ? 'translate(-100%, -50%)'
+                              : 'translate(-50%, 0)',
+                        opacity: dimmed ? 0.3 : isSkillSelected || isSkillHovered ? 1 : 0.85,
+                      }}
+                    >
+                      <span
+                        className={cn(
+                          'rounded px-1.5 py-0.5 transition-all duration-150',
+                          isSkillHovered || isSkillSelected
+                            ? 'bg-black/90 text-foreground border border-white/15 shadow-md'
+                            : 'text-foreground/80',
+                        )}
+                      >
+                        {SKILL_MAP[node.id].short}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+
+          {/* ================= MICRO-NODES: SECONDARY & TERTIARY EVIDENCE POINTS ================= */}
+          {phase !== 'landing' &&
+            layout.microNodes.map((mn) => {
+              const parentStatus = statusOf(mn.skillId)
+              const isParentSelected = selectedSkillId === mn.skillId
+              const isParentHighlighted = highlightSet.has(mn.skillId)
+              const isParentHovered = hovered === mn.skillId
+              const isThisHovered = hoveredMicro?.id === mn.id
+
+              const visible = awakened || parentStatus !== 'dormant'
+              const dimmed =
+                hasHighlight &&
+                !isParentSelected &&
+                !isParentHighlighted &&
+                !isParentHovered &&
+                !isThisHovered &&
+                selectedSkillId !== 'audit-orchestrator'
+
+              const showMicroLabel =
+                (isThisHovered || (isParentSelected && mn.level === 3)) && !dimmed
+
+              return (
+                <div key={`micro-node-${mn.id}`}>
+                  <TreeNode
+                    x={mn.x}
+                    y={mn.y}
+                    status={parentStatus}
+                    label={mn.label}
+                    size={compact ? 7 : 8}
+                    visible={visible}
+                    dimmed={dimmed}
+                    selected={isThisHovered || (isParentSelected && mn.level === 3)}
+                    reduced={reduced}
+                    interactive={interactive && awakened}
+                    variant="micro"
+                    kind={mn.kind}
+                    onHover={() => setHoveredMicro(mn)}
+                    onFocus={() => setHoveredMicro(mn)}
+                    onLeave={() => setHoveredMicro((cur) => (cur?.id === mn.id ? null : cur))}
+                    onClick={() => onSelectSkill?.(mn.skillId)}
+                  />
+                  {showMicroLabel && (
+                    <div
+                      className="pointer-events-none absolute z-30 -translate-x-1/2 font-mono text-[9px] font-medium tracking-tight whitespace-nowrap"
+                      style={{
+                        left: mn.x,
+                        top: mn.y - 14,
+                      }}
+                    >
+                      <span className="rounded border border-white/12 bg-black/90 px-1.5 py-0.5 text-foreground shadow-md backdrop-blur-md">
+                        <span className="text-[8px] uppercase tracking-wider text-muted-foreground mr-1">
+                          {mn.kind}
+                        </span>
+                        {mn.label}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+
+          {/* Micro-Node Diagnostic HUD Tooltip on Hover */}
+          {interactive && hoveredMicro && (
+            <div
+              className="pointer-events-none absolute z-40 -translate-x-1/2 -translate-y-full pb-2"
+              style={{ left: hoveredMicro.x, top: hoveredMicro.y }}
+            >
+              <div className="flex items-center gap-1.5 rounded border border-white/12 bg-background/95 px-2 py-1 font-mono text-[10px] shadow-[0_4px_16px_rgba(0,0,0,0.6)] backdrop-blur-md">
+                <span
+                  className="rounded px-1 py-0.5 text-[8px] font-bold uppercase tracking-wider"
+                  style={{
+                    color: STATUS_STYLE[statusOf(hoveredMicro.skillId)].color,
+                    backgroundColor: `${STATUS_STYLE[statusOf(hoveredMicro.skillId)].color}18`,
+                  }}
+                >
+                  {hoveredMicro.kind}
+                </span>
+                <span className="font-sans text-xs font-medium text-foreground">{hoveredMicro.label}</span>
               </div>
-            )
-          })}
+            </div>
+          )}
 
           {interactive && hoveredNode && hoveredSkill && (
             <SkillTooltip skill={hoveredSkill} x={hoveredNode.x} y={hoveredNode.y} containerWidth={width} />
@@ -474,8 +890,9 @@ export function AuditTree({
           })}
         </div>
       </motion.div>
-    </div>
-  )
+    </motion.div>
+  </div>
+)
 }
 
 function rad(deg: number) {

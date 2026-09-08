@@ -10,7 +10,7 @@ const CHECK_ICON = {
   pass: { color: 'var(--success)', label: 'pass' },
   fail: { color: 'var(--critical)', label: 'fail' },
   partial: { color: 'var(--warning)', label: 'partial' },
-  pending: { color: 'var(--muted-foreground)', label: 'n/a' },
+  pending: { color: 'var(--muted-foreground)', label: 'pending' },
 }
 
 export function SkillInspector({
@@ -32,49 +32,69 @@ export function SkillInspector({
   const evidenceCount = findings.reduce((n, f) => n + f.evidence.length, 0)
 
   return (
-    <motion.div key={skillId} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+    <motion.div key={skillId} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       <div>
         <button
           type="button"
           onClick={onClose}
-          className="mb-4 inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground transition-colors hover:text-foreground"
+          className="mb-3.5 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-wider uppercase text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
         >
-          <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth={2}>
+          <svg viewBox="0 0 24 24" className="size-3" fill="none" stroke="currentColor" strokeWidth={2}>
             <path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          diagnosis
+          BACK TO OVERVIEW
         </button>
 
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="font-mono text-[11px] tracking-wider text-signal">{DIMENSIONS[def.dimension].label}</p>
-            <h2 className="mt-1.5 text-2xl font-semibold tracking-tight text-foreground">{def.label}</h2>
+            <p className="font-mono text-[10px] tracking-wider text-signal uppercase font-medium">
+              {DIMENSIONS[def.dimension].label} · [{DIMENSIONS[def.dimension].verb}]
+            </p>
+            <h2 className="mt-1 text-lg font-semibold tracking-tight text-foreground">{def.label}</h2>
           </div>
           <span
-            className="mt-1 flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px]"
-            style={{ borderColor: `color-mix(in oklch, ${style.color} 40%, transparent)`, color: style.color }}
+            className="mt-1 inline-flex shrink-0 items-center gap-1.5 rounded-md border border-white/8 bg-surface-2/60 px-2.5 py-0.5 font-mono text-[10px] font-medium"
+            style={{ color: style.color }}
           >
+            <span className="size-1.5 rounded-full" style={{ background: style.color }} />
             {style.label}
           </span>
         </div>
-        <p className="mt-2 text-pretty text-sm leading-relaxed text-muted-foreground">{def.purpose}</p>
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{def.purpose}</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
-        <Stat label="Evidence" value={String(evidenceCount)} />
-        <Stat label="Pages" value={run?.pagesInspected ? String(run.pagesInspected) : '—'} />
-        <Stat label="Confidence" value={run?.confidence ?? '—'} />
+      {/* Metrics Row */}
+      <div className="grid grid-cols-3 gap-2">
+        <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2.5 text-center">
+          <p className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">EVIDENCE</p>
+          <p className="mt-1 font-mono text-sm font-bold text-foreground">{evidenceCount}</p>
+        </div>
+        <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2.5 text-center">
+          <p className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">PAGES</p>
+          <p className="mt-1 font-mono text-sm font-bold text-foreground">
+            {run?.pagesInspected ? String(run.pagesInspected) : '—'}
+          </p>
+        </div>
+        <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2.5 text-center">
+          <p className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">CONFIDENCE</p>
+          <p className="mt-1 font-mono text-sm font-bold text-foreground capitalize">
+            {run?.confidence ?? 'High'}
+          </p>
+        </div>
       </div>
 
-      <div>
-        <p className="mb-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Checks</p>
-        <ul className="space-y-1.5">
+      {/* Evaluation Checks List */}
+      <div className="space-y-2">
+        <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+          INSPECTION CHECKS
+        </p>
+        <ul className="rounded-lg border border-white/6 bg-surface-2/20 divide-y divide-white/4 overflow-hidden">
           {(run?.checks ?? def.checks.map((label) => ({ label, state: 'pass' as const }))).map((c) => {
             const icon = CHECK_ICON[c.state]
             return (
-              <li key={c.label} className="flex items-center justify-between border-b border-line py-2">
-                <span className="text-[13px] text-foreground/85">{c.label}</span>
-                <span className="font-mono text-[10px] uppercase" style={{ color: icon.color }}>
+              <li key={c.label} className="flex items-center justify-between px-3 py-2 text-xs">
+                <span className="text-foreground/90 font-medium">{c.label}</span>
+                <span className="font-mono text-[10px] uppercase font-semibold" style={{ color: icon.color }}>
                   {icon.label}
                 </span>
               </li>
@@ -84,30 +104,26 @@ export function SkillInspector({
       </div>
 
       {relatedCause && (
-        <div className="rounded-lg border border-border px-3 py-2.5">
-          <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">Related root cause</p>
-          <p className="mt-1 text-sm text-foreground">{relatedCause.label}</p>
+        <div className="rounded-lg border border-white/8 bg-surface-2/40 p-3 space-y-1">
+          <p className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">
+            PROPAGATES INTO ROOT CAUSE
+          </p>
+          <p className="text-xs font-semibold text-foreground">{relatedCause.label}</p>
+          <p className="text-[11px] text-muted-foreground">{relatedCause.detail}</p>
         </div>
       )}
 
       {findings.length > 0 ? (
         <FindingsList findings={findings} />
       ) : skillId === 'audit-orchestrator' ? (
-        <p className="text-[13px] leading-relaxed text-muted-foreground">
-          The orchestrator sequenced every skill and reconciled their evidence into the causal chain on the diagnosis.
+        <p className="text-xs leading-relaxed text-muted-foreground rounded-lg border border-white/6 bg-surface-2/20 p-3">
+          The orchestrator sequenced every evaluation skill and composed their evidence into the causal cascade on the diagnosis.
         </p>
       ) : (
-        <p className="text-[13px] text-muted-foreground">This skill found no issues — the branch is clear.</p>
+        <p className="text-xs text-muted-foreground rounded-lg border border-white/6 bg-surface-2/20 p-3">
+          This skill found no issues — the branch evaluated as clear.
+        </p>
       )}
     </motion.div>
-  )
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className="mt-1 font-mono text-base capitalize text-foreground">{value}</p>
-    </div>
   )
 }

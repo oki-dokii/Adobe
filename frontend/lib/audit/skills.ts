@@ -44,7 +44,7 @@ export const SKILLS: SkillDef[] = [
   {
     id: 'site-type-classifier',
     label: 'Site Type Classifier',
-    short: 'Classify',
+    short: 'Site Type',
     dimension: 'understanding',
     summary: 'Determines what kind of site this is so later skills calibrate correctly.',
     purpose:
@@ -54,7 +54,7 @@ export const SKILLS: SkillDef[] = [
   {
     id: 'crawl-access-audit',
     label: 'Crawl Access',
-    short: 'Crawl',
+    short: 'Crawl Access',
     dimension: 'discoverability',
     summary: 'Checks whether crawlers can reach pages without being blocked.',
     purpose:
@@ -64,7 +64,7 @@ export const SKILLS: SkillDef[] = [
   {
     id: 'render-extract-audit',
     label: 'Render & Extract',
-    short: 'Render',
+    short: 'Render & Extract',
     dimension: 'discoverability',
     summary: 'Tests whether meaningful content survives without a browser runtime.',
     purpose:
@@ -74,7 +74,7 @@ export const SKILLS: SkillDef[] = [
   {
     id: 'citation-extractability-audit',
     label: 'Citation Extractability',
-    short: 'Citation',
+    short: 'Citation Extractability',
     dimension: 'trust',
     summary: 'Checks whether facts are quotable in a self-contained, extractable form.',
     purpose:
@@ -84,7 +84,7 @@ export const SKILLS: SkillDef[] = [
   {
     id: 'entity-identity-audit',
     label: 'Entity Identity',
-    short: 'Entity',
+    short: 'Entity Identity',
     dimension: 'understanding',
     summary: 'Checks whether machines can distinguish the brand from similar entities.',
     purpose:
@@ -94,7 +94,7 @@ export const SKILLS: SkillDef[] = [
   {
     id: 'ai-answerability-audit',
     label: 'AI Answerability',
-    short: 'Answer',
+    short: 'AI Answerability',
     dimension: 'understanding',
     summary: 'Simulates the questions AI is asked about the brand and grades the answers.',
     purpose:
@@ -104,7 +104,7 @@ export const SKILLS: SkillDef[] = [
   {
     id: 'freshness-audit',
     label: 'Freshness',
-    short: 'Fresh',
+    short: 'Freshness',
     dimension: 'trust',
     summary: 'Checks whether content signals recency and is kept up to date.',
     purpose:
@@ -114,7 +114,7 @@ export const SKILLS: SkillDef[] = [
   {
     id: 'corroboration-consistency-audit',
     label: 'Corroboration',
-    short: 'Corrob.',
+    short: 'Corroboration',
     dimension: 'trust',
     summary: 'Checks whether on-site claims agree with each other and third parties.',
     purpose:
@@ -124,7 +124,7 @@ export const SKILLS: SkillDef[] = [
   {
     id: 'engagement-handoff-audit',
     label: 'Engagement Handoff',
-    short: 'Engage',
+    short: 'Engagement Handoff',
     dimension: 'engagement',
     summary: 'Checks whether an AI can route a user to the right next action.',
     purpose:
