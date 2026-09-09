@@ -60,16 +60,28 @@ def _is_true_price_conflict(scoped_facts: list, snapshot: CrawlSnapshot) -> bool
     path_keys = {_canonical_price_path(u) for u in urls}
     if len(path_keys) < 2:
         return False
+    # If e-commerce site or multiple product paths (e.g. /products/sku1 vs /products/sku2), prices naturally differ
+    if snapshot.site_type and (snapshot.site_type.ecommerce or snapshot.site_type.cluster == "C"):
+        return False
+    if any("/product" in u.lower() or "/item" in u.lower() for u in urls):
+        return False
+
     # If any page has an explicit historical date (e.g. past press release / old news), it's a conflict
     now_year = datetime.now(timezone.utc).year
     has_historical_page = False
     for g in scoped_facts:
         pg = snapshot.page_by_url(g.url)
-        if pg and pg.dates:
-            years = _year_ints(pg.dates.get("schema") or []) + _year_ints(pg.dates.get("visible") or [])
-            if any(y <= now_year - 2 for y in years):
+        if pg:
+            schema_years = _year_ints(pg.dates.get("schema") or [])
+            if any(y <= now_year - 2 for y in schema_years):
                 has_historical_page = True
                 break
+            url_l = pg.url.lower()
+            if any(k in url_l for k in ("/press", "/news", "/blog", "/archive", "/changelog", "/releases")):
+                vis_years = _year_ints(pg.dates.get("visible") or [])
+                if any(y <= now_year - 2 for y in vis_years):
+                    has_historical_page = True
+                    break
     if has_historical_page:
         return True
     # If pages are home vs pricing claiming conflicting single prices

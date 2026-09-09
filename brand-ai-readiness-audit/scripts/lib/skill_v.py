@@ -15,7 +15,7 @@ YMYL_ADVICE = re.compile(
     re.I,
 )
 SAAS_TERMS = ("saas", "subscription", "workspace", "platform", "api", "cloud", "login", "pricing", "sign up", "signup", "developer platform", "infrastructure")
-ECOM_TERMS = ("add to cart", "add-to-cart", "sku", "checkout", "free shipping")
+ECOM_TERMS = ("add to cart", "add-to-cart", "sku", "checkout", "free shipping", "add to bag", "add-to-bag", "shopping bag", "express delivery")
 DOCS_TERMS = ("documentation", "/docs", "api reference", "changelog", "version")
 NEWS_TERMS = ("subscribe to newsletter", "opinion", "byline", "published")
 DIR_TERMS = ("nonprofit", "donate", "directory", "listings", "chamber")

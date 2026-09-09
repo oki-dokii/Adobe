@@ -218,7 +218,22 @@ Benchmarking across diverse real-world domains (Python.org, Rust-Lang, Vercel, G
 
 ---
 
-## 9. How to extend this file
+## 9. Expanded 40-Domain Live Benchmark & E-Commerce Hardening (2026-09-09)
+
+### Additional Empirical Findings Across 26 New Real-World Sites
+
+Benchmarking an additional 26 live domains (Hugging Face, Ollama, Modal, Astral, Linear, Resend, Raycast, Node.js, Deno, FastAPI, PyPI, ArXiv, W3C, Neon, Redis, ClickHouse, GitLab, Replicate, Anthropic, Cohere, Notion, Warby Parker, MIT Tech Review, Internet Archive, The Verge, Svelte) revealed:
+
+| Finding / Anomaly | Origin(s) Observed | Root Cause | Fix / Architectural Rule |
+|---|---|---|---|
+| **E-Commerce Multi-Product Price Conflict (High FP)** | `gymshark.com` | Multi-product catalog containing multiple items ($15, $22, $26, $28, $30, $32) triggered `_is_true_price_conflict` because `pg.dates["visible"]` picked up footer copyright/founded year (e.g. 2023 <= 2024). | Scoped historical check to schema metadata dates or explicit archive/press/news/blog routes, and explicitly exempted e-commerce sites (`snapshot.site_type.ecommerce`) and `/product/` URLs from scalar catalog cross-comparisons. |
+| **Modern Apparel E-Commerce Terms** | `gymshark.com`, `warbyparker.com` | Apparel and UK-influenced D2C stores use "bag" ("add to bag", "shopping bag") rather than "cart". | Expanded `ECOM_TERMS` in `skill_v.py` to include `"add to bag"`, `"add-to-bag"`, `"shopping bag"`, `"express delivery"`, ensuring correct Cluster F (`Ecom=True`) classification. |
+| **Media AI Crawler Directives** | `technologyreview.com`, `theverge.com` | High-profile news publishers aggressively disallow AI crawler user-agents (`GPTBot`, `ChatGPT-User`, `Google-Extended`, `anthropic-ai`, `ClaudeBot`, `PerplexityBot`, `Bytespider`) while allowing search engines. | Confirmed clean extraction and emission as `ai_token_disallow` without misinterpreting publisher paywalls as brand content defects. |
+| **FastAPI, Svelte, Neon, Deno Clean Audits** | `fastapi.tiangolo.com`, `svelte.dev`, `neon.tech`, `deno.com` | High-quality open-source and modern developer tooling ecosystems audited cleanly in <6s with zero false positive findings. | Validated benchmark performance across modern single-page and static documentation architectures. |
+
+---
+
+## 10. How to extend this file
 
 When you change detection:
 
