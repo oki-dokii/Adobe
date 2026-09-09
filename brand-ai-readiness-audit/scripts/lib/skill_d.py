@@ -83,6 +83,27 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
                 )
                 attach_confidence(f, deterministic=True, reproduced=False)
                 findings.append(f)
+        elif raw["hidden_text"] and raw["has_toggle"]:
+            # interaction_insert: facts inside interactive reveal (e.g. tabs/modals) missing in static visible text
+            joined_hidden = " ".join(raw["hidden_text"])
+            hidden_prices = set(offer_price_strings(joined_hidden, page_type=p.page_type))
+            if hidden_prices and not raw_prices and p.page_type in ("pricing", "product", "home"):
+                f = make_finding(
+                    skill_id="render-extract-audit",
+                    finding_type="interaction_insert",
+                    title="Decision facts require user interaction (tabs/modals) to reveal",
+                    severity="medium",
+                    evidence=f"Prices {list(hidden_prices)[:3]} only in interactive toggle/hidden container on {p.url}",
+                    action=SuggestedAction(
+                        summary="Ensure core pricing and offering facts are statically visible in the initial DOM.",
+                        where=p.url,
+                        why="Headless AI crawlers without user interaction click models will miss toggled amounts.",
+                    ),
+                    urls=[p.url],
+                    category="render",
+                )
+                attach_confidence(f, deterministic=True, reproduced=False)
+                findings.append(f)
 
         # PDF-only
         ctype = p.headers.get("content-type", "")

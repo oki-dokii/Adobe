@@ -286,3 +286,43 @@ def test_render_budget_exhausted_skips_later_protected():
         if p.render_status == "skipped" and is_protected_fact_url(p.url, BASE + "/")
     ]
     assert skipped_prot or snap.coverage["protected_render_requests"] <= 3
+
+
+def test_interaction_insert_detector():
+    from lib.skill_d import run as run_d
+    html = """<!doctype html><html><head><title>Pricing</title></head><body><main>
+    <h1>Plans</h1>
+    <p>We provide enterprise cloud analytics.</p>
+    <button onclick="toggle()">Show Pricing</button>
+    <div style="display:none"><p>Pro Plan $99 per month</p></div>
+    </main></body></html>"""
+    routes = routes_for({"/pricing": html})
+    snap = crawl(BASE + "/pricing", C(routes), Clock.start_run(30), page_cap=2)
+    d = run_d(snap)
+    assert any(f.finding_type == "interaction_insert" for f in d.findings)
+
+
+def test_entity_structured_disambiguators():
+    from lib.skill_ent import run as run_ent
+    html = """<!doctype html><html><head><title>Apex</title>
+    <script type="application/ld+json">
+    {"@type": "Organization", "name": "Apex", "address": {"@type": "PostalAddress", "addressCountry": "US"}, "description": "Cloud telemetry infrastructure"}
+    </script>
+    </head><body><main><p>Platform solutions.</p></main></body></html>"""
+    routes = routes_for({"/": html})
+    snap = crawl(BASE + "/", C(routes), Clock.start_run(30), page_cap=2)
+    ent_res = run_ent(snap)
+    assert snap.entities[0].disambiguators["geo"] == "US"
+    assert "telemetry" in snap.entities[0].disambiguators["category"]
+    # Disambiguated via schema, so collision_risk finding is suppressed
+    assert not any(f.finding_type == "collision_risk" for f in ent_res.findings)
+
+
+def test_qualifier_vat_and_seat_recognition():
+    from lib.skill_cit import amount_is_isolated
+    # Amount with local VAT qualifier in same sentence is NOT isolated
+    s1 = "Our enterprise tier is $50 per seat/month plus VAT."
+    assert not amount_is_isolated(s1, s1.index("$50"), s1.index("$50") + 3, page_type="pricing")
+    # Isolated amount with later VAT condition in next sentence IS isolated
+    s2 = "Our tier is $50. Additional fees apply. All listed amounts are excl. VAT and billed annually."
+    assert amount_is_isolated(s2, s2.index("$50"), s2.index("$50") + 3, page_type="pricing")

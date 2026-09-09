@@ -233,7 +233,25 @@ Benchmarking an additional 26 live domains (Hugging Face, Ollama, Modal, Astral,
 
 ---
 
-## 10. How to extend this file
+## 10. Deepened internal capabilities within the 10 marketplace skills (2026-09-09)
+
+### Capabilities deepened without breaking the 10-skill locked architecture
+
+Rather than adding redundant skill directories, we deepened detection within the existing 10 skills:
+
+1. **`interaction_insert` detector in `skill_d.py` (`render-extract-audit`)**:
+   - *Problem*: Critical facts (pricing, subscription terms) hidden inside collapsed accordions, client-side tab panels, or toggle modals were not flagged when invisible in initial raw DOM.
+   - *Implementation*: Detects when facts appear only in `raw["hidden_text"]` with `raw["has_toggle"] == True` while absent in static `main_text`.
+2. **Structured disambiguation in `skill_ent.py` (`entity-identity-audit`)**:
+   - *Problem*: Generic brand names with valid schema `Organization` disambiguators (e.g. `addressCountry: US`, `disambiguatingDescription`) still risked false collision alarms.
+   - *Implementation*: Traverses structured JSON-LD nodes to populate `Entity.disambiguators` (`geo`, `category`), suppressing false collisions when structured grounding is present.
+3. **Multi-jurisdiction & B2B tax qualifiers in `skill_cit.py` (`citation-extractability-audit`)**:
+   - *Problem*: Pricing copy with VAT/GST or complex seat metrics (`plus VAT`, `excl. taxes`, `per seat/mo`) could trigger false qualifier splits.
+   - *Implementation*: Expanded `QUALIFIER` regex to recognize international tax terms (`plus VAT`, `excl. taxes`, `incl. GST`) and seat formulas (`/agent`, `/dev`, `/seat`, `/user`).
+
+---
+
+## 11. How to extend this file
 
 When you change detection:
 

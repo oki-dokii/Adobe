@@ -16,9 +16,9 @@ QUALIFIER = re.compile(
     r"(?:"
     r"\bthen\b|\bafter\b|\bintro\b|first\s+\d+"
     r"|per\s+\w+"
-    r"|/\s*(?:mo|yr|wk|hr|user|seat)"
-    r"|\bbilled\b|\bunless\b|\bstarting\b"
-    r"|\bexcluding\b|\bincluding\b|\bexcl\.?|\bincl\.?"
+    r"|/\s*(?:mo|yr|wk|hr|user|seat|agent|dev|member|device|domain|gb|tb|unit|txn|request)"
+    r"|\bbilled\b|\bunless\b|\bstarting\b|\bstarting\s+at\b|\bstarting\s+from\b"
+    r"|\b(?:plus|excluding|including|excl\.?|incl\.?)\s*(?:vat|tax|taxes|gst|duty|duties)?"
     r"|\bfor\s+\w+"
     r")",
     re.I,

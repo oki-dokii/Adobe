@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import time
 
@@ -38,8 +39,28 @@ def run(snapshot: CrawlSnapshot, client: HttpClient | None = None, fetch_sameas:
         # ALL-CAPS short token is an acronym shape, not a dictionary collision.
         risk = "low"
     dis = bool(re.search(r"\bwe are a\b|\bis an? [a-z][a-z0-9- ]{2,40}\b(?:in|based)\b", parsed["main_text"], re.I))
+    disambiguators = {"category": "", "geo": ""}
+    # Extract structured disambiguators if available in Organization JSON-LD
+    for raw_ld in parsed.get("json_ld", []):
+        try:
+            ld = json.loads(raw_ld) if isinstance(raw_ld, str) else raw_ld
+            nodes = [ld] if isinstance(ld, dict) else ld if isinstance(ld, list) else []
+            for n in nodes:
+                if isinstance(n, dict) and n.get("@type") in ("Organization", "Corporation", "LocalBusiness", "NGO"):
+                    if n.get("address"):
+                        addr = n["address"]
+                        geo_val = addr.get("addressCountry") or addr.get("addressLocality") if isinstance(addr, dict) else str(addr)
+                        if geo_val:
+                            disambiguators["geo"] = str(geo_val)
+                    if n.get("description") or n.get("disambiguatingDescription"):
+                        disambiguators["category"] = str(n.get("disambiguatingDescription") or n.get("description"))[:60]
+        except Exception:
+            pass
+    if disambiguators["geo"] or disambiguators["category"]:
+        dis = True
+
     same = parsed["same_as"]
-    ent = Entity(name=name, same_as=same, collision_risk=risk, collision_evidence=evidence, disambiguators={"category": "", "geo": ""})
+    ent = Entity(name=name, same_as=same, collision_risk=risk, collision_evidence=evidence, disambiguators=disambiguators)
     snapshot.entities = [ent]
     if risk != "low" and not dis:
         f = make_finding(
