@@ -118,9 +118,20 @@ class Finding:
         sa = self.suggested_action
         action: Any
         if isinstance(sa, SuggestedAction):
-            action = sa.summary
+            action = {
+                "summary": sa.summary,
+                "priority": sa.priority,
+            }
+        elif isinstance(sa, dict):
+            action = {
+                "summary": sa.get("summary", str(sa)),
+                "priority": sa.get("priority", "medium"),
+            }
         else:
-            action = sa
+            action = {
+                "summary": str(sa),
+                "priority": "medium",
+            }
         return {
             "id": self.id,
             "title": self.title,

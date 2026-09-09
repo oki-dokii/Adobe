@@ -29,6 +29,16 @@ def build_report(
         "low": sum(1 for f in user if f.severity == "low"),
     }
     handout = [f.to_handout() for f in user]
+    proactive_recs = []
+    for f in user:
+        sa = f.suggested_action
+        if hasattr(sa, "proactive") and sa.proactive:
+            proactive_recs.append({
+                "summary": sa.summary,
+                "priority": sa.priority,
+                "finding_id": f.id,
+                "context": f.title,
+            })
     report = {
         "site": site,
         "audited_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -40,7 +50,7 @@ def build_report(
         "findings_internal": [f.to_internal() for f in user],
         "appendix_overflow": [f.to_handout() for f in overflow],
         "suppressed": [f.to_handout() | {"reason": f.suppress_reason} for f in findings if f.suppressed],
-        "proactive_recommendations": [],
+        "proactive_recommendations": proactive_recs,
         "metrics": metrics,
         "timing": {
             "crawl_ms": timing.crawl_ms,
@@ -91,11 +101,16 @@ def render_markdown(report: dict[str, Any]) -> str:
         lines.append(f"- {lim}")
     lines += ["", "## Findings"]
     for f in report["findings"]:
+        sa = f["suggested_action"]
+        if isinstance(sa, dict):
+            action_text = f"[{sa.get('priority', 'medium').upper()}] {sa.get('summary', '')}"
+        else:
+            action_text = str(sa)
         lines += [
             f"### {f['id']}: {f['title']}",
             f"- Severity: {f['severity']}",
             f"- Evidence: {f['evidence']}",
-            f"- Suggested action: {f['suggested_action']}",
+            f"- Suggested action: {action_text}",
             "",
         ]
     if report.get("appendix_overflow"):
