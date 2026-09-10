@@ -874,10 +874,11 @@ export function AuditTree({
               const dimmed =
                 hasHighlight && !isSkillSelected && !isSkillHighlighted && !isSkillHovered
               const outward = rad(node.angle)
-              const lx = node.x + Math.cos(outward) * (compact ? 18 : 22)
-              const ly = node.y + Math.sin(outward) * (compact ? 18 : 22)
+              const tangent = outward + (node.y > cy ? -Math.PI / 2.3 : Math.PI / 2.3)
+              const lx = node.x + Math.cos(tangent) * (compact ? 22 : 28)
+              const ly = node.y + Math.sin(tangent) * (compact ? 20 : 24)
               const align: 'left' | 'right' | 'center' =
-                Math.cos(outward) > 0.35 ? 'left' : Math.cos(outward) < -0.35 ? 'right' : 'center'
+                Math.cos(tangent) > 0.25 ? 'left' : Math.cos(tangent) < -0.25 ? 'right' : 'center'
               const showSkillLabel =
                 showLabels &&
                 visible &&
@@ -930,10 +931,10 @@ export function AuditTree({
                     >
                       <span
                         className={cn(
-                          'rounded px-1.5 py-0.5 transition-all duration-150',
+                          'rounded border px-2 py-0.5 font-mono text-[9px] font-semibold tracking-wider uppercase backdrop-blur-md shadow-[0_2px_12px_rgba(0,0,0,0.7)] transition-all duration-150',
                           isSkillHovered || isSkillSelected
-                            ? 'bg-black/90 text-foreground border border-white/15 shadow-md'
-                            : 'text-foreground/80',
+                            ? 'border-signal/50 bg-black/95 text-signal'
+                            : 'border-white/10 bg-black/85 text-foreground/90',
                         )}
                       >
                         {SKILL_MAP[node.id].short}
