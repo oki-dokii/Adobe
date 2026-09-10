@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import type { AppPhase, Site, SkillId, SkillStatus } from '@/lib/audit/types'
 import { DIMENSIONS, RUN_ORDER, SKILL_MAP } from '@/lib/audit/skills'
@@ -237,6 +237,162 @@ export function AuditTree({
     camY = 0
   }
 
+  // Interactive Pan & Zoom State (Graph / Canvas Navigation)
+  const [pan, setPan] = useState({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
+  const [isPanning, setIsPanning] = useState(false)
+  const [spacePressed, setSpacePressed] = useState(false)
+
+  const containerRef = useRef<HTMLDivElement>(null)
+  const isDraggingRef = useRef(false)
+  const dragStartRef = useRef({ x: 0, y: 0, panX: 0, panY: 0 })
+  const hasDraggedRef = useRef(false)
+
+  // Reset user pan when focusing on a specific skill or site
+  useEffect(() => {
+    setPan({ x: 0, y: 0 })
+  }, [selectedSkillId, focusedId])
+
+  // Spacebar and keyboard zoom shortcuts (+, -, 0)
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (
+        (e.code === 'Space' || e.key === ' ') &&
+        !spacePressed &&
+        (e.target as HTMLElement)?.tagName !== 'INPUT' &&
+        (e.target as HTMLElement)?.tagName !== 'TEXTAREA'
+      ) {
+        setSpacePressed(true)
+      }
+      if (e.key === '+' || e.key === '=') {
+        setZoom((z) => Math.min(2.8, Number((z * 1.15).toFixed(2))))
+      }
+      if (e.key === '-' || e.key === '_') {
+        setZoom((z) => Math.max(0.45, Number((z / 1.15).toFixed(2))))
+      }
+      if (e.key === '0') {
+        setPan({ x: 0, y: 0 })
+        setZoom(1)
+      }
+    }
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'Space' || e.key === ' ') {
+        setSpacePressed(false)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+    }
+  }, [spacePressed])
+
+  // Mouse wheel and trackpad smooth zoom with cursor focal point
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault()
+
+      const rect = el.getBoundingClientRect()
+      const mouseX = e.clientX - rect.left
+      const mouseY = e.clientY - rect.top
+
+      const factor = e.ctrlKey
+        ? Math.exp(-e.deltaY * 0.01)
+        : Math.exp(-e.deltaY * 0.0018)
+
+      setZoom((prevZoom) => {
+        const nextZoom = Math.min(2.8, Math.max(0.45, prevZoom * factor))
+        if (nextZoom === prevZoom) return prevZoom
+
+        const scaleRatio = nextZoom / prevZoom
+        setPan((prevPan) => ({
+          x: prevPan.x - (mouseX - cx - prevPan.x) * (scaleRatio - 1),
+          y: prevPan.y - (mouseY - cy - prevPan.y) * (scaleRatio - 1),
+        }))
+
+        return nextZoom
+      })
+    }
+
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [cx, cy])
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0 && e.button !== 1) return
+    isDraggingRef.current = true
+    hasDraggedRef.current = false
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      panX: pan.x,
+      panY: pan.y,
+    }
+    setIsPanning(true)
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId)
+    } catch {
+      // ignore
+    }
+  }
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return
+    const dx = e.clientX - dragStartRef.current.x
+    const dy = e.clientY - dragStartRef.current.y
+    if (Math.hypot(dx, dy) > 4) {
+      hasDraggedRef.current = true
+    }
+    setPan({
+      x: dragStartRef.current.panX + dx,
+      y: dragStartRef.current.panY + dy,
+    })
+  }
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return
+    isDraggingRef.current = false
+    setIsPanning(false)
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId)
+    } catch {
+      // ignore
+    }
+    setTimeout(() => {
+      hasDraggedRef.current = false
+    }, 60)
+  }
+
+  const handleZoomIn = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setZoom((z) => Math.min(2.8, Number((z * 1.2).toFixed(2))))
+  }
+
+  const handleZoomOut = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setZoom((z) => Math.max(0.45, Number((z / 1.2).toFixed(2))))
+  }
+
+  const handleResetView = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setPan({ x: 0, y: 0 })
+    setZoom(1)
+  }
+
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).tagName === 'svg' || (e.target as HTMLElement) === containerRef.current) {
+      handleResetView(e)
+    }
+  }
+
+  const totalScale = camScale * zoom
+  const totalX = camX + pan.x
+  const totalY = camY + pan.y
+
   const horizonR = radius * (0.28 + rootProgress * 0.62)
   const others = sites.filter((s) => s.id !== focusedId)
   const rootStatusLabel =
@@ -251,11 +407,25 @@ export function AuditTree({
             : 'origin'
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div
+      ref={containerRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      onDoubleClick={handleDoubleClick}
+      className={cn(
+        'absolute inset-0 overflow-hidden select-none',
+        isPanning ? 'cursor-grabbing' : spacePressed ? 'cursor-grab' : 'cursor-grab',
+      )}
+    >
       <motion.div
         className="absolute inset-0"
-        animate={{ scale: camScale, x: camX, y: camY }}
-        transition={{ duration: reduced ? 0 : 0.85, ease: [0.22, 1, 0.36, 1] }}
+        animate={{ scale: totalScale, x: totalX, y: totalY }}
+        transition={{
+          duration: isPanning ? 0 : reduced ? 0 : 0.22,
+          ease: isPanning ? 'linear' : [0.22, 1, 0.36, 1],
+        }}
         style={{ transformOrigin: `${cx}px ${cy}px` }}
       >
         {/* Living respiration wrapper (slow, calm organic breathing) */}
@@ -610,7 +780,10 @@ export function AuditTree({
                 selected={selectedSkillId === 'audit-orchestrator'}
                 variant="root"
                 rootState={rootHeartbeat}
-                onClick={onSelectRoot}
+                onClick={() => {
+                  if (hasDraggedRef.current) return
+                  onSelectRoot?.()
+                }}
                 onHover={() => setHovered('root')}
                 onLeave={() => setHovered((h) => (h === 'root' ? null : h))}
                 onFocus={() => setHovered('root')}
@@ -666,6 +839,7 @@ export function AuditTree({
                     interactive={interactive && awakened}
                     variant="dimension"
                     onClick={() => {
+                      if (hasDraggedRef.current) return
                       const firstChild = related[0]
                       if (firstChild) onSelectSkill?.(firstChild)
                     }}
@@ -734,7 +908,10 @@ export function AuditTree({
                     onHover={() => setHovered(node.id)}
                     onFocus={() => setHovered(node.id)}
                     onLeave={() => setHovered((h) => (h === node.id ? null : h))}
-                    onClick={() => onSelectSkill?.(node.id)}
+                    onClick={() => {
+                      if (hasDraggedRef.current) return
+                      onSelectSkill?.(node.id)
+                    }}
                   />
                   {showSkillLabel && (
                     <div
@@ -806,7 +983,10 @@ export function AuditTree({
                     onHover={() => setHoveredMicro(mn)}
                     onFocus={() => setHoveredMicro(mn)}
                     onLeave={() => setHoveredMicro((cur) => (cur?.id === mn.id ? null : cur))}
-                    onClick={() => onSelectSkill?.(mn.skillId)}
+                    onClick={() => {
+                      if (hasDraggedRef.current) return
+                      onSelectSkill?.(mn.skillId)
+                    }}
                   />
                   {showMicroLabel && (
                     <div
@@ -878,7 +1058,10 @@ export function AuditTree({
               <button
                 key={s.id}
                 type="button"
-                onClick={() => onFocusSite?.(s.id)}
+                onClick={() => {
+                  if (hasDraggedRef.current) return
+                  onFocusSite?.(s.id)
+                }}
                 className="absolute -translate-x-1/2 -translate-y-1/2 text-center outline-none focus-visible:ring-2 focus-visible:ring-signal"
                 style={{ left: ox, top: oy, opacity: 0.42 }}
               >
@@ -900,6 +1083,68 @@ export function AuditTree({
         </div>
       </motion.div>
     </motion.div>
+
+    {/* Floating Canvas Pan/Zoom Controls HUD */}
+    {phase !== 'landing' && (
+      <aside
+        aria-label="Canvas zoom and pan controls"
+        onPointerDown={(e) => e.stopPropagation()}
+        className="pointer-events-auto absolute left-6 bottom-6 z-30 flex flex-col gap-1.5 select-none"
+      >
+        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#070b14]/85 p-1.5 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+          <button
+            type="button"
+            onClick={handleZoomIn}
+            className="flex size-7 items-center justify-center rounded-lg border border-white/8 bg-white/5 font-mono text-sm font-semibold text-muted-foreground transition-colors hover:bg-white/15 hover:text-foreground active:scale-95 cursor-pointer"
+            title="Zoom In (+)"
+            aria-label="Zoom in"
+          >
+            +
+          </button>
+
+          <span
+            className="min-w-[3.4rem] px-1 text-center font-mono text-[11px] font-semibold text-foreground tabular-nums cursor-default"
+            title="Current zoom level"
+          >
+            {Math.round(zoom * 100)}%
+          </span>
+
+          <button
+            type="button"
+            onClick={handleZoomOut}
+            className="flex size-7 items-center justify-center rounded-lg border border-white/8 bg-white/5 font-mono text-sm font-semibold text-muted-foreground transition-colors hover:bg-white/15 hover:text-foreground active:scale-95 cursor-pointer"
+            title="Zoom Out (−)"
+            aria-label="Zoom out"
+          >
+            −
+          </button>
+
+          <div className="h-4 w-px bg-white/10 mx-0.5" />
+
+          <button
+            type="button"
+            onClick={handleResetView}
+            className={cn(
+              'flex items-center gap-1.5 rounded-lg border px-2 py-1 font-mono text-[10px] font-medium tracking-wider uppercase transition-colors active:scale-95 cursor-pointer',
+              pan.x !== 0 || pan.y !== 0 || zoom !== 1
+                ? 'border-signal/40 bg-signal/15 text-signal hover:bg-signal/25'
+                : 'border-white/8 bg-white/5 text-muted-foreground hover:bg-white/15 hover:text-foreground',
+            )}
+            title="Reset Pan & Zoom (0)"
+            aria-label="Reset view"
+          >
+            <span>RESET</span>
+            <span className="text-[11px]">⟲</span>
+          </button>
+        </div>
+
+        <div className="hidden sm:flex items-center gap-1.5 px-1 font-mono text-[9px] text-muted-foreground/50 tracking-wider">
+          <span>DRAG TO PAN</span>
+          <span>•</span>
+          <span>SCROLL TO ZOOM</span>
+        </div>
+      </aside>
+    )}
   </div>
 )
 }
