@@ -98,6 +98,23 @@ export function RootCauseChain({
                           {cause.detail}
                         </p>
 
+                        {/* Downstream AI Behavior Impact */}
+                        <div className="rounded-md border border-critical/20 bg-critical/5 p-2.5 space-y-1">
+                          <div className="flex items-center gap-1.5 font-mono text-[9px] font-semibold text-critical tracking-wider uppercase">
+                            <span className="size-1.5 rounded-full bg-critical animate-pulse" />
+                            DOWNSTREAM AI PERCEPTION IMPACT
+                          </div>
+                          <p className="text-[11px] leading-relaxed text-critical/90">
+                            {cause.detail.toLowerCase().includes('crawl') || cause.detail.toLowerCase().includes('access')
+                              ? 'LLM indexing spiders fail to ingest core assets, causing conversational assistants to omit the brand or report it as defunct.'
+                              : cause.detail.toLowerCase().includes('entity') || cause.detail.toLowerCase().includes('identity')
+                              ? 'AI models conflate the brand with ambiguous competitor entities, misattributing canonical features in search summaries.'
+                              : cause.detail.toLowerCase().includes('render') || cause.detail.toLowerCase().includes('script')
+                              ? 'Dual-fetch disparity leaves headless LLMs with empty content, forcing retrieval pipelines to rely on unverified third-party scrapers.'
+                              : 'AI answer engines drop citation confidence below threshold, paraphrasing claims inaccurately or substituting direct competitor URLs.'}
+                          </p>
+                        </div>
+
                         {/* Affected Findings Register */}
                         {affectedFindings.length > 0 && (
                           <div className="space-y-1.5">

@@ -81,11 +81,15 @@ function rad(deg: number) {
   return (deg * Math.PI) / 180
 }
 
+function n(v: number) {
+  return Math.round(v * 1e4) / 1e4
+}
+
 function quad(x1: number, y1: number, x2: number, y2: number, bend: number) {
   const mx = (x1 + x2) / 2
   const my = (y1 + y2) / 2
   const a = Math.atan2(y2 - y1, x2 - x1) + Math.PI / 2
-  return `M ${x1} ${y1} Q ${mx + Math.cos(a) * bend} ${my + Math.sin(a) * bend} ${x2} ${y2}`
+  return `M ${n(x1)} ${n(y1)} Q ${n(mx + Math.cos(a) * bend)} ${n(my + Math.sin(a) * bend)} ${n(x2)} ${n(y2)}`
 }
 
 function stripStart(d: string) {
@@ -444,14 +448,14 @@ export function computeAmbientRoots(
     const bend = (rand() - 0.5) * reach * 0.35
     const mx = cx + Math.cos(angle) * len * 0.45 + Math.cos(perp) * bend
     const my = cy + Math.sin(angle) * len * 0.45 + Math.sin(perp) * bend
-    paths.push(`M ${cx} ${cy} Q ${mx} ${my} ${ex} ${ey}`)
+    paths.push(`M ${n(cx)} ${n(cy)} Q ${n(mx)} ${n(my)} ${n(ex)} ${n(ey)}`)
     if (rand() > 0.4) {
       const fork = 0.55 + rand() * 0.20
       const fx = cx + (ex - cx) * fork
       const fy = cy + (ey - cy) * fork
       const fex = fx + Math.cos(angle + (rand() - 0.5) * 0.8) * len * 0.26
       const fey = fy + Math.sin(angle + (rand() - 0.5) * 0.8) * len * 0.26
-      paths.push(`M ${fx} ${fy} Q ${(fx + fex) / 2} ${(fy + fey) / 2} ${fex} ${fey}`)
+      paths.push(`M ${n(fx)} ${n(fy)} Q ${n((fx + fex) / 2)} ${n((fy + fey) / 2)} ${n(fex)} ${n(fey)}`)
     }
   }
   return paths

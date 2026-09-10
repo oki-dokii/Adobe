@@ -90,8 +90,6 @@ export function AuditTree({
     return traces
   }, [cx, cy, radius])
 
-  if (width === 0 || height === 0) return null
-
   const statusOf = (id: SkillId): SkillStatus => skills.find((s) => s.id === id)?.status ?? 'dormant'
   const progressOf = (id: SkillId): number => skills.find((s) => s.id === id)?.progress ?? 0
   const findingOf = (id: SkillId): boolean => !!skills.find((s) => s.id === id)?.findingEmitted
@@ -170,9 +168,9 @@ export function AuditTree({
 
   // Causal Cascade Path (when root cause is selected or in chain mode)
   const causalPath = useMemo(() => {
-    if (highlightSet.size < 2) return null
+    if (highlightSet.size === 0) return null
     const activeNodes = layout.nodes.filter((n) => highlightSet.has(n.id))
-    if (activeNodes.length < 2) return null
+    if (activeNodes.length === 0) return null
 
     const orderMap: Record<SkillId, number> = {
       'crawl-access-audit': 0,
@@ -188,6 +186,15 @@ export function AuditTree({
     }
     const sorted = [...activeNodes].sort((a, b) => (orderMap[a.id] ?? 0) - (orderMap[b.id] ?? 0))
 
+    if (sorted.length === 1) {
+      const node = sorted[0]
+      const limb = layout.limbs.find((l) => l.dimension === node.limb)
+      if (limb) {
+        return `M ${cx} ${cy} Q ${(cx + limb.joint.x) / 2} ${(cy + limb.joint.y) / 2} ${limb.joint.x} ${limb.joint.y} Q ${(limb.joint.x + node.x) / 2} ${(limb.joint.y + node.y) / 2} ${node.x} ${node.y}`
+      }
+      return `M ${cx} ${cy} Q ${(cx + node.x) / 2} ${(cy + node.y) / 2} ${node.x} ${node.y}`
+    }
+
     let d = `M ${sorted[0].x} ${sorted[0].y}`
     for (let i = 1; i < sorted.length; i++) {
       const prev = sorted[i - 1]
@@ -199,7 +206,9 @@ export function AuditTree({
       d += ` Q ${bx} ${by} ${cur.x} ${cur.y}`
     }
     return d
-  }, [highlightSet, layout.nodes, cx, cy])
+  }, [highlightedSkillIds, viewMode, phase, guideFocus, layout, cx, cy, site, skills])
+
+  if (width === 0 || height === 0) return null
 
   // Camera Spatial Framing
   const cameraTargetId =
@@ -650,15 +659,15 @@ export function AuditTree({
                     status={st}
                     label={DIMENSIONS[limb.dimension].label}
                     size={compact ? 24 : 28}
-                    visible={awakened || phase !== 'landing'}
+                    visible={true}
                     dimmed={dimmed}
                     selected={isSelectedLimb || isHighlightedLimb}
                     reduced={reduced}
                     interactive={interactive && awakened}
                     variant="dimension"
                     onClick={() => {
-                       const firstChild = limb.skillIds[0]
-                       if (firstChild) onSelectSkill?.(firstChild)
+                      const firstChild = related[0]
+                      if (firstChild) onSelectSkill?.(firstChild)
                     }}
                   />
                   <div

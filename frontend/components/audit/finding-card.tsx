@@ -31,6 +31,8 @@ export function FindingCard({
     if (highlighted) ref.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [highlighted])
 
+  const consequenceChain = SKILL_MAP[finding.skillId]?.consequenceChain
+
   const handleCopyPatch = (e: React.MouseEvent) => {
     e.stopPropagation()
     const patchText = `// Remediation for: ${finding.title}\n// Dimension: ${DIMENSIONS[finding.dimension].label} | Severity: ${sev.label}\n\n${finding.recommendation.title}\n${finding.recommendation.detail}`
@@ -131,32 +133,118 @@ export function FindingCard({
                 <p className="leading-relaxed text-muted-foreground">{finding.whyItMatters}</p>
               </div>
 
-              {/* EVIDENCE: Concrete Register */}
+              {/* AI BEHAVIOR CONSEQUENCE CHAIN */}
+              {consequenceChain && consequenceChain.length > 0 && (
+                <div className="space-y-1.5">
+                  <span className="font-mono text-[10px] tracking-wider text-muted-foreground/70 uppercase">
+                    AI BEHAVIOR CONSEQUENCE
+                  </span>
+                  <div className="rounded-lg border border-white/8 bg-black/30 overflow-hidden">
+                    {consequenceChain.map((step, i) => (
+                      <div key={i} className="relative">
+                        <div
+                          className={cn(
+                            'flex items-start gap-3 px-3 py-2.5',
+                            i < consequenceChain.length - 1 && 'border-b border-white/6',
+                          )}
+                        >
+                          <span
+                            className={cn(
+                              'mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full font-mono text-[9px] font-bold',
+                              i === 0 && 'bg-warning/15 text-warning border border-warning/30',
+                              i === 1 && 'bg-orange-500/15 text-orange-400 border border-orange-500/30',
+                              i === 2 && 'bg-critical/20 text-critical border border-critical/40',
+                            )}
+                          >
+                            {i + 1}
+                          </span>
+                          <span
+                            className={cn(
+                              'text-[11px] leading-relaxed',
+                              i === 0 && 'text-foreground/80',
+                              i === 1 && 'text-foreground/70',
+                              i === 2 && 'text-critical/90 font-medium',
+                            )}
+                          >
+                            {step}
+                          </span>
+                        </div>
+                        {i < consequenceChain.length - 1 && (
+                          <div className="absolute -bottom-2 left-[1.3rem] z-10 flex h-4 w-4 items-center justify-center">
+                            <svg viewBox="0 0 10 10" className="size-2 text-muted-foreground/35" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                              <path d="M5 1v7M2 6l3 3 3-3" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* EVIDENCE: Rendered as artifacts */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[10px] tracking-wider text-muted-foreground/70 uppercase">
-                    DOM & SIGNAL EVIDENCE
+                    SIGNAL EVIDENCE
                   </span>
-                  <span className="font-mono text-[10px] text-muted-foreground/60">
-                    {finding.affectedPages} of {finding.sampledPages} sampled pages
+                  <span className="font-mono text-[10px] text-muted-foreground/60 tabular-nums">
+                    {finding.affectedPages} / {finding.sampledPages} sampled
                   </span>
                 </div>
                 <div className="space-y-1.5">
                   {finding.evidence.map((e) => (
                     <div
                       key={e.id}
-                      className="rounded border border-white/6 bg-black/40 p-2.5 font-mono text-[11px]"
+                      className="rounded border border-white/6 bg-black/40 overflow-hidden"
                     >
-                      <div className="flex items-center justify-between text-foreground">
-                        <span className="font-medium">{e.label}</span>
-                        {e.signal && <span className="text-signal text-[10px]">{e.signal}</span>}
+                      <div className="flex items-center justify-between gap-2 px-2.5 py-2 border-b border-white/6">
+                        <span className="font-mono text-[11px] font-medium text-foreground">{e.label}</span>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {e.confidence && (
+                            <span
+                              className={cn(
+                                'rounded px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider',
+                                e.confidence === 'high' && 'bg-success/15 text-success border border-success/25',
+                                e.confidence === 'medium' && 'bg-warning/15 text-warning border border-warning/25',
+                                e.confidence === 'low' && 'bg-white/8 text-muted-foreground border border-white/10',
+                              )}
+                            >
+                              {e.confidence}
+                            </span>
+                          )}
+                          {e.signal && (
+                            <code className="rounded bg-signal/10 border border-signal/20 px-1.5 py-0.5 font-mono text-[9px] text-signal tracking-wide">
+                              {e.signal}
+                            </code>
+                          )}
+                        </div>
                       </div>
-                      <p className="mt-1 text-muted-foreground break-all">{e.detail}</p>
-                      {e.url && (
-                        <p className="mt-0.5 text-[10px] text-muted-foreground/50 break-all">
-                          URL: {e.url}
-                        </p>
-                      )}
+                      <div className="px-2.5 py-2 space-y-1.5">
+                        {e.reference ? (
+                          <pre className="overflow-x-auto rounded bg-black/50 border border-white/6 px-2 py-1.5 font-mono text-[10px] text-foreground/80 whitespace-pre-wrap break-all">
+                            {e.detail}
+                            {'\n'}
+                            <span className="text-muted-foreground/50 text-[9px]">{e.reference}</span>
+                          </pre>
+                        ) : (
+                          <p className="font-mono text-[11px] text-muted-foreground">{e.detail}</p>
+                        )}
+                        {e.url && (
+                          <a
+                            href={e.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(ev) => ev.stopPropagation()}
+                            className="inline-flex items-center gap-1.5 rounded border border-signal/25 bg-signal/8 px-2 py-1 font-mono text-[9px] text-signal/90 hover:text-signal hover:border-signal/40 transition-colors max-w-full"
+                          >
+                            <svg viewBox="0 0 12 12" className="size-2.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                              <path d="M7 1h4v4M11 1L5 7M3 3H1v8h8V9" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="truncate">{e.url.replace(/^https?:\/\//, '')}</span>
+                          </a>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -189,9 +277,25 @@ export function FindingCard({
                 </div>
                 <p className="font-semibold text-foreground text-xs">{finding.recommendation.title}</p>
                 <p className="leading-relaxed text-muted-foreground text-[11px]">{finding.recommendation.detail}</p>
+                <div className="flex items-center gap-2 pt-1.5 border-t border-white/6 mt-1">
+                  <span
+                    className={cn(
+                      'rounded px-1.5 py-0.5 font-mono text-[9px] uppercase font-semibold',
+                      finding.recommendation.priority === 'critical' && 'bg-critical/15 text-critical',
+                      finding.recommendation.priority === 'high' && 'bg-warning/15 text-warning',
+                      finding.recommendation.priority === 'medium' && 'bg-signal/15 text-signal',
+                      finding.recommendation.priority === 'low' && 'bg-white/8 text-muted-foreground',
+                    )}
+                  >
+                    {finding.recommendation.priority} priority
+                  </span>
+                  <span className="rounded bg-white/5 border border-white/8 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground uppercase">
+                    {finding.recommendation.effort} effort
+                  </span>
+                </div>
               </div>
 
-              {/* FOCUS ON TREE Navigation Button */}
+              {/* FOCUS ON TREE */}
               <div className="flex justify-end pt-1">
                 <button
                   type="button"

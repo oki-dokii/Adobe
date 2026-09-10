@@ -59,6 +59,11 @@ export interface SkillDef {
   purpose: string
   /** The individual checks this skill performs. */
   checks: string[]
+  /**
+   * 3-step causal cascade: structural signal → AI behavior consequence → business impact.
+   * Rendered in the finding inspector to connect web observations to AI citation outcomes.
+   */
+  consequenceChain?: string[]
 }
 
 /** A single check inside a skill for a specific run. */
