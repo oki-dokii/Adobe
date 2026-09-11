@@ -7,14 +7,14 @@ import { SKILL_MAP, RUN_ORDER, DIMENSIONS } from '@/lib/audit/skills'
 import { cn } from '@/lib/utils'
 
 const SKILL_OUTPUT_SUMMARY: Record<SkillId, string> = {
-  'audit-orchestrator': 'Reconciling findings',
-  'site-type-classifier': 'SaaS / Marketing taxonomy',
-  'crawl-access-audit': '4 AI bot directives checked',
-  'render-extract-audit': 'Dual-fetch ratio evaluated',
-  'entity-identity-audit': 'Identity graph parsed',
-  'citation-extractability-audit': 'Self-containment verified',
-  'ai-answerability-audit': 'Query clarity mapped',
-  'freshness-audit': 'Temporal recency checked',
+  'audit-orchestrator': 'Reconciling findings & causal tree',
+  'site-type-classifier': 'SaaS / Marketing taxonomy classification',
+  'crawl-access-audit': '4 AI bot crawler directives checked',
+  'render-extract-audit': 'Dual-fetch server/DOM ratio evaluated',
+  'entity-identity-audit': 'JSON-LD schema identity graph parsed',
+  'citation-extractability-audit': 'Information self-containment verified',
+  'ai-answerability-audit': 'Query relevance & passage clarity mapped',
+  'freshness-audit': 'Temporal recency & freshness checked',
   'corroboration-consistency-audit': 'Cross-claim consistency verified',
   'engagement-handoff-audit': 'Machine-legible handoff verified',
 }
@@ -37,60 +37,71 @@ export function RunningView({
     focusedSite.phase === 'validating'
       ? 'Validating origin security & DNS'
       : focusedSite.phase === 'consolidating'
-        ? 'Orchestrating causal hierarchy'
+        ? 'Synthesizing causal hierarchy & score'
         : active
           ? `Executing ${SKILL_MAP[active.id]?.label}`
           : 'Initializing diagnostic pipeline'
 
+  const progressPercent = Math.round((doneCount / totalCount) * 100)
+
   return (
     <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-between p-6">
-      {/* Top Bar Status */}
+      {/* Top Bar Status Pill */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-3 py-1 backdrop-blur-md">
-          <span className="size-2 rounded-full bg-signal animate-pulse" />
-          <span className="font-mono text-[10px] font-semibold tracking-wider text-foreground uppercase">
-            DIAGNOSTIC PIPELINE ACTIVE
+        <div className="flex items-center gap-2.5 rounded-full border border-indigo-500/20 bg-[#0e1424]/90 px-4 py-1.5 backdrop-blur-md shadow-md">
+          <span className="size-2 rounded-full bg-indigo-400 animate-pulse" />
+          <span className="font-mono text-[11px] font-semibold tracking-wider text-foreground uppercase">
+            {phaseLabel}
           </span>
           <span className="font-mono text-[10px] text-muted-foreground/60">•</span>
-          <span className="font-mono text-[10px] text-muted-foreground">
+          <span className="font-mono text-[11px] font-medium text-indigo-300">
             {doneCount}/{totalCount} SKILLS
           </span>
         </div>
       </div>
 
       {/* Right Sidebar: Multi-Agent Execution Timeline */}
-      <div className="pointer-events-auto absolute right-6 top-16 bottom-16 hidden lg:flex w-80 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0a0f1a]/85 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
-        <div className="border-b border-white/6 bg-black/40 px-4 py-3">
+      <div className="pointer-events-auto absolute right-6 top-16 bottom-16 hidden lg:flex w-84 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0c1120]/92 backdrop-blur-2xl shadow-[0_24px_64px_rgba(0,0,0,0.65)]">
+        <div className="border-b border-white/6 bg-black/40 px-4 py-3.5">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] font-semibold tracking-wider text-signal uppercase">
-              AGENT TELEMETRY
+            <span className="font-mono text-[10px] font-bold tracking-wider text-indigo-400 uppercase">
+              AGENT EXECUTION TELEMETRY
             </span>
-            <span className="font-mono text-[9px] text-muted-foreground">
-              {Math.round((doneCount / totalCount) * 100)}% COMPLETE
+            <span className="font-mono text-[10px] font-semibold text-indigo-300">
+              {progressPercent}% COMPLETE
             </span>
           </div>
-          <p className="mt-0.5 text-xs font-semibold text-foreground truncate">{focusedSite.host}</p>
+          <p className="mt-1 text-xs font-semibold text-foreground truncate">{focusedSite.host}</p>
+
+          {/* Overall Progress Bar */}
+          <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500"
+              initial={{ width: 0 }}
+              animate={{ width: `${progressPercent}%` }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto p-3 space-y-1.5 font-mono text-[11px]">
-          {RUN_ORDER.map((skillId, index) => {
+          {RUN_ORDER.map((skillId) => {
             const skillDef = SKILL_MAP[skillId]
             const run = focusedSite.skills.find((s) => s.id === skillId)
             const isSkipped = skippedSkillIds.includes(skillId)
             const status = isSkipped ? ('skipped' as const) : (run?.status ?? 'dormant')
             const isRunning = status === 'running'
             const isDone = isResolved(status) && !isSkipped
-            const style = STATUS_STYLE[status]
 
             return (
               <div
                 key={skillId}
                 className={cn(
-                  'rounded-lg border p-2.5 transition-all duration-200',
+                  'rounded-xl border p-2.5 transition-all duration-200',
                   isSkipped
                     ? 'border-white/4 bg-transparent opacity-35'
                     : isRunning
-                      ? 'border-signal/40 bg-signal/10 shadow-[0_0_15px_rgba(56,189,248,0.15)]'
+                      ? 'border-indigo-500/40 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.15)]'
                       : isDone
                         ? 'border-white/6 bg-white/[0.02]'
                         : 'border-white/4 bg-transparent opacity-40',
@@ -99,79 +110,45 @@ export function RunningView({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 truncate">
                     <span
-                      className="size-1.5 rounded-full shrink-0"
-                      style={{ background: style.color }}
-                    />
-                    <span
                       className={cn(
-                        'truncate text-xs font-medium',
+                        'size-1.5 rounded-full shrink-0',
                         isSkipped
-                          ? 'text-muted-foreground line-through decoration-white/20'
+                          ? 'bg-zinc-600'
                           : isRunning
-                            ? 'text-signal font-semibold'
+                            ? 'bg-indigo-400 animate-ping'
                             : isDone
-                              ? 'text-foreground'
-                              : 'text-muted-foreground',
+                              ? 'bg-emerald-400'
+                              : 'bg-zinc-600',
                       )}
-                    >
+                    />
+                    <span className="text-xs font-semibold text-foreground truncate">
                       {skillDef.short}
                     </span>
                   </div>
                   <span
-                    className="text-[9px] uppercase tracking-wider px-1 py-0.2 rounded font-semibold"
-                    style={{
-                      color: style.color,
-                      backgroundColor: `${style.color}15`,
-                    }}
+                    className={cn(
+                      'text-[9px] uppercase px-1.5 py-0.5 rounded font-bold',
+                      isSkipped
+                        ? 'text-muted-foreground/60'
+                        : isRunning
+                          ? 'text-indigo-300 bg-indigo-500/20'
+                          : isDone
+                            ? 'text-emerald-400 bg-emerald-500/10'
+                            : 'text-muted-foreground/60',
+                    )}
                   >
-                    {isSkipped ? 'SKIPPED' : status === 'running' ? 'RUNNING' : status === 'completed' ? 'DONE' : status}
+                    {status}
                   </span>
                 </div>
 
-                {/* Progress or Outcome Summary */}
-                {isRunning && (
-                  <div className="mt-2 space-y-1">
-                    <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
-                      <motion.div
-                        className="h-full bg-signal"
-                        style={{ width: `${Math.max(15, Math.round((run?.progress ?? 0.3) * 100))}%` }}
-                        animate={{ opacity: [0.6, 1, 0.6] }}
-                        transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
-                      />
-                    </div>
-                    <span className="text-[9px] text-signal/80 truncate block">
-                      {SKILL_OUTPUT_SUMMARY[skillId]}
-                    </span>
-                  </div>
-                )}
-
-                {isDone && (
-                  <div className="mt-1 flex items-center justify-between text-[9px] text-muted-foreground/70">
-                    <span className="truncate">{SKILL_OUTPUT_SUMMARY[skillId]}</span>
-                    <span className="text-emerald-400 font-semibold shrink-0">✓</span>
-                  </div>
-                )}
+                <p className="mt-1 text-[10px] text-muted-foreground/75 truncate">
+                  {SKILL_OUTPUT_SUMMARY[skillId]}
+                </p>
               </div>
             )
           })}
-        </div>
-
-        {/* Footnote */}
-        <div className="border-t border-white/6 bg-black/40 px-3 py-2 text-center">
-          <p className="font-mono text-[9px] text-muted-foreground/50">
-            DETERMINISTIC V1 · DUAL-FETCH INSPECTION
-          </p>
-        </div>
-      </div>
-
-      {/* Bottom Center Status Pill */}
-      <div className="text-center">
-        <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-black/80 px-4 py-2 backdrop-blur-md shadow-xl">
-          <div className="size-2 rounded-full bg-signal animate-ping" />
-          <p className="text-xs font-medium text-foreground">{phaseLabel}</p>
         </div>
       </div>
     </div>
   )
 }
-

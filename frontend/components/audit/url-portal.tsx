@@ -7,8 +7,7 @@ import { hostOf, isValidUrl, normalizeUrl, SAMPLE_URLS } from '@/lib/audit/mock-
 import type { Point } from '@/lib/audit/types'
 
 /**
- * The diagnostic aperture — not a generic search box.
- * Entering a domain positions the target into the diagnostic instrument.
+ * The diagnostic aperture — entering a domain positions the target into the diagnostic instrument.
  */
 export function UrlPortal({
   onStart,
@@ -31,7 +30,7 @@ export function UrlPortal({
     const trimmed = raw.trim().replace(/,$/, '')
     if (!trimmed) return false
     if (!isValidUrl(trimmed)) {
-      setError('Please enter a valid website address.')
+      setError('Please enter a valid website address (e.g. acme.com).')
       return false
     }
     const normalized = normalizeUrl(trimmed)
@@ -48,7 +47,7 @@ export function UrlPortal({
     let queue = urls
     if (value.trim()) {
       if (!isValidUrl(value)) {
-        setError('Please enter a valid website address.')
+        setError('Please enter a valid website address (e.g. acme.com).')
         return
       }
       const normalized = normalizeUrl(value)
@@ -87,10 +86,10 @@ export function UrlPortal({
 
   return (
     <div className="relative w-full">
-      {/* Subtle Spatial Reticle Lines */}
+      {/* Subtle Spatial Glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 size-36 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/4"
+        className="pointer-events-none absolute left-1/2 top-1/2 size-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/10 blur-3xl"
       />
 
       <div className="relative">
@@ -101,26 +100,26 @@ export function UrlPortal({
             handleSubmit()
           }}
           className={cn(
-            'relative flex w-full items-center gap-3 rounded-xl border px-4.5 py-3 transition-all duration-200 bg-surface/90 backdrop-blur-xl shadow-[0_12px_32px_rgba(0,0,0,0.5)]',
+            'relative flex w-full items-center gap-3 rounded-2xl border px-5 py-3.5 transition-all duration-200 bg-[#0f1422]/90 backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.5)]',
             error
-              ? 'border-critical/60 bg-surface/95'
+              ? 'border-rose-500/60 ring-2 ring-rose-500/20'
               : focused
-                ? 'border-signal/50 ring-1 ring-signal/20'
-                : 'border-white/10 hover:border-white/18',
+                ? 'border-indigo-500/60 ring-4 ring-indigo-500/15 shadow-[0_20px_50px_rgba(99,102,241,0.12)]'
+                : 'border-white/10 hover:border-white/20',
           )}
         >
-          {/* Subtle Status Indicator */}
+          {/* Status Indicator */}
           <div className="flex items-center justify-center shrink-0">
             <span
               aria-hidden
               className={cn(
-                'size-2 rounded-full transition-colors duration-200',
-                error ? 'bg-critical' : live ? 'bg-signal' : 'bg-muted-foreground/50',
+                'size-2.5 rounded-full transition-colors duration-200',
+                error ? 'bg-rose-500' : live ? 'bg-indigo-400 animate-pulse' : 'bg-zinc-600',
               )}
             />
           </div>
 
-          {/* Quiet Protocol Prefix */}
+          {/* Protocol Prefix */}
           <span className="font-mono text-xs font-medium text-muted-foreground/60 select-none">
             https://
           </span>
@@ -133,14 +132,14 @@ export function UrlPortal({
                 initial={{ opacity: 0, scale: 0.92 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.92 }}
-                className="inline-flex items-center gap-1.5 rounded-md border border-signal/30 bg-signal/10 px-2 py-0.5 font-mono text-xs text-signal"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-1 font-mono text-xs text-indigo-200"
               >
                 {hostOf(u)}
                 <button
                   type="button"
                   aria-label={`Remove ${hostOf(u)}`}
                   onClick={() => setUrls((prev) => prev.filter((x) => x !== u))}
-                  className="text-signal/70 hover:text-white transition-colors ml-0.5"
+                  className="text-indigo-300/70 hover:text-white transition-colors ml-0.5"
                 >
                   ×
                 </button>
@@ -164,7 +163,7 @@ export function UrlPortal({
             placeholder={urls.length ? 'queue another domain...' : 'example.com'}
             aria-label="Website domain to inspect"
             aria-invalid={!!error}
-            className="min-w-[14ch] flex-1 bg-transparent py-0.5 font-mono text-sm font-medium tracking-tight text-foreground outline-none placeholder:text-muted-foreground/45 placeholder:font-sans"
+            className="min-w-[14ch] flex-1 bg-transparent py-1 font-mono text-sm font-medium tracking-tight text-foreground outline-none placeholder:text-muted-foreground/40 placeholder:font-sans"
           />
 
           {previewHost && <span className="sr-only">{previewHost}</span>}
@@ -173,35 +172,35 @@ export function UrlPortal({
             type="submit"
             aria-label="Inspect website"
             className={cn(
-              'inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 font-mono text-xs font-semibold transition-all duration-150 cursor-pointer shrink-0',
+              'inline-flex items-center gap-2 rounded-xl px-4 py-2 font-medium text-xs transition-all duration-150 cursor-pointer shrink-0 shadow-sm',
               validDraft || urls.length > 0
-                ? 'bg-signal text-slate-950 hover:bg-signal/90 active:scale-[0.98]'
-                : 'border border-white/8 bg-white/4 text-muted-foreground hover:text-foreground hover:bg-white/8',
+                ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-400 hover:to-violet-500 text-white shadow-indigo-500/25 active:scale-[0.98]'
+                : 'border border-white/8 bg-white/5 text-muted-foreground hover:text-foreground hover:bg-white/10',
             )}
           >
-            <span>Inspect</span>
-            <kbd className="rounded bg-black/20 px-1 py-0.5 text-[9px] font-mono opacity-70">⏎</kbd>
+            <span>Run Audit</span>
+            <kbd className="rounded bg-black/30 px-1.5 py-0.5 text-[10px] font-mono opacity-80">↵</kbd>
           </button>
         </form>
       </div>
 
       {/* Helper text & Sample Domain Benchmarks */}
-      <div className="mt-3.5 text-center">
+      <div className="mt-4 text-center">
         {error ? (
-          <p className="font-mono text-xs text-critical font-medium">{error}</p>
+          <p className="font-mono text-xs text-rose-400 font-medium">{error}</p>
         ) : validDraft ? (
-          <p className="font-mono text-xs text-signal font-medium tracking-wide">
-            Ready to inspect
+          <p className="font-mono text-xs text-indigo-300 font-medium tracking-wide">
+            Ready to inspect origin
           </p>
         ) : (
-          <p className="font-mono text-[11px] text-muted-foreground/60 tracking-normal">
-            Press Enter to begin · Comma queues secondary site
+          <p className="font-mono text-[11px] text-muted-foreground/70 tracking-normal">
+            Press Enter to begin · Comma separates multi-domain comparison
           </p>
         )}
 
-        <div className="mt-3.5 flex flex-wrap items-center justify-center gap-1.5">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
           <span className="font-mono text-[10px] tracking-wider text-muted-foreground/60 uppercase mr-1">
-            Sample domains:
+            Benchmarks:
           </span>
           {SAMPLE_URLS.slice(0, 4).map((u) => (
             <button
@@ -212,9 +211,9 @@ export function UrlPortal({
                 const r = el?.getBoundingClientRect()
                 onStart([u], r ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null)
               }}
-              className="group inline-flex items-center gap-1.5 rounded-md border border-white/6 bg-surface/60 px-2.5 py-1 font-mono text-xs text-muted-foreground transition-all duration-150 hover:border-white/18 hover:bg-surface hover:text-foreground"
+              className="group inline-flex items-center gap-1.5 rounded-lg border border-white/6 bg-white/[0.03] px-3 py-1.5 font-mono text-xs text-muted-foreground transition-all duration-150 hover:border-indigo-500/30 hover:bg-indigo-500/10 hover:text-foreground"
             >
-              <span className="size-1 rounded-full bg-muted-foreground/40 group-hover:bg-signal transition-colors" />
+              <span className="size-1.5 rounded-full bg-zinc-600 group-hover:bg-indigo-400 transition-colors" />
               {hostOf(u)}
             </button>
           ))}
