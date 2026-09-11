@@ -1,7 +1,8 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { AppPhase, AuditResult, Point, Site } from '@/lib/audit/types'
+import type { AppPhase, AuditResult, Point, Site, SkillId } from '@/lib/audit/types'
+import { RUN_ORDER } from '@/lib/audit/skills'
 import { applyEvent, createSite, runSiteAudit } from '@/lib/audit/engine'
 
 /**
@@ -13,6 +14,15 @@ import { applyEvent, createSite, runSiteAudit } from '@/lib/audit/engine'
 export function useAuditSession() {
   const [phase, setPhase] = useState<AppPhase>('landing')
   const [sites, setSites] = useState<Site[]>([])
+  const [skippedSkillIds, setSkippedSkillIds] = useState<SkillId[]>(() => {
+    if (typeof window === 'undefined') return []
+    try {
+      const raw = sessionStorage.getItem('bair.skippedSkills')
+      return raw ? (JSON.parse(raw) as SkillId[]) : []
+    } catch {
+      return []
+    }
+  })
   const [focusedId, setFocusedId] = useState<string | null>(null)
   const [ingestOrigin, setIngestOrigin] = useState<Point | null>(null)
   const [rootArrived, setRootArrived] = useState(false)
@@ -95,6 +105,25 @@ export function useAuditSession() {
     [sites, focusedId],
   )
 
+  const setSkippedSkillId = useCallback((id: SkillId, skipped: boolean) => {
+    setSkippedSkillIds((prev) => {
+      let next: SkillId[]
+      if (skipped) {
+        if (prev.includes(id)) return prev
+        if (prev.length >= RUN_ORDER.length - 1) return prev
+        next = [...prev, id]
+      } else {
+        next = prev.filter((x) => x !== id)
+      }
+      try {
+        sessionStorage.setItem('bair.skippedSkills', JSON.stringify(next))
+      } catch {
+        // ignore
+      }
+      return next
+    })
+  }, [])
+
   return {
     phase,
     sites,
@@ -103,6 +132,9 @@ export function useAuditSession() {
     setFocusedId,
     ingestOrigin,
     rootArrived,
+    skippedSkillIds,
+    setSkippedSkillId,
+    setSkippedSkillIds,
     begin,
     markArrived,
     commitIngest,

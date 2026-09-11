@@ -53,12 +53,12 @@ export function AmbientBackground({
 
       {/* 3. Restrained Fine Cad Grid */}
       <div
-        className="absolute inset-0 bg-cad-grid opacity-18"
+        className="absolute inset-0 bg-cad-grid opacity-40"
         style={{
           maskImage:
-            'radial-gradient(ellipse 75% 65% at 50% 46%, black 20%, rgba(0,0,0,0.2) 65%, transparent 85%)',
+            'radial-gradient(ellipse 80% 70% at 50% 46%, black 28%, rgba(0,0,0,0.45) 70%, transparent 92%)',
           WebkitMaskImage:
-            'radial-gradient(ellipse 75% 65% at 50% 46%, black 20%, rgba(0,0,0,0.2) 65%, transparent 85%)',
+            'radial-gradient(ellipse 80% 70% at 50% 46%, black 28%, rgba(0,0,0,0.45) 70%, transparent 92%)',
         }}
       />
 

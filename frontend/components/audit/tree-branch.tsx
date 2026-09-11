@@ -23,6 +23,7 @@ export function TreeBranch({
   weight = 'twig',
   flowPath,
   dashArray,
+  pulseToken,
 }: {
   path: string
   status: SkillStatus
@@ -35,6 +36,7 @@ export function TreeBranch({
   weight?: 'trunk' | 'twig' | 'tendril'
   flowPath?: string
   dashArray?: string
+  pulseToken?: string
 }) {
   const style = STATUS_STYLE[status]
   const active = isActive(status)
@@ -124,9 +126,14 @@ export function TreeBranch({
         initial={reduced ? { pathLength: 1, opacity: baseOpacity } : { pathLength: isTendril ? 1 : 0, opacity: 0 }}
         animate={{
           pathLength: isTendril ? 1 : grown ? 1 : isTrunk ? 1 : 0,
-          opacity: grown || isTrunk ? baseOpacity : 0,
+          opacity: grown || isTrunk ? (pulseToken && emphasized && !reduced ? [0.4, baseOpacity] : baseOpacity) : 0,
         }}
-        transition={{ duration: reduced ? 0 : isTrunk ? 1.0 : isTendril ? 0.5 : 0.8, delay: reduced ? 0 : Math.min(index * 0.025, 0.4), ease: [0.22, 1, 0.36, 1] }}
+        key={pulseToken ? `${index}-${pulseToken}` : undefined}
+        transition={{
+          duration: pulseToken && emphasized && !reduced ? 0.4 : reduced ? 0 : isTrunk ? 1.0 : isTendril ? 0.5 : 0.8,
+          delay: pulseToken && emphasized ? 0 : reduced ? 0 : Math.min(index * 0.025, 0.4),
+          ease: [0.22, 1, 0.36, 1],
+        }}
       />
 
       {/* Discrete live data pulse traveling through multiple levels */}

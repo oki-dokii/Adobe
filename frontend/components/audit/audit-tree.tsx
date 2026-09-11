@@ -35,6 +35,8 @@ export function AuditTree({
   onFocusSite,
   guideFocus = null,
   viewMode = 'diagnose',
+  highlightPulseToken,
+  highlightSource = null,
 }: {
   width: number
   height: number
@@ -55,6 +57,8 @@ export function AuditTree({
   onFocusSite?: (id: string) => void
   guideFocus?: 'root' | 'dimensions' | 'skills' | 'findings' | 'causes' | 'actions' | null
   viewMode?: TreeViewMode
+  highlightPulseToken?: string
+  highlightSource?: 'span' | 'cause' | 'finding' | 'guide' | 'skill' | null
 }) {
   const [hovered, setHovered] = useState<SkillId | 'root' | null>(null)
   const [hoveredMicro, setHoveredMicro] = useState<MicroNodeLayout | null>(null)
@@ -208,8 +212,6 @@ export function AuditTree({
     return d
   }, [highlightedSkillIds, viewMode, phase, guideFocus, layout, cx, cy, site, skills])
 
-  if (width === 0 || height === 0) return null
-
   // Camera Spatial Framing
   const cameraTargetId =
     selectedSkillId && selectedSkillId !== 'audit-orchestrator'
@@ -320,7 +322,7 @@ export function AuditTree({
 
     el.addEventListener('wheel', onWheel, { passive: false })
     return () => el.removeEventListener('wheel', onWheel)
-  }, [cx, cy])
+  }, [cx, cy, width, height])
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0 && e.button !== 1) return
@@ -405,6 +407,8 @@ export function AuditTree({
           : sitePhase === 'completed' || sitePhase === 'partial'
             ? 'diagnosed'
             : 'origin'
+
+  if (width === 0 || height === 0) return null
 
   return (
     <div
@@ -624,6 +628,7 @@ export function AuditTree({
                     evidenceFlow={findingOf(branch.id) && st === 'running'}
                     weight="twig"
                     flowPath={branch.flowPath}
+                    pulseToken={isBranchHighlighted ? highlightPulseToken : undefined}
                   />
                 )
               })}
@@ -704,35 +709,52 @@ export function AuditTree({
               })}
 
             {/* ================= DEPTH LAYER 6: ROOT-CAUSE CAUSAL ROUTE VISUALIZATION ================= */}
-            {causalPath && (
+            {causalPath && (viewMode === 'chain' || highlightSource === 'span' || Boolean(highlightPulseToken)) && (
               <g className="pointer-events-none">
-                {/* Outer optic halo */}
-                <motion.path
-                  d={causalPath}
-                  fill="none"
-                  stroke="var(--warning)"
-                  strokeWidth={4.5}
-                  strokeLinecap="round"
-                  style={{ opacity: 0.22, filter: 'blur(3px)' }}
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-                />
-                {/* Core animated causal conduit */}
-                <motion.path
-                  d={causalPath}
-                  fill="none"
-                  stroke="var(--warning)"
-                  strokeWidth={2.0}
-                  strokeLinecap="round"
-                  strokeDasharray="5 5"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-                />
-                {/* Diagnostic telemetry pulse along causal vector */}
-                {!reduced && (
-                  <DataPulse path={causalPath} color="var(--destructive)" duration={2.2} delay={0.2} />
+                {highlightSource === 'span' || Boolean(highlightPulseToken) ? (
+                  <motion.path
+                    d={causalPath}
+                    fill="none"
+                    stroke="var(--signal)"
+                    strokeWidth={1.25}
+                    strokeLinecap="round"
+                    strokeDasharray={phase === 'auditing' ? '4 4' : undefined}
+                    style={{ opacity: 0.55 }}
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                ) : (
+                  <>
+                    {/* Outer optic halo */}
+                    <motion.path
+                      d={causalPath}
+                      fill="none"
+                      stroke="var(--warning)"
+                      strokeWidth={4.5}
+                      strokeLinecap="round"
+                      style={{ opacity: 0.22, filter: 'blur(3px)' }}
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                    {/* Core animated causal conduit */}
+                    <motion.path
+                      d={causalPath}
+                      fill="none"
+                      stroke="var(--warning)"
+                      strokeWidth={2.0}
+                      strokeLinecap="round"
+                      strokeDasharray="5 5"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                    {/* Diagnostic telemetry pulse along causal vector */}
+                    {!reduced && (
+                      <DataPulse path={causalPath} color="var(--destructive)" duration={2.2} delay={0.2} />
+                    )}
+                  </>
                 )}
               </g>
             )}
@@ -901,6 +923,7 @@ export function AuditTree({
                     visible={visible}
                     dimmed={dimmed}
                     selected={isSkillSelected}
+                    highlighted={isSkillHighlighted}
                     reduced={reduced}
                     progress={progressOf(node.id)}
                     interactive={interactive && awakened}

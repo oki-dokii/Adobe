@@ -1,11 +1,17 @@
-import type { Site } from './types'
+import type { Site, SkillId } from './types'
 import { DIMENSIONS, SKILL_MAP } from './skills'
+import type { PerceptionBundle } from '@/lib/perception/types'
+import { formatPerceptionMarkdown } from '@/lib/perception/export-perception'
 
 /**
  * Formats a comprehensive Markdown perception diagnostic report
  * matching the production evaluation reporting contract.
  */
-export function generateAuditMarkdown(site: Site): string {
+export function generateAuditMarkdown(
+  site: Site,
+  bundle: PerceptionBundle | null = null,
+  skippedSkillIds: SkillId[] = [],
+): string {
   const result = site.result
   if (!result) return `# Diagnostic Report for ${site.host}\n\nNo result available.`
 
@@ -21,7 +27,6 @@ export function generateAuditMarkdown(site: Site): string {
     avgScore >= 60 ? 'C+' :
     avgScore >= 50 ? 'C' : 'D'
 
-  const percentile = Math.min(99, Math.max(14, Math.round(avgScore * 0.96)))
   const now = new Date().toISOString()
 
   const lines: string[] = [
@@ -36,7 +41,7 @@ export function generateAuditMarkdown(site: Site): string {
     '',
     '## 1. Executive Summary & BLUF',
     '',
-    `- **AI Readiness Index:** **${avgScore} / 100** (Grade: **${letterGrade}**, **${percentile}th** Percentile)`,
+    `- **AI Readiness Index:** **${avgScore} / 100** (Grade: **${letterGrade}**)`,
     `- **Diagnosis:** ${result.overallLabel}`,
     `- **Observation:** ${result.overallSummary}`,
     `- **Defect Register:** ${result.counts.critical} Critical · ${result.counts.high} High · ${result.counts.medium} Medium`,
@@ -47,7 +52,7 @@ export function generateAuditMarkdown(site: Site): string {
     '',
     '| Metric | Corpus Value | Brand Position |',
     '|---|---|---|',
-    `| **Brand Score** | **${avgScore} / 100** | Grade ${letterGrade} (${percentile}th percentile) |`,
+    `| **Brand Score** | **${avgScore} / 100** | Grade ${letterGrade} |`,
     '| **Corpus Median** | 67 / 100 | ' + (avgScore >= 67 ? 'Above median (+ ' + (avgScore - 67) + ' pts)' : 'Below median (− ' + (67 - avgScore) + ' pts)') + ' |',
     '| **Top Quartile (25%)** | 82 / 100 | ' + (avgScore >= 82 ? 'Citation Leader' : `${82 - avgScore} pts gap to top quartile`) + ' |',
     '| **Corpus Best** | 91 / 100 | Reference Benchmark |',
@@ -145,21 +150,41 @@ export function generateAuditMarkdown(site: Site): string {
     `*Report produced by Brand AI Readiness Diagnostic Engine · ID: ${site.id}*`,
   )
 
+  // Append Perception Simulation & Marketplace Sections
+  lines.push(formatPerceptionMarkdown(bundle, skippedSkillIds, site.skills))
+
   return lines.join('\n')
 }
 
 /**
- * Triggers a browser file download of the Markdown diagnostic report.
+ * Triggers a browser file download of the full diagnostic report including perception simulation.
+ */
+export function downloadDiagnosticReport(
+  site: Site,
+  bundle: PerceptionBundle | null = null,
+  skippedSkillIds: SkillId[] = [],
+): void {
+  try {
+    const content = generateAuditMarkdown(site, bundle, skippedSkillIds)
+    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    const safeHost = site.host.replace(/[^a-zA-Z0-9.-]/g, '_')
+    link.setAttribute('download', `${safeHost}-ai-readiness.md`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  } catch (err) {
+    console.error('Failed to download diagnostic report:', err)
+  }
+}
+
+/**
+ * Backward compatibility wrapper
  */
 export function downloadMarkdownReport(site: Site): void {
-  const content = generateAuditMarkdown(site)
-  const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.setAttribute('download', `${site.host}-ai-readiness-diagnostic.md`)
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
+  downloadDiagnosticReport(site, null, [])
 }
+

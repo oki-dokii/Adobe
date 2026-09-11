@@ -21,11 +21,13 @@ const SKILL_OUTPUT_SUMMARY: Record<SkillId, string> = {
 
 export function RunningView({
   focusedSite,
+  skippedSkillIds = [],
 }: {
   sites: Site[]
   focusedSite: Site
   focusedId: string
   onFocus: (id: string) => void
+  skippedSkillIds?: SkillId[]
 }) {
   const active = focusedSite.skills.find((s) => s.status === 'running')
   const doneCount = focusedSite.skills.filter((s) => isResolved(s.status)).length
@@ -74,9 +76,10 @@ export function RunningView({
           {RUN_ORDER.map((skillId, index) => {
             const skillDef = SKILL_MAP[skillId]
             const run = focusedSite.skills.find((s) => s.id === skillId)
-            const status = run?.status ?? 'dormant'
+            const isSkipped = skippedSkillIds.includes(skillId)
+            const status = isSkipped ? ('skipped' as const) : (run?.status ?? 'dormant')
             const isRunning = status === 'running'
-            const isDone = isResolved(status)
+            const isDone = isResolved(status) && !isSkipped
             const style = STATUS_STYLE[status]
 
             return (
@@ -84,11 +87,13 @@ export function RunningView({
                 key={skillId}
                 className={cn(
                   'rounded-lg border p-2.5 transition-all duration-200',
-                  isRunning
-                    ? 'border-signal/40 bg-signal/10 shadow-[0_0_15px_rgba(56,189,248,0.15)]'
-                    : isDone
-                      ? 'border-white/6 bg-white/[0.02]'
-                      : 'border-white/4 bg-transparent opacity-40',
+                  isSkipped
+                    ? 'border-white/4 bg-transparent opacity-35'
+                    : isRunning
+                      ? 'border-signal/40 bg-signal/10 shadow-[0_0_15px_rgba(56,189,248,0.15)]'
+                      : isDone
+                        ? 'border-white/6 bg-white/[0.02]'
+                        : 'border-white/4 bg-transparent opacity-40',
                 )}
               >
                 <div className="flex items-center justify-between">
@@ -100,7 +105,13 @@ export function RunningView({
                     <span
                       className={cn(
                         'truncate text-xs font-medium',
-                        isRunning ? 'text-signal font-semibold' : isDone ? 'text-foreground' : 'text-muted-foreground',
+                        isSkipped
+                          ? 'text-muted-foreground line-through decoration-white/20'
+                          : isRunning
+                            ? 'text-signal font-semibold'
+                            : isDone
+                              ? 'text-foreground'
+                              : 'text-muted-foreground',
                       )}
                     >
                       {skillDef.short}
@@ -113,7 +124,7 @@ export function RunningView({
                       backgroundColor: `${style.color}15`,
                     }}
                   >
-                    {status === 'running' ? 'RUNNING' : status === 'completed' ? 'DONE' : status}
+                    {isSkipped ? 'SKIPPED' : status === 'running' ? 'RUNNING' : status === 'completed' ? 'DONE' : status}
                   </span>
                 </div>
 

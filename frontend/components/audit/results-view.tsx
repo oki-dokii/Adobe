@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { RootCause, Site, SkillId } from '@/lib/audit/types'
 import { SKILL_MAP } from '@/lib/audit/skills'
@@ -13,6 +13,7 @@ import { SkillInspector } from './skill-inspector'
 import { cn } from '@/lib/utils'
 
 type Tab = 'diagnose' | 'chain' | 'findings'
+type PanelTab = Tab | 'perceive'
 
 export function ResultsView({
   focusedSite,
@@ -24,6 +25,9 @@ export function ResultsView({
   treeMode,
   onTreeMode,
   focusedSkillIds = [],
+  highlightedFindingIds,
+  perceptionPanel,
+  onExport,
 }: {
   sites: Site[]
   focusedSite: Site
@@ -37,16 +41,24 @@ export function ResultsView({
   treeMode: Tab
   onTreeMode: (mode: Tab) => void
   focusedSkillIds?: SkillId[]
+  highlightedFindingIds?: string[]
+  perceptionPanel?: ReactNode
+  onExport?: () => void
 }) {
   const [researchOpen, setResearchOpen] = useState(false)
+  const [panelTab, setPanelTab] = useState<PanelTab>(treeMode)
+
+  useEffect(() => {
+    setPanelTab(treeMode)
+  }, [treeMode])
   const result = focusedSite.result
   if (!result) return null
 
-  const tab = treeMode
-
   const highlightedIds =
-    activeCause?.findingIds ??
-    result.findings.filter((f) => focusedSkillIds.includes(f.skillId)).map((f) => f.id)
+    highlightedFindingIds?.length
+      ? highlightedFindingIds
+      : (activeCause?.findingIds ??
+        result.findings.filter((f) => focusedSkillIds.includes(f.skillId)).map((f) => f.id))
   const actions = result.findings.filter((f) => !f.isLimitation).map((f) => f.recommendation)
   const skill = selectedSkill ? SKILL_MAP[selectedSkill] : null
   const accent = selectedSkill
@@ -85,18 +97,19 @@ export function ResultsView({
             </button>
           </div>
         ) : (
-          <nav className="flex w-full items-center justify-between rounded-lg border border-white/6 bg-surface-2/60 p-1" aria-label="Diagnostic views">
+          <nav className="flex w-full items-center justify-between gap-0.5 rounded-lg border border-white/6 bg-surface-2/60 p-1" aria-label="Diagnostic views">
             {(['diagnose', 'chain', 'findings'] as const).map((id) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => {
                   onCloseSkill()
+                  setPanelTab(id)
                   onTreeMode(id)
                 }}
                 className={cn(
                   'flex-1 rounded-md py-1.5 text-center font-mono text-[10px] font-semibold tracking-wider transition-all duration-150 cursor-pointer uppercase',
-                  tab === id
+                  panelTab === id
                     ? 'border border-signal/40 bg-signal/15 text-signal shadow-sm'
                     : 'text-muted-foreground hover:text-foreground',
                 )}
@@ -104,6 +117,23 @@ export function ResultsView({
                 {id === 'chain' ? 'CAUSES' : id === 'diagnose' ? 'DIAGNOSE' : 'FINDINGS'}
               </button>
             ))}
+            {perceptionPanel && (
+              <button
+                type="button"
+                onClick={() => {
+                  onCloseSkill()
+                  setPanelTab('perceive')
+                }}
+                className={cn(
+                  'flex-1 rounded-md py-1.5 text-center font-mono text-[10px] font-semibold tracking-wider transition-all duration-150 cursor-pointer uppercase lg:hidden',
+                  panelTab === 'perceive'
+                    ? 'border border-signal/40 bg-signal/15 text-signal shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                PERCEIVE
+              </button>
+            )}
           </nav>
         )}
       </div>
@@ -121,15 +151,17 @@ export function ResultsView({
             />
           ) : (
             <motion.div
-              key={tab}
+              key={panelTab}
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="space-y-6"
             >
-              {tab === 'diagnose' && (
-                <>
+              {panelTab === 'perceive' && <div className="lg:hidden">{perceptionPanel}</div>}
+
+              {(panelTab === 'diagnose' || panelTab === 'perceive') && (
+                <div className={panelTab === 'perceive' ? 'hidden lg:block space-y-6' : undefined}>
                   <ScoreOverview result={result} host={focusedSite.host} />
 
                   {/* Priority Remediation Actions */}
@@ -171,10 +203,10 @@ export function ResultsView({
                       Measures structural extractability, machine legibility, and citation preconditions via read-only GET/HEAD crawling. Evaluates technical readiness, not stochastic query volume.
                     </p>
                   </section>
-                </>
+                </div>
               )}
 
-              {tab === 'chain' && (
+              {panelTab === 'chain' && (
                 <RootCauseChain
                   causes={result.rootCauses}
                   findings={result.findings}
@@ -186,7 +218,7 @@ export function ResultsView({
                 />
               )}
 
-              {tab === 'findings' && (
+              {panelTab === 'findings' && (
                 <FindingsList
                   findings={result.findings}
                   causes={result.rootCauses}
@@ -204,7 +236,7 @@ export function ResultsView({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => downloadMarkdownReport(focusedSite)}
+            onClick={onExport ?? (() => downloadMarkdownReport(focusedSite))}
             className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-signal/40 bg-signal/15 px-3 py-2 font-mono text-[10px] font-bold tracking-wider text-signal uppercase transition-colors hover:bg-signal/25 cursor-pointer"
           >
             <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth={2}>

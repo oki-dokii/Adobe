@@ -55,11 +55,9 @@ export function FindingsList({
               highlighted={highlightedIds.includes(f.id)}
               onFocusTree={() => onInspectSkill?.(f.skillId)}
               onToggle={() => {
-                setOpen((prev) => {
-                  const nextOpen = !prev[f.id]
-                  if (nextOpen) onInspectSkill?.(f.skillId)
-                  return { ...prev, [f.id]: nextOpen }
-                })
+                const nextOpen = !open[f.id]
+                setOpen((prev) => ({ ...prev, [f.id]: nextOpen }))
+                if (nextOpen) onInspectSkill?.(f.skillId)
               }}
             />
           ))}

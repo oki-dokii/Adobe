@@ -21,6 +21,8 @@ export function AuditCanvas({
   onFocusSite,
   guideFocus = null,
   viewMode = 'diagnose',
+  highlightPulseToken,
+  highlightSource = null,
 }: {
   site: Site | null
   rootLabel: string
@@ -38,6 +40,8 @@ export function AuditCanvas({
   onFocusSite?: (id: string) => void
   guideFocus?: 'root' | 'dimensions' | 'skills' | 'findings' | 'causes' | 'actions' | null
   viewMode?: TreeViewMode
+  highlightPulseToken?: string
+  highlightSource?: 'span' | 'cause' | 'finding' | 'guide' | 'skill' | null
 }) {
   const [ref, { width, height }] = useMeasure<HTMLDivElement>()
   const reduced = usePrefersReducedMotion()
@@ -64,6 +68,8 @@ export function AuditCanvas({
         onFocusSite={onFocusSite}
         guideFocus={guideFocus}
         viewMode={viewMode}
+        highlightPulseToken={highlightPulseToken}
+        highlightSource={highlightSource}
       />
     </div>
   )

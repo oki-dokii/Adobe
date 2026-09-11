@@ -3,10 +3,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useAuditSession } from '@/hooks/use-audit-session'
+import { usePerception } from '@/hooks/use-perception'
 import { usePrefersReducedMotion } from '@/hooks/use-measure'
 import type { RootCause, SkillId } from '@/lib/audit/types'
+import type { PerceptionSpan } from '@/lib/perception/types'
 import type { TreeViewMode } from './audit-tree'
 import { hostOf } from '@/lib/audit/mock-data'
+import { downloadDiagnosticReport } from '@/lib/audit/export'
 import { AmbientBackground } from './ambient-background'
 import { AppHeader } from './app-header'
 import { LandingView } from './landing-view'
@@ -16,12 +19,27 @@ import { ResultsView } from './results-view'
 import { AuditCanvas } from './audit-canvas'
 import { GuideOverlay } from './guide-overlay'
 import { HelpOverlay } from './help-overlay'
+import { PerceptionConsole } from './perception-console'
+import { SkillMarketplace } from './skill-marketplace'
 import { cn } from '@/lib/utils'
 
 export function AuditExperience() {
   const session = useAuditSession()
-  const { phase, sites, focusedSite, focusedId, setFocusedId, ingestOrigin, rootArrived, begin, markArrived, commitIngest, reset } =
-    session
+  const {
+    phase,
+    sites,
+    focusedSite,
+    focusedId,
+    setFocusedId,
+    ingestOrigin,
+    rootArrived,
+    skippedSkillIds,
+    setSkippedSkillId,
+    begin,
+    markArrived,
+    commitIngest,
+    reset,
+  } = session
   const reduced = usePrefersReducedMotion()
   const [portalActive, setPortalActive] = useState(false)
   const [guideOpen, setGuideOpen] = useState(false)
@@ -33,6 +51,8 @@ export function AuditExperience() {
   const [activeCause, setActiveCause] = useState<RootCause | null>(null)
   const [highlightedSkills, setHighlightedSkills] = useState<SkillId[]>([])
   const [treeMode, setTreeMode] = useState<TreeViewMode>('diagnose')
+  const [perceptionOpen, setPerceptionOpen] = useState(true)
+  const perception = usePerception(phase === 'results' ? focusedSite : null, skippedSkillIds)
 
   const onStart = useCallback(
     (urls: string[], origin: { x: number; y: number } | null) => {
@@ -55,13 +75,14 @@ export function AuditExperience() {
       setSelectedSkill(null)
       setActiveCause(null)
       setHighlightedSkills([])
+      perception.clearActiveSpan()
       setGuideOpen(false)
       setHelpOpen(false)
       setGuideFocus(null)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [])
+  }, [perception.clearActiveSpan])
 
   useEffect(() => {
     if (phase === 'results') {
@@ -74,6 +95,7 @@ export function AuditExperience() {
     setSelectedSkill((cur) => (cur === id ? null : id))
     setActiveCause(null)
     setHighlightedSkills([])
+    perception.clearActiveSpan()
   }
 
   const handleSelectRoot = () => {
@@ -108,7 +130,47 @@ export function AuditExperience() {
 
   const treeInteractive = phase !== 'ingesting'
 
-  const highlighted = useMemo(() => highlightedSkills, [highlightedSkills])
+  const handleSelectSpan = useCallback(
+    (span: PerceptionSpan | null) => {
+      perception.selectSpan(span)
+      setSelectedSkill(null)
+      setActiveCause(null)
+    },
+    [perception.selectSpan],
+  )
+
+  const highlighted = useMemo(
+    () => (perception.activeSpan?.skillIds?.length ? perception.activeSpan.skillIds : highlightedSkills),
+    [perception.activeSpan, highlightedSkills],
+  )
+
+  const highlightSource = useMemo<'span' | 'cause' | 'finding' | 'guide' | 'skill' | null>(() => {
+    if (perception.activeSpan) return 'span'
+    if (activeCause) return 'cause'
+    if (selectedSkill) return 'skill'
+    if (guideFocus) return 'guide'
+    if (highlightedSkills.length > 0) return 'finding'
+    return null
+  }, [perception.activeSpan, activeCause, selectedSkill, guideFocus, highlightedSkills])
+
+  const displaySite = useMemo(() => {
+    if (!focusedSite) return null
+    return {
+      ...focusedSite,
+      skills: focusedSite.skills.map((s) =>
+        skippedSkillIds.includes(s.id) ? { ...s, status: 'skipped' as const } : s,
+      ),
+    }
+  }, [focusedSite, skippedSkillIds])
+
+  const [downloadNotice, setDownloadNotice] = useState<string | null>(null)
+
+  const handleExport = useCallback(() => {
+    if (!focusedSite?.result) return
+    downloadDiagnosticReport(focusedSite, perception.bundle, skippedSkillIds)
+    setDownloadNotice('Report downloaded')
+    setTimeout(() => setDownloadNotice(null), 3500)
+  }, [focusedSite, perception.bundle, skippedSkillIds])
 
   return (
     <div className="relative min-h-dvh overflow-hidden bg-background">
@@ -116,12 +178,13 @@ export function AuditExperience() {
 
       <div
         className={cn(
-          'absolute inset-0 z-[2] transition-[right,bottom] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+          'absolute inset-0 z-[2] transition-[left,right,bottom] duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
           phase === 'results' && 'lg:right-[23.5rem]',
+          phase === 'results' && perceptionOpen && 'lg:left-[23rem]',
         )}
       >
         <AuditCanvas
-          site={focusedSite}
+          site={displaySite}
           rootLabel={rootArrived || phase === 'auditing' || phase === 'results' ? focusedSite?.host ?? '' : ''}
           interactive={treeInteractive}
           selectedSkillId={selectedSkill}
@@ -135,6 +198,8 @@ export function AuditExperience() {
           onFocusSite={setFocusedId}
           guideFocus={guideOpen ? guideFocus : null}
           viewMode={treeMode}
+          highlightPulseToken={perception.activeSpan?.id ?? ''}
+          highlightSource={highlightSource}
           className="absolute inset-0"
         />
       </div>
@@ -144,7 +209,11 @@ export function AuditExperience() {
         onHelp={() => setHelpOpen(true)}
         onReset={reset}
         showReset={phase !== 'landing'}
+        showExport={phase === 'results'}
+        exportEnabled={Boolean(focusedSite?.result)}
+        onExport={handleExport}
       />
+      <span className="sr-only" aria-live="polite">{downloadNotice}</span>
 
       <AnimatePresence>
         {phase === 'landing' && (
@@ -156,7 +225,13 @@ export function AuditExperience() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.45 }}
           >
-            <LandingView onStart={onStart} onPortalFocus={setPortalActive} />
+            <LandingView
+              onStart={onStart}
+              onPortalFocus={setPortalActive}
+              onGuide={() => setGuideOpen(true)}
+              skippedSkillIds={skippedSkillIds}
+              onToggleSkill={setSkippedSkillId}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -181,7 +256,13 @@ export function AuditExperience() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <RunningView sites={sites} focusedSite={focusedSite} focusedId={focusedId} onFocus={setFocusedId} />
+            <RunningView
+              sites={sites}
+              focusedSite={focusedSite}
+              focusedId={focusedId}
+              onFocus={setFocusedId}
+              skippedSkillIds={skippedSkillIds}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -208,8 +289,42 @@ export function AuditExperience() {
               onCloseSkill={() => setSelectedSkill(null)}
               treeMode={treeMode}
               onTreeMode={handleTreeMode}
-              focusedSkillIds={highlightedSkills}
+              focusedSkillIds={highlighted}
+              highlightedFindingIds={perception.activeSpan?.findingIds}
+              onExport={handleExport}
+              perceptionPanel={
+                <PerceptionConsole
+                  layout="embedded"
+                  selectedQuestionId={perception.selectedQuestionId}
+                  onSelectQuestion={perception.setSelectedQuestionId}
+                  onAsk={() => void perception.ask()}
+                  loading={perception.loading}
+                  error={perception.error}
+                  usedClientFallback={perception.usedClientFallback}
+                  bundle={perception.bundle}
+                  answerDimmed={perception.answerDimmed}
+                  activeSpanId={perception.activeSpan?.id ?? null}
+                  onSelectSpan={handleSelectSpan}
+                />
+              }
             />
+            {focusedSite.result && (
+              <PerceptionConsole
+                layout="dock"
+                open={perceptionOpen}
+                onToggleOpen={() => setPerceptionOpen((v) => !v)}
+                selectedQuestionId={perception.selectedQuestionId}
+                onSelectQuestion={perception.setSelectedQuestionId}
+                onAsk={() => void perception.ask()}
+                loading={perception.loading}
+                error={perception.error}
+                usedClientFallback={perception.usedClientFallback}
+                bundle={perception.bundle}
+                answerDimmed={perception.answerDimmed}
+                activeSpanId={perception.activeSpan?.id ?? null}
+                onSelectSpan={handleSelectSpan}
+              />
+            )}
           </motion.div>
         )}
       </AnimatePresence>

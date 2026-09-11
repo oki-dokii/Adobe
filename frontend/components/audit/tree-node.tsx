@@ -48,6 +48,7 @@ export function TreeNode({
   rootState = 'dormant',
   kind,
   hasFinding,
+  highlighted = false,
 }: {
   x: number
   y: number
@@ -55,6 +56,7 @@ export function TreeNode({
   label: string
   size?: number
   selected?: boolean
+  highlighted?: boolean
   dimmed?: boolean
   visible: boolean
   reduced: boolean
@@ -115,6 +117,7 @@ export function TreeNode({
       onFocus={onFocus}
       onBlur={onLeave}
       onClick={onClick}
+      aria-current={selected || highlighted ? 'true' : undefined}
       className={cn(
         'group absolute grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full outline-none',
         interactive ? 'cursor-pointer' : 'pointer-events-none',
@@ -124,8 +127,8 @@ export function TreeNode({
       style={{ left: x, top: y, width: hitSize, height: hitSize }}
       initial={reduced ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.3 }}
       animate={{
-        opacity: visible ? (dimmed ? (isMicro ? 0.2 : 0.25) : 1) : 0,
-        scale: visible ? (justCompleted ? 1.35 : selected ? (isMicro ? 1.4 : 1.15) : 1) : 0.3,
+        opacity: visible ? (dimmed ? (isMicro ? 0.2 : 0.35) : 1) : 0,
+        scale: visible ? (justCompleted ? 1.35 : selected ? (isMicro ? 1.4 : 1.15) : highlighted ? 1.08 : 1) : 0.3,
       }}
       transition={{
         duration: justCompleted ? 0.38 : reduced ? 0 : 0.4,

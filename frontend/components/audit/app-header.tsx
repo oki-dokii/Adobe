@@ -5,11 +5,17 @@ export function AppHeader({
   onHelp,
   onReset,
   showReset,
+  onExport,
+  exportEnabled = true,
+  showExport = false,
 }: {
   onGuide: () => void
   onHelp: () => void
   onReset?: () => void
   showReset?: boolean
+  onExport?: () => void
+  exportEnabled?: boolean
+  showExport?: boolean
 }) {
   return (
     <header className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between px-5 py-3 md:px-8 border-b border-white/6 bg-background/70 backdrop-blur-md">
@@ -42,6 +48,18 @@ export function AppHeader({
         >
           Help
         </button>
+
+        {showExport && (
+          <button
+            type="button"
+            onClick={onExport}
+            disabled={!exportEnabled}
+            aria-label="Export diagnostic report as Markdown"
+            className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-xs text-muted-foreground transition-all hover:text-foreground hover:bg-white/10 hover:border-white/20 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            Export
+          </button>
+        )}
 
         {showReset && onReset && (
           <button
