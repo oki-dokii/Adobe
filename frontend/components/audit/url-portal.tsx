@@ -6,9 +6,6 @@ import { cn } from '@/lib/utils'
 import { hostOf, isValidUrl, normalizeUrl, SAMPLE_URLS } from '@/lib/audit/mock-data'
 import type { Point } from '@/lib/audit/types'
 
-/**
- * The diagnostic aperture — entering a domain positions the target into the diagnostic instrument.
- */
 export function UrlPortal({
   onStart,
   onFocusChange,
@@ -86,12 +83,6 @@ export function UrlPortal({
 
   return (
     <div className="relative w-full">
-      {/* Subtle Spatial Glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 size-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/10 blur-3xl"
-      />
-
       <div className="relative">
         <form
           ref={originRef}
@@ -100,27 +91,24 @@ export function UrlPortal({
             handleSubmit()
           }}
           className={cn(
-            'relative flex w-full items-center gap-3 rounded-2xl border px-5 py-3.5 transition-all duration-200 bg-[#0f1422]/90 backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.5)]',
+            'relative flex w-full items-center gap-3 rounded-2xl border px-5 py-3.5 transition-all duration-200 bg-white shadow-[0_4px_24px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)]',
             error
-              ? 'border-rose-500/60 ring-2 ring-rose-500/20'
+              ? 'border-rose-300 ring-4 ring-rose-50'
               : focused
-                ? 'border-indigo-500/60 ring-4 ring-indigo-500/15 shadow-[0_20px_50px_rgba(99,102,241,0.12)]'
-                : 'border-white/10 hover:border-white/20',
+                ? 'border-indigo-600 ring-4 ring-indigo-50 shadow-[0_8px_30px_rgba(79,70,229,0.1)]'
+                : 'border-slate-200 hover:border-slate-300',
           )}
         >
-          {/* Status Indicator */}
-          <div className="flex items-center justify-center shrink-0">
-            <span
-              aria-hidden
-              className={cn(
-                'size-2.5 rounded-full transition-colors duration-200',
-                error ? 'bg-rose-500' : live ? 'bg-indigo-400 animate-pulse' : 'bg-zinc-600',
-              )}
-            />
+          {/* Clean Globe / Search Icon */}
+          <div className="flex items-center justify-center shrink-0 text-slate-400">
+            <svg viewBox="0 0 20 20" fill="none" className="size-5" stroke="currentColor" strokeWidth={1.5}>
+              <circle cx="10" cy="10" r="7.5" />
+              <path d="M2.5 10h15M10 2.5a13 13 0 0 1 3.5 7.5 13 13 0 0 1-3.5 7.5 13 13 0 0 1-3.5-7.5A13 13 0 0 1 10 2.5z" />
+            </svg>
           </div>
 
           {/* Protocol Prefix */}
-          <span className="font-mono text-xs font-medium text-muted-foreground/60 select-none">
+          <span className="font-mono text-xs font-medium text-slate-400 select-none">
             https://
           </span>
 
@@ -132,14 +120,14 @@ export function UrlPortal({
                 initial={{ opacity: 0, scale: 0.92 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.92 }}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/15 px-2.5 py-1 font-mono text-xs text-indigo-200"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1 font-mono text-xs font-semibold text-indigo-700"
               >
                 {hostOf(u)}
                 <button
                   type="button"
                   aria-label={`Remove ${hostOf(u)}`}
                   onClick={() => setUrls((prev) => prev.filter((x) => x !== u))}
-                  className="text-indigo-300/70 hover:text-white transition-colors ml-0.5"
+                  className="text-indigo-400 hover:text-indigo-900 transition-colors ml-0.5 font-bold"
                 >
                   ×
                 </button>
@@ -160,26 +148,26 @@ export function UrlPortal({
             autoComplete="off"
             autoCapitalize="off"
             spellCheck={false}
-            placeholder={urls.length ? 'queue another domain...' : 'example.com'}
+            placeholder={urls.length ? 'queue another domain...' : 'acme.com'}
             aria-label="Website domain to inspect"
             aria-invalid={!!error}
-            className="min-w-[14ch] flex-1 bg-transparent py-1 font-mono text-sm font-medium tracking-tight text-foreground outline-none placeholder:text-muted-foreground/40 placeholder:font-sans"
+            className="min-w-[14ch] flex-1 bg-transparent py-1 font-mono text-sm font-medium tracking-tight text-slate-900 outline-none placeholder:text-slate-400 placeholder:font-sans"
           />
 
           {previewHost && <span className="sr-only">{previewHost}</span>}
 
           <button
             type="submit"
-            aria-label="Inspect website"
+            aria-label="Run Audit"
             className={cn(
-              'inline-flex items-center gap-2 rounded-xl px-4 py-2 font-medium text-xs transition-all duration-150 cursor-pointer shrink-0 shadow-sm',
+              'inline-flex items-center gap-2 rounded-xl px-4.5 py-2.5 font-semibold text-xs transition-all duration-150 cursor-pointer shrink-0 shadow-xs',
               validDraft || urls.length > 0
-                ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-400 hover:to-violet-500 text-white shadow-indigo-500/25 active:scale-[0.98]'
-                : 'border border-white/8 bg-white/5 text-muted-foreground hover:text-foreground hover:bg-white/10',
+                ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200 active:scale-[0.98]'
+                : 'bg-slate-900 hover:bg-slate-800 text-white active:scale-[0.98]',
             )}
           >
             <span>Run Audit</span>
-            <kbd className="rounded bg-black/30 px-1.5 py-0.5 text-[10px] font-mono opacity-80">↵</kbd>
+            <kbd className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-mono">↵</kbd>
           </button>
         </form>
       </div>
@@ -187,20 +175,20 @@ export function UrlPortal({
       {/* Helper text & Sample Domain Benchmarks */}
       <div className="mt-4 text-center">
         {error ? (
-          <p className="font-mono text-xs text-rose-400 font-medium">{error}</p>
+          <p className="text-xs text-rose-600 font-medium">{error}</p>
         ) : validDraft ? (
-          <p className="font-mono text-xs text-indigo-300 font-medium tracking-wide">
+          <p className="text-xs text-indigo-600 font-semibold tracking-wide">
             Ready to inspect origin
           </p>
         ) : (
-          <p className="font-mono text-[11px] text-muted-foreground/70 tracking-normal">
+          <p className="text-xs text-slate-500 font-normal">
             Press Enter to begin · Comma separates multi-domain comparison
           </p>
         )}
 
         <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-          <span className="font-mono text-[10px] tracking-wider text-muted-foreground/60 uppercase mr-1">
-            Benchmarks:
+          <span className="text-xs font-semibold text-slate-400 mr-1">
+            Sample benchmarks:
           </span>
           {SAMPLE_URLS.slice(0, 4).map((u) => (
             <button
@@ -211,9 +199,9 @@ export function UrlPortal({
                 const r = el?.getBoundingClientRect()
                 onStart([u], r ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null)
               }}
-              className="group inline-flex items-center gap-1.5 rounded-lg border border-white/6 bg-white/[0.03] px-3 py-1.5 font-mono text-xs text-muted-foreground transition-all duration-150 hover:border-indigo-500/30 hover:bg-indigo-500/10 hover:text-foreground"
+              className="group inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-mono text-xs text-slate-600 shadow-xs transition-all duration-150 hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-900"
             >
-              <span className="size-1.5 rounded-full bg-zinc-600 group-hover:bg-indigo-400 transition-colors" />
+              <span className="size-1.5 rounded-full bg-slate-300 group-hover:bg-indigo-600 transition-colors" />
               {hostOf(u)}
             </button>
           ))}

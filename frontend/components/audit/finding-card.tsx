@@ -41,15 +41,24 @@ export function FindingCard({
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const sevClass =
+    finding.severity === 'critical'
+      ? 'bg-rose-50 text-rose-700 border-rose-200'
+      : finding.severity === 'high'
+        ? 'bg-amber-50 text-amber-700 border-amber-200'
+        : finding.severity === 'medium'
+          ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+          : 'bg-slate-100 text-slate-600 border-slate-200'
+
   return (
     <div
       ref={ref}
       className={cn(
         'overflow-hidden rounded-xl border transition-all duration-200',
         open
-          ? 'bg-[#0f1526]/95 border-white/14 shadow-[0_8px_30px_rgba(0,0,0,0.5)]'
-          : 'bg-white/[0.02] border-white/6 hover:border-white/14 hover:bg-white/[0.04]',
-        highlighted && 'ring-2 ring-indigo-500 border-indigo-500/60 bg-[#0f1526]',
+          ? 'bg-white border-slate-300 shadow-md ring-1 ring-slate-200'
+          : 'bg-white border-slate-200/90 hover:border-slate-300 shadow-2xs hover:shadow-xs',
+        highlighted && 'ring-2 ring-indigo-500 border-indigo-500 bg-white shadow-sm',
       )}
     >
       <button
@@ -62,29 +71,27 @@ export function FindingCard({
           {/* Metadata Badges */}
           <span className="flex flex-wrap items-center gap-1.5 font-mono text-[10px]">
             <span
-              className="inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 font-semibold uppercase tracking-wider text-[9px]"
-              style={{
-                background: `${sev.color}15`,
-                color: sev.color,
-                border: `1px solid ${sev.color}35`,
-              }}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 font-bold uppercase tracking-wider text-[9px]',
+                sevClass,
+              )}
             >
               <span className="size-1.5 rounded-full" style={{ background: sev.color }} />
               {sev.label}
             </span>
-            <span className="rounded-md border border-white/8 bg-white/5 px-2 py-0.5 text-muted-foreground uppercase text-[9px]">
+            <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 text-slate-600 uppercase text-[9px] font-semibold">
               {DIMENSIONS[finding.dimension].verb}
             </span>
-            <span className="rounded-md border border-white/8 bg-white/5 px-2 py-0.5 text-muted-foreground/80 uppercase text-[9px]">
+            <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 text-slate-500 uppercase text-[9px]">
               {finding.confidence} CONF
             </span>
           </span>
 
           {/* Dominant Title */}
-          <span className="mt-2 block text-xs font-semibold leading-snug text-foreground">
+          <span className="mt-2 block text-xs font-bold leading-snug text-slate-900">
             {finding.title}
           </span>
-          <span className="mt-0.5 block font-mono text-[10px] text-muted-foreground/75">
+          <span className="mt-0.5 block text-[11px] text-slate-500 font-medium">
             {SKILL_MAP[finding.skillId].label}
           </span>
         </span>
@@ -92,9 +99,9 @@ export function FindingCard({
         <motion.div
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: 0.2 }}
-          className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 text-muted-foreground"
+          className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-500"
         >
-          <svg viewBox="0 0 24 24" className="size-3" fill="none" stroke="currentColor" strokeWidth={2}>
+          <svg viewBox="0 0 24 24" className="size-3" fill="none" stroke="currentColor" strokeWidth={2.2}>
             <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </motion.div>
@@ -109,20 +116,20 @@ export function FindingCard({
             transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="space-y-4 border-t border-white/6 px-4 pb-4 pt-3 text-xs">
+            <div className="space-y-4 border-t border-slate-100 px-4 pb-4 pt-3 text-xs">
               {/* WHAT: Observation */}
               <div className="space-y-1">
-                <span className="font-mono text-[10px] tracking-wider text-muted-foreground/70 uppercase">
-                  WHAT WAS OBSERVED
+                <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                  What was observed
                 </span>
-                <p className="leading-relaxed text-foreground/90">{finding.description}</p>
+                <p className="leading-relaxed text-slate-800">{finding.description}</p>
               </div>
 
               {/* WHY: Impact */}
-              <div className="rounded-xl border border-white/6 bg-white/[0.02] p-3 space-y-1.5">
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-1.5 shadow-2xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] font-medium tracking-wider text-muted-foreground uppercase">
-                    WHY THIS MATTERS
+                  <span className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                    Why this matters
                   </span>
                   <WhyHint
                     observed={finding.description}
@@ -130,40 +137,40 @@ export function FindingCard({
                     evidence={finding.evidence[0]?.detail}
                   />
                 </div>
-                <p className="leading-relaxed text-muted-foreground">{finding.whyItMatters}</p>
+                <p className="leading-relaxed text-slate-600">{finding.whyItMatters}</p>
               </div>
 
               {/* AI BEHAVIOR CONSEQUENCE CHAIN */}
               {consequenceChain && consequenceChain.length > 0 && (
                 <div className="space-y-1.5">
-                  <span className="font-mono text-[10px] tracking-wider text-muted-foreground/70 uppercase">
-                    AI BEHAVIOR CONSEQUENCE
+                  <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                    AI Behavior Consequence
                   </span>
-                  <div className="rounded-xl border border-white/8 bg-black/40 overflow-hidden">
+                  <div className="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-2xs">
                     {consequenceChain.map((step, i) => (
                       <div key={i} className="relative">
                         <div
                           className={cn(
                             'flex items-start gap-3 px-3 py-2.5',
-                            i < consequenceChain.length - 1 && 'border-b border-white/6',
+                            i < consequenceChain.length - 1 && 'border-b border-slate-100',
                           )}
                         >
                           <span
                             className={cn(
-                              'mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full font-mono text-[9px] font-bold',
-                              i === 0 && 'bg-amber-500/15 text-amber-300 border border-amber-500/30',
-                              i === 1 && 'bg-orange-500/15 text-orange-400 border border-orange-500/30',
-                              i === 2 && 'bg-rose-500/20 text-rose-400 border border-rose-500/40',
+                              'mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full font-mono text-[10px] font-bold',
+                              i === 0 && 'bg-amber-100 text-amber-800',
+                              i === 1 && 'bg-orange-100 text-orange-800',
+                              i === 2 && 'bg-rose-100 text-rose-800',
                             )}
                           >
                             {i + 1}
                           </span>
                           <span
                             className={cn(
-                              'text-[11px] leading-relaxed',
-                              i === 0 && 'text-foreground/80',
-                              i === 1 && 'text-foreground/70',
-                              i === 2 && 'text-rose-300 font-medium',
+                              'text-xs leading-relaxed',
+                              i === 0 && 'text-slate-700',
+                              i === 1 && 'text-slate-700',
+                              i === 2 && 'text-rose-700 font-semibold',
                             )}
                           >
                             {step}
@@ -178,10 +185,10 @@ export function FindingCard({
               {/* EVIDENCE: Rendered as artifacts */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] tracking-wider text-muted-foreground/70 uppercase">
-                    SIGNAL EVIDENCE
+                  <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                    Signal Evidence
                   </span>
-                  <span className="font-mono text-[10px] text-muted-foreground/60 tabular-nums">
+                  <span className="font-mono text-xs text-slate-400 tabular-nums">
                     {finding.affectedPages} / {finding.sampledPages} sampled
                   </span>
                 </div>
@@ -189,25 +196,25 @@ export function FindingCard({
                   {finding.evidence.map((e) => (
                     <div
                       key={e.id}
-                      className="rounded-lg border border-white/6 bg-black/40 overflow-hidden"
+                      className="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-2xs"
                     >
-                      <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-white/6">
-                        <span className="font-mono text-[11px] font-medium text-foreground">{e.label}</span>
+                      <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-slate-100 bg-slate-50/60">
+                        <span className="font-mono text-xs font-semibold text-slate-800">{e.label}</span>
                         <div className="flex items-center gap-1.5 shrink-0">
                           {e.confidence && (
                             <span
                               className={cn(
                                 'rounded px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider',
-                                e.confidence === 'high' && 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25',
-                                e.confidence === 'medium' && 'bg-amber-500/15 text-amber-300 border border-amber-500/25',
-                                e.confidence === 'low' && 'bg-white/8 text-muted-foreground border border-white/10',
+                                e.confidence === 'high' && 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+                                e.confidence === 'medium' && 'bg-amber-50 text-amber-700 border border-amber-200',
+                                e.confidence === 'low' && 'bg-slate-100 text-slate-600 border border-slate-200',
                               )}
                             >
                               {e.confidence}
                             </span>
                           )}
                           {e.signal && (
-                            <code className="rounded bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 font-mono text-[9px] text-indigo-300 tracking-wide">
+                            <code className="rounded bg-indigo-50 border border-indigo-200 px-1.5 py-0.5 font-mono text-[9px] text-indigo-700 font-semibold">
                               {e.signal}
                             </code>
                           )}
@@ -215,13 +222,13 @@ export function FindingCard({
                       </div>
                       <div className="px-3 py-2 space-y-1.5">
                         {e.reference ? (
-                          <pre className="overflow-x-auto rounded-md bg-black/50 border border-white/6 px-2.5 py-2 font-mono text-[10px] text-foreground/80 whitespace-pre-wrap break-all">
+                          <pre className="overflow-x-auto rounded-lg bg-slate-50 border border-slate-200 px-2.5 py-2 font-mono text-[11px] text-slate-800 whitespace-pre-wrap break-all">
                             {e.detail}
                             {'\n'}
-                            <span className="text-muted-foreground/50 text-[9px]">{e.reference}</span>
+                            <span className="text-slate-400 text-[10px]">{e.reference}</span>
                           </pre>
                         ) : (
-                          <p className="font-mono text-[11px] text-muted-foreground">{e.detail}</p>
+                          <p className="font-mono text-xs text-slate-600">{e.detail}</p>
                         )}
                         {e.url && (
                           <a
@@ -229,9 +236,9 @@ export function FindingCard({
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(ev) => ev.stopPropagation()}
-                            className="inline-flex items-center gap-1.5 rounded border border-indigo-500/25 bg-indigo-500/10 px-2.5 py-1 font-mono text-[9px] text-indigo-300 hover:text-white transition-colors max-w-full"
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1 font-mono text-[10px] font-medium text-indigo-700 hover:bg-indigo-100 transition-colors max-w-full"
                           >
-                            <svg viewBox="0 0 12 12" className="size-2.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                            <svg viewBox="0 0 12 12" className="size-3 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5}>
                               <path d="M7 1h4v4M11 1L5 7M3 3H1v8h8V9" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             <span className="truncate">{e.url.replace(/^https?:\/\//, '')}</span>
@@ -245,44 +252,44 @@ export function FindingCard({
 
               {/* ROOT CAUSE: System link */}
               {rootCause && (
-                <div className="rounded-xl border border-white/6 bg-white/[0.02] p-3 space-y-1">
-                  <span className="font-mono text-[9px] tracking-wider text-muted-foreground/70 uppercase">
-                    CAUSAL ROOT ORIGIN
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-1 shadow-2xs">
+                  <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                    Causal Root Origin
                   </span>
-                  <p className="text-xs font-semibold text-foreground">{rootCause.label}</p>
-                  <p className="text-[11px] text-muted-foreground">{rootCause.detail}</p>
+                  <p className="text-xs font-bold text-slate-900">{rootCause.label}</p>
+                  <p className="text-xs text-slate-600">{rootCause.detail}</p>
                 </div>
               )}
 
               {/* ACTION: Remediation */}
-              <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/[0.04] p-3.5 space-y-2">
+              <div className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-3.5 space-y-2 shadow-2xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] font-bold tracking-wider text-indigo-300 uppercase">
-                    RECOMMENDED ACTION
+                  <span className="text-xs font-bold tracking-wider text-indigo-900 uppercase">
+                    Recommended Action
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyPatch}
-                    className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[9px] text-muted-foreground transition-colors hover:text-foreground hover:bg-white/10 cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-lg border border-indigo-200 bg-white px-2.5 py-1 text-xs font-medium text-indigo-700 shadow-2xs hover:bg-indigo-50 cursor-pointer"
                   >
-                    {copied ? 'COPIED ✓' : 'COPY ACTION'}
+                    {copied ? 'Copied ✓' : 'Copy Action'}
                   </button>
                 </div>
-                <p className="font-bold text-foreground text-xs">{finding.recommendation.title}</p>
-                <p className="leading-relaxed text-muted-foreground text-[11px]">{finding.recommendation.detail}</p>
-                <div className="flex items-center gap-2 pt-2 border-t border-white/6 mt-1">
+                <p className="font-bold text-slate-900 text-xs">{finding.recommendation.title}</p>
+                <p className="leading-relaxed text-slate-600 text-xs">{finding.recommendation.detail}</p>
+                <div className="flex items-center gap-2 pt-2 border-t border-indigo-100 mt-1">
                   <span
                     className={cn(
-                      'rounded px-2 py-0.5 font-mono text-[9px] uppercase font-bold',
-                      finding.recommendation.priority === 'critical' && 'bg-rose-500/15 text-rose-300',
-                      finding.recommendation.priority === 'high' && 'bg-amber-500/15 text-amber-300',
-                      finding.recommendation.priority === 'medium' && 'bg-indigo-500/15 text-indigo-300',
-                      finding.recommendation.priority === 'low' && 'bg-white/8 text-muted-foreground',
+                      'rounded-md px-2 py-0.5 text-[10px] uppercase font-bold',
+                      finding.recommendation.priority === 'critical' && 'bg-rose-100 text-rose-800',
+                      finding.recommendation.priority === 'high' && 'bg-amber-100 text-amber-800',
+                      finding.recommendation.priority === 'medium' && 'bg-indigo-100 text-indigo-800',
+                      finding.recommendation.priority === 'low' && 'bg-slate-100 text-slate-700',
                     )}
                   >
                     {finding.recommendation.priority} priority
                   </span>
-                  <span className="rounded bg-white/5 border border-white/8 px-2 py-0.5 font-mono text-[9px] text-muted-foreground uppercase">
+                  <span className="rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[10px] font-medium text-slate-600 uppercase">
                     {finding.recommendation.effort} effort
                   </span>
                 </div>
@@ -293,9 +300,9 @@ export function FindingCard({
                 <button
                   type="button"
                   onClick={onFocusTree}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 font-mono text-[10px] font-bold tracking-wider text-indigo-300 uppercase transition-colors hover:bg-indigo-500/20 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 cursor-pointer"
                 >
-                  <span>FOCUS ON TREE</span>
+                  <span>Focus on Tree</span>
                   <span>→</span>
                 </button>
               </div>

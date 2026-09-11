@@ -9,15 +9,15 @@ import { STATUS_STYLE, isActive, isResolved } from '@/lib/audit/status'
 export type RootHeartbeatState = 'dormant' | 'receiving' | 'processing' | 'diagnosed'
 
 const STATUS_HEX: Record<SkillStatus, string> = {
-  dormant: '#64748b',
-  initializing: '#38bdf8',
-  queued: '#94a3b8',
-  running: '#38bdf8',
-  completed: '#10b981',
-  warning: '#f59e0b',
-  critical: '#f43f5e',
-  skipped: '#64748b',
-  partial: '#f59e0b',
+  dormant: '#94a3b8',
+  initializing: '#4f46e5',
+  queued: '#cbd5e1',
+  running: '#4f46e5',
+  completed: '#059669',
+  warning: '#d97706',
+  critical: '#e11d48',
+  skipped: '#94a3b8',
+  partial: '#d97706',
 }
 
 /**

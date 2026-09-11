@@ -6,74 +6,62 @@
 
 ---
 
-## [Unreleased] — UI Redesign (Premium Editorial SaaS Theme)
+## [Unreleased] — Light Theme & Human-Crafted UI Overhaul
 
 ### Summary
-Comprehensive UI/UX overhaul transforming the prototype from a cold, neon-heavy HUD terminal into a **warm, editorial, premium SaaS diagnostic suite** designed to stand out to hackathon judges.
+Complete redesign from dark/neon to a **clean, bright, editorial Light Theme** (inspired by Stripe, Linear, Apple Developer, and modern enterprise SaaS suites). Eliminated AI-generated tropes (harsh neon glows, robot buzzwords, tacky gradient text clips, cyber reticles) in favor of high-contrast typography, natural copywriting, pure white cards, and refined royal indigo accents.
 
 ---
 
-### 1. Design System & Tokens (`app/globals.css`)
-- **Accent Color Shift**: Replaced cold cyan neon (`#38bdf8` / `oklch(0.85 0.16 210)`) with an elegant warm indigo-violet (`oklch(0.72 0.14 280)`).
-- **Warm Dark Surfaces**: Replaced harsh jet-black `#000000` with layered warm slate-navy backgrounds (`oklch(0.09 0.010 275)`, elevated surfaces `oklch(0.13 0.010 275)` and `oklch(0.16 0.012 275)`).
-- **Visual Texture**: Replaced high-contrast CAD gridlines with subtle radial dot grids and micro-noise textures.
-- **Corner Radii & Borders**: Upgraded borders to softer translucency (`rgba(255, 255, 255, 0.07)`) with expanded corner radiuses (`rounded-xl`, `rounded-2xl`).
+### Key Transformations
 
-### 2. Root Layout & Metadata (`app/layout.tsx`)
-- Enhanced page title and SEO meta descriptions for "Brand AI Readiness & Extractability Diagnostic".
-- Updated theme-color meta tag to match the warm dark backdrop.
+#### 1. Light Theme Design System (`app/globals.css`)
+- **Color Scheme**: Switched `:root` to `color-scheme: light`.
+- **Canvas Base**: Porcelain/slate off-white `#f8fafc` for maximum comfort and contrast.
+- **Typography**: Deep charcoal `#0f172a` (slate-900) for primary text and `#64748b` (slate-500) for secondary metadata.
+- **Card Surfaces**: Pure white `#ffffff` with subtle, crisp borders (`#e2e8f0`) and soft ambient shadows (`shadow-xs`, `shadow-sm`, `shadow-md`).
+- **Semantic Accents**:
+  - Primary / Signal: Authoritative royal indigo `#4f46e5`
+  - Success: Crisp emerald `#059669`
+  - Warning: Warm amber `#d97706`
+  - Critical: Deep rose `#e11d48`
+- **Subtle Light Grid**: Delicate architectural dot grid with `rgba(148, 163, 184, 0.25)`.
 
-### 3. Ambient Background (`components/audit/ambient-background.tsx`)
-- Removed aggressive CAD blueprint gridlines and circular reticle calibration rings.
-- Introduced warm violet-tinted radial lighting gradients from the top center.
-- Refined ambient structure line opacity for subtle visual depth without noise.
+#### 2. Ambient Canvas (`components/audit/ambient-background.tsx`)
+- Replaced dark space glow with an airy, light atmospheric wash (`#e0e7ff` top radial light).
+- Replaced glowing rings with clean, crisp slate architectural connector lines (`#cbd5e1`).
 
-### 4. Application Header (`components/audit/app-header.tsx`)
-- Replaced the neon cyan box icon with an elegant gradient logo mark.
-- Cleaned up navigation typography with modern sans-serif fonts.
-- Replaced harsh bordered pills with sleek translucent glass badges.
+#### 3. Human-Crafted Hero & Copy (`components/audit/landing-view.tsx`)
+- **No AI Gradient Clip Text**: Replaced purple/pink gradient headline text with solid, confident `#0f172a` typography.
+- **Human Micro-Copy**: "What does AI see when it indexes your brand?" with natural enterprise explanation.
+- **Refined Eyebrow**: Clean white pill badge with green active pulse dot ("AI Extractability & Search Readiness Audit").
+- **Clean Skill Pills**: White cards with slate borders and clean active states.
+- **Authentic Value Chips**: DOM Analysis, RFC 9309 Protocol, Zero-Hallucination Scoring.
 
-### 5. Landing View & Hero (`components/audit/landing-view.tsx`)
-- **Resolved Windows Layout Overlap**: Restructured the hero into a clean flex column layout with responsive padding (`pt-24 pb-16`), ensuring elements never collide across screen resolutions and OS scale settings.
-- **Editorial Typography**: Implemented gradient text styling (`from-white via-zinc-200 to-zinc-400`) with warm highlighted keyword underlines.
-- **Value Proof Chips**: Added deterministic methodology badges (Dual-Fetch Crawler, RFC 9309 Protocol, Zero-Hallucination Scoring).
-- **Skill Marketplace**: Redesigned skill toggle capsules into clean rounded buttons with clear armed/skipped visual indicators.
+#### 4. Clean Search Aperture (`components/audit/url-portal.tsx`)
+- Pure white search input with natural elevation shadow and focus ring (`ring-4 ring-indigo-50 border-indigo-600`).
+- Integrated clean Globe/Search icon and quiet `https://` prefix.
+- Solid royal indigo "Run Audit" button with clean Enter badge.
+- Benchmark domain buttons styled as crisp white capsules with soft hover states.
 
-### 6. URL Portal & Input (`components/audit/url-portal.tsx`)
-- Expanded input aperture with soft glassmorphic backdrop and indigo focus glow.
-- Redesigned "Run Audit" primary button with rich indigo-violet gradient and Enter key glyph.
-- Polished benchmark domain pills with hover feedback.
+#### 5. Executive Results Dashboard (`components/audit/results-view.tsx`)
+- Upgraded panel to crisp white glass (`bg-white/95 border-slate-200 shadow-2xl`).
+- Segmented tab bar in slate (`bg-slate-200/60` container, white elevated active pill).
+- Solid indigo Export Report button with clean icon.
+- Clean white research methodology dialog.
 
-### 7. Diagnostic Results Workspace (`components/audit/results-view.tsx`)
-- Upgraded panel container to `rounded-2xl` with warm glass backdrop (`backdrop-blur-2xl`) and deep shadow.
-- Segmented navigation tabs (DIAGNOSE, CAUSES, FINDINGS, PERCEIVE) with smooth active state indicators.
-- Upgraded primary export button to vibrant gradient styling.
-- Polished research methodology overlay with clear 38-site empirical evaluation metrics.
+#### 6. Score Overview & Metrics (`components/audit/score-overview.tsx`)
+- High-contrast letter grade pill (`bg-emerald-50 text-emerald-700 border-emerald-200`).
+- Clean metric tracks on light slate tracks (`bg-slate-100`).
+- Clear lost-point deduction tags with negative point badges.
 
-### 8. Score Overview & Metrics (`components/audit/score-overview.tsx`)
-- Prominent letter grade badge (A, B+, C, etc.) with glowing score-matched border.
-- Thicker, smoother horizontal meter tracks for both AI Readiness Index and the 4 Causal Dimensions (Find, Understand, Trust, Engage).
-- Lost Point Inventory with crisp negative point deductions.
-
-### 9. Finding Cards (`components/audit/finding-card.tsx`)
-- Refined card containers with subtle borders and smooth expanding accordion transitions.
-- Softened severity badges (`Critical`, `High`, `Medium`, `Low`) with tailored pastel-neon accents.
-- Polished code block rendering and one-click action copy functionality.
-
-### 10. Agent Execution View (`components/audit/running-view.tsx`)
-- Upgraded telemetry sidebar with overall percentage progress bar.
-- Replaced neon flashing indicators with pulsing emerald and indigo status dots.
-
-### 11. Perception Console (`components/audit/perception-console.tsx`)
-- Upgraded dock container to deep glass styling with warm indigo accents.
-- Replaced plain button with a gradient "Query Evidence" CTA.
-- Refined question selector radio pills with active borders.
-
-### 12. Guide Modal (`components/audit/guide-overlay.tsx`)
-- Redesigned from a plain sidebar into a centered, elegant architectural walkthrough modal with numbered concept cards.
+#### 7. Finding Cards & Telemetry (`components/audit/finding-card.tsx`, `components/audit/running-view.tsx`, `components/audit/perception-console.tsx`)
+- Soft pastel severity badges (`bg-rose-50 text-rose-700`, `bg-amber-50 text-amber-700`, `bg-indigo-50 text-indigo-700`).
+- Clean light editor code blocks (`bg-slate-50 border-slate-200 text-slate-800`).
+- Telemetry and Perception docks converted to clean white cards with smooth indigo progress meters.
 
 ---
 
 ### Verification
-- `npm run build`: Production build and Next.js compilation succeeded with 0 errors.
-- Dev server running smoothly on `localhost:3000`.
+- `npm run build`: Production build and Turbopack Next.js compilation succeeded in 737ms with 0 errors.
+- Dev server active at `http://localhost:3000`.

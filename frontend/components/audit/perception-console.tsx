@@ -45,7 +45,7 @@ export function PerceptionConsole({
           aria-expanded={false}
           onClick={onToggleOpen}
           aria-label="Expand Perception Console"
-          className="flex h-full w-10 cursor-pointer items-center justify-center rounded-2xl border border-white/10 bg-[#0b101d]/95 font-mono text-[10px] font-semibold tracking-[0.2em] text-muted-foreground [writing-mode:vertical-rl] hover:text-foreground hover:border-indigo-500/30 transition-colors shadow-2xl backdrop-blur-2xl"
+          className="flex h-full w-10 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white/95 font-mono text-[10px] font-bold tracking-[0.2em] text-slate-600 [writing-mode:vertical-rl] hover:text-slate-900 hover:border-slate-300 transition-colors shadow-lg backdrop-blur-xl"
         >
           PERCEPTION
         </button>
@@ -58,36 +58,36 @@ export function PerceptionConsole({
   return (
     <aside
       className={cn(
-        'pointer-events-auto flex flex-col overflow-hidden bg-[#0b101d]/95 backdrop-blur-2xl',
+        'pointer-events-auto flex flex-col overflow-hidden bg-white/95 backdrop-blur-xl',
         layout === 'dock' &&
-          'absolute inset-y-20 left-5 z-20 hidden w-[22.5rem] border border-white/10 lg:flex lg:rounded-2xl lg:shadow-[0_24px_64px_rgba(0,0,0,0.7)] transition-[left,width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none',
+          'absolute inset-y-20 left-5 z-20 hidden w-[23rem] border border-slate-200 lg:flex lg:rounded-2xl lg:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-[left,width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none',
         layout === 'embedded' && 'h-full border-0 bg-transparent',
       )}
     >
       {/* Header */}
-      <header className="flex items-start justify-between gap-2 border-b border-white/8 bg-black/40 px-4.5 py-3.5">
+      <header className="flex items-start justify-between gap-2 border-b border-slate-100 bg-slate-50/80 px-4.5 py-3.5">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className="size-2 rounded-full bg-indigo-400" />
-            <h2 className="font-mono text-[11px] font-bold tracking-wider text-foreground uppercase">
-              PERCEPTION ENGINE
+            <span className="size-2 rounded-full bg-indigo-600" />
+            <h2 className="text-xs font-bold tracking-wider text-slate-900 uppercase">
+              Perception Engine
             </h2>
             {layout === 'dock' && (
               <button
                 type="button"
                 aria-expanded={open}
                 onClick={onToggleOpen}
-                className="cursor-pointer rounded-md border border-white/10 px-2 py-0.5 font-mono text-[9px] text-muted-foreground hover:border-white/20 hover:text-foreground transition-colors"
+                className="cursor-pointer rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
               >
-                COLLAPSE
+                Collapse
               </button>
             )}
           </div>
-          <p className="mt-1 text-[11px] leading-snug text-muted-foreground">
+          <p className="mt-1 text-xs text-slate-600">
             Ask what an AI assistant would synthesize from extractable evidence.
           </p>
         </div>
-        <span className="shrink-0 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-right font-mono text-[8px] font-semibold leading-tight tracking-wide text-amber-300">
+        <span className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-right font-mono text-[9px] font-bold text-amber-800">
           SIMULATED
         </span>
       </header>
@@ -103,10 +103,10 @@ export function PerceptionConsole({
               <label
                 key={q.id}
                 className={cn(
-                  'flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2.5 transition-all',
+                  'flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2.5 transition-all shadow-2xs',
                   isSelected
-                    ? 'border-indigo-500/40 bg-indigo-500/10 text-foreground shadow-sm'
-                    : 'border-white/6 bg-white/[0.02] text-muted-foreground hover:border-white/12 hover:text-foreground hover:bg-white/[0.03]',
+                    ? 'border-indigo-300 bg-indigo-50/70 text-indigo-950 font-semibold'
+                    : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50',
                 )}
               >
                 <input
@@ -115,9 +115,9 @@ export function PerceptionConsole({
                   value={q.id}
                   checked={isSelected}
                   onChange={() => onSelectQuestion(q.id)}
-                  className="size-3.5 accent-indigo-500 cursor-pointer"
+                  className="size-3.5 accent-indigo-600 cursor-pointer"
                 />
-                <span className="text-xs font-medium">{q.prompt}</span>
+                <span className="text-xs">{q.prompt}</span>
               </label>
             )
           })}
@@ -130,33 +130,33 @@ export function PerceptionConsole({
           disabled={loading}
           aria-busy={loading}
           className={cn(
-            'w-full cursor-pointer rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 px-3.5 py-2.5 font-mono text-[11px] font-bold tracking-wider text-white uppercase transition-all shadow-md shadow-indigo-500/20',
-            'hover:from-indigo-400 hover:to-violet-500 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-indigo-500/30',
+            'w-full cursor-pointer rounded-xl bg-indigo-600 px-3.5 py-2.5 text-xs font-bold tracking-wide text-white uppercase transition-all shadow-xs',
+            'hover:bg-indigo-700 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-indigo-600/30',
             'disabled:cursor-not-allowed disabled:opacity-50',
           )}
         >
-          {loading ? 'SYNTHESIZING…' : 'QUERY EVIDENCE'}
+          {loading ? 'Synthesizing…' : 'Query Evidence'}
         </button>
 
         {/* Stale Evidence Warning */}
         {bundle?.perception.stale && (
-          <div className="rounded-xl border border-amber-500/25 bg-amber-500/8 px-3 py-2 font-mono text-[10px] text-amber-200/90 flex items-center justify-between">
+          <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 flex items-center justify-between font-medium">
             <span>Evidence set changed — re-query</span>
-            <span className="size-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
           </div>
         )}
 
         {/* Errors & Fallback */}
         {error && (
-          <div className="space-y-2 rounded-xl border border-rose-500/20 bg-rose-500/5 p-3">
-            <p className="text-[11px] leading-relaxed text-rose-300">{error}</p>
+          <div className="space-y-2 rounded-xl border border-rose-200 bg-rose-50 p-3">
+            <p className="text-xs text-rose-700 font-medium">{error}</p>
             {usedClientFallback && (
-              <p className="font-mono text-[10px] text-muted-foreground">Used extract-only fallback</p>
+              <p className="font-mono text-[10px] text-slate-500">Used extract-only fallback</p>
             )}
             <button
               type="button"
               onClick={onAsk}
-              className="cursor-pointer font-mono text-[10px] text-indigo-400 underline hover:text-indigo-300"
+              className="cursor-pointer font-mono text-xs text-indigo-600 font-bold underline hover:text-indigo-800"
             >
               Retry
             </button>
@@ -166,9 +166,9 @@ export function PerceptionConsole({
         {/* Skeleton Loading */}
         {loading && !perception && (
           <div className="space-y-2.5 pt-1" aria-hidden="true">
-            <div className="h-3.5 rounded bg-zinc-800/80 animate-pulse" />
-            <div className="h-3.5 w-4/5 rounded bg-zinc-800/80 animate-pulse" />
-            <div className="h-3.5 w-3/5 rounded bg-zinc-800/80 animate-pulse" />
+            <div className="h-3.5 rounded bg-slate-200 animate-pulse" />
+            <div className="h-3.5 w-4/5 rounded bg-slate-200 animate-pulse" />
+            <div className="h-3.5 w-3/5 rounded bg-slate-200 animate-pulse" />
           </div>
         )}
 
@@ -181,9 +181,9 @@ export function PerceptionConsole({
             )}
           >
             {/* Status & Confidence Meta */}
-            <div className="flex items-center justify-between border-b border-white/6 pb-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-              <span>status: <strong className="text-foreground">{perception.status}</strong></span>
-              <span>confidence: <strong className="text-indigo-300">{perception.confidence}</strong></span>
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2 text-xs uppercase tracking-wider text-slate-500 font-medium">
+              <span>status: <strong className="text-slate-900">{perception.status}</strong></span>
+              <span>confidence: <strong className="text-indigo-600">{perception.confidence}</strong></span>
             </div>
 
             {/* Grounded Answer Chips with Sentence Tracing */}

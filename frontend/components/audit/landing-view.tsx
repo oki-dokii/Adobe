@@ -30,7 +30,7 @@ export function LandingView({
     if (!currentlySkipped) {
       const remainingCount = RUN_ORDER.length - skippedSkillIds.length
       if (remainingCount <= 1) {
-        setWarningMsg('At least one diagnostic skill must remain armed')
+        setWarningMsg('At least one diagnostic skill must remain active')
         setTimeout(() => setWarningMsg(null), 3000)
         return
       }
@@ -42,78 +42,71 @@ export function LandingView({
 
   return (
     <div className="pointer-events-none relative min-h-dvh flex flex-col justify-center items-center px-4 sm:px-6 pt-24 pb-16">
-      <main className="flex flex-col items-center justify-center w-full max-w-3xl mx-auto text-center my-auto space-y-8">
+      <main className="flex flex-col items-center justify-center w-full max-w-3xl mx-auto text-center my-auto space-y-7">
         {/* Hero Header Section */}
         <div className="flex flex-col items-center space-y-4 max-w-2xl">
-          {/* Eyebrow Pill */}
+          {/* Refined Eyebrow Pill */}
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/[0.06] px-3.5 py-1 backdrop-blur-md shadow-sm"
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200/90 bg-white px-3.5 py-1 text-xs font-medium text-slate-700 shadow-xs"
           >
-            <span className="size-1.5 rounded-full bg-indigo-400 animate-pulse" />
-            <span className="font-mono text-[11px] font-medium tracking-wider text-indigo-300 uppercase">
-              Brand AI Readiness & Extractability Diagnostic
-            </span>
+            <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>AI Extractability & Search Readiness Audit</span>
           </motion.div>
 
-          {/* Editorial Headline */}
+          {/* Clean, Human Editorial Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="text-balance text-3xl font-extrabold tracking-[-0.035em] sm:text-5xl md:text-6xl sm:leading-[1.12]"
+            transition={{ duration: 0.55, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
+            className="text-balance text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 sm:leading-[1.12]"
           >
-            <span className="bg-gradient-to-b from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-              What does AI see when it sees your{' '}
-            </span>
-            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-purple-300 bg-clip-text text-transparent underline decoration-indigo-500/30 underline-offset-8">
-              brand?
-            </span>
+            What does AI see when it indexes your brand?
           </motion.h1>
 
           {/* Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-xl text-balance text-sm sm:text-base leading-relaxed text-muted-foreground font-normal"
+            transition={{ duration: 0.55, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-xl text-balance text-base sm:text-lg leading-relaxed text-slate-600 font-normal"
           >
-            Audit how LLMs, autonomous agents, and search crawlers parse, extract, and synthesize your domain. Read-only, deterministic, evidence-backed inspection.
+            A deterministic, read-only technical audit measuring how LLMs, autonomous agents, and search engines crawl, understand, and cite your website.
           </motion.p>
         </div>
 
         {/* Diagnostic Input Portal */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.22, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ delay: 0.18, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           className="pointer-events-auto w-full max-w-xl text-center z-10"
         >
           <UrlPortal onStart={onStart} onFocusChange={onPortalFocus} />
 
-          {/* Skill Marketplace / Configuration Drawer */}
+          {/* Diagnostic Skills Strip */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.32, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 rounded-xl border border-white/6 bg-white/[0.02] p-3.5 backdrop-blur-md"
+            transition={{ delay: 0.26, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-6 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs"
           >
-            <div className="flex items-center justify-between mb-2.5 px-1">
+            <div className="flex items-center justify-between mb-3 px-1">
               <div className="flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-indigo-400" />
-                <span className="font-mono text-[11px] font-medium text-foreground/80 tracking-wide">
-                  {armedCount} of {RUN_ORDER.length} diagnostic skills armed
+                <span className="size-2 rounded-full bg-indigo-600" />
+                <span className="text-xs font-semibold text-slate-800">
+                  {armedCount} of {RUN_ORDER.length} diagnostic skills active
                 </span>
               </div>
               {onGuide && (
                 <button
                   type="button"
                   onClick={onGuide}
-                  className="font-mono text-[11px] text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer flex items-center gap-1"
+                  className="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors cursor-pointer flex items-center gap-1"
                 >
-                  architecture guide ↗
+                  Architecture guide →
                 </button>
               )}
             </div>
@@ -127,20 +120,20 @@ export function LandingView({
                   <button
                     key={id}
                     type="button"
-                    title={`${isArmed ? 'Click to skip' : 'Click to arm'}: ${SKILL_MAP[id].label}`}
+                    title={`${isArmed ? 'Click to disable' : 'Click to enable'}: ${SKILL_MAP[id].label}`}
                     onClick={() => handleToggle(id)}
                     className={cn(
-                      'flex items-center gap-1.5 rounded-lg px-2.5 py-1 font-mono text-[10px] font-medium transition-all duration-150 cursor-pointer',
+                      'flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-150 cursor-pointer',
                       isArmed
-                        ? 'border border-indigo-500/25 bg-indigo-500/10 text-indigo-200 hover:border-indigo-400/40 hover:bg-indigo-500/15'
-                        : 'border border-white/6 bg-transparent text-muted-foreground/40 line-through opacity-50 hover:opacity-80 hover:border-white/12',
+                        ? 'border border-slate-200 bg-slate-50 text-slate-800 hover:bg-slate-100 hover:border-slate-300'
+                        : 'border border-slate-100 bg-transparent text-slate-400 line-through opacity-60 hover:opacity-100',
                     )}
                   >
                     <span>{SKILL_MAP[id].short}</span>
                     <span
                       className={cn(
                         'size-1.5 rounded-full transition-colors',
-                        isArmed ? 'bg-indigo-400' : 'bg-zinc-600',
+                        isArmed ? 'bg-indigo-600' : 'bg-slate-300',
                       )}
                       aria-hidden
                     />
@@ -151,30 +144,30 @@ export function LandingView({
 
             {/* Warning Message */}
             {warningMsg && (
-              <p className="mt-2.5 rounded-md border border-rose-500/30 bg-rose-500/10 px-3 py-1 font-mono text-[10px] text-rose-300 inline-block">
+              <p className="mt-2.5 rounded-md border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-medium text-rose-700 inline-block">
                 {warningMsg}
               </p>
             )}
           </motion.div>
 
           {/* Value Proof Badges */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-muted-foreground/70 font-mono text-[11px]">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-slate-500 text-xs font-medium">
             <span className="flex items-center gap-1.5">
-              <svg className="size-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <svg className="size-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
                 <polyline points="20 6 9 17 4 12" />
               </svg>
-              Dual-Fetch Crawler
+              Dual-Fetch DOM Analysis
             </span>
-            <span className="text-white/10">•</span>
+            <span className="text-slate-300">•</span>
             <span className="flex items-center gap-1.5">
-              <svg className="size-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <svg className="size-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
                 <polyline points="20 6 9 17 4 12" />
               </svg>
-              RFC 9309 Protocol
+              RFC 9309 Protocol Verification
             </span>
-            <span className="text-white/10">•</span>
+            <span className="text-slate-300">•</span>
             <span className="flex items-center gap-1.5">
-              <svg className="size-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <svg className="size-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
                 <polyline points="20 6 9 17 4 12" />
               </svg>
               Zero-Hallucination Scoring

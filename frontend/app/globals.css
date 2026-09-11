@@ -46,45 +46,45 @@
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* Warm Editorial Dark — richly neutral, slightly purple-tinted */
-  --background: oklch(0.09 0.010 275);   /* deep near-black with subtle warmth */
-  --foreground: oklch(0.96 0.004 80);    /* warm off-white, easy on the eyes */
+  /* Crisp, Editorial Light Theme (Linear / Stripe inspired) */
+  --background: #f8fafc;            /* slate-50: clean, bright, refined off-white */
+  --foreground: #0f172a;            /* slate-900: deep charcoal for maximum readability */
 
-  --surface: oklch(0.13 0.010 275);      /* elevated surface panel */
-  --surface-2: oklch(0.16 0.012 275);    /* further elevated (cards within panels) */
+  --surface: #ffffff;               /* pure white elevated cards */
+  --surface-2: #f1f5f9;             /* slate-100: secondary elevated surfaces */
 
-  --card: oklch(0.12 0.010 275);
-  --card-foreground: oklch(0.96 0.004 80);
-  --popover: oklch(0.14 0.012 275);
-  --popover-foreground: oklch(0.96 0.004 80);
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
 
-  --primary: oklch(0.96 0.004 80);
-  --primary-foreground: oklch(0.09 0.010 275);
-  --secondary: oklch(0.18 0.012 275);
-  --secondary-foreground: oklch(0.96 0.004 80);
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
 
-  --muted: oklch(0.17 0.010 275);
-  --muted-foreground: oklch(0.58 0.012 275);
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;      /* slate-500: calm, legible secondary text */
 
-  --accent: oklch(0.19 0.015 275);
-  --accent-foreground: oklch(0.96 0.004 80);
+  --accent: #e0e7ff;                /* indigo-100 */
+  --accent-foreground: #3730a3;
 
-  /* Warm Indigo-Violet Signal — sophisticated, not neon */
-  --signal: oklch(0.72 0.14 280);        /* indigo-violet — warm, premium */
-  --signal-foreground: oklch(0.10 0.015 280);
-  --signal-muted: oklch(0.48 0.10 280);
+  /* Authoritative Enterprise Indigo Accent */
+  --signal: #4f46e5;                /* indigo-600 */
+  --signal-foreground: #ffffff;
+  --signal-muted: #e0e7ff;
 
-  --success: oklch(0.70 0.13 155);       /* sage-emerald */
-  --warning: oklch(0.74 0.13 72);        /* warm amber */
-  --critical: oklch(0.63 0.17 22);       /* rose-red */
+  --success: #059669;               /* emerald-600 */
+  --warning: #d97706;               /* amber-600 */
+  --critical: #e11d48;              /* rose-600 */
 
-  --destructive: oklch(0.63 0.17 22);
-  --border: rgba(255, 255, 255, 0.07);
-  --line: rgba(255, 255, 255, 0.05);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: oklch(0.72 0.14 280);
+  --destructive: #e11d48;
+  --border: #e2e8f0;                /* slate-200: crisp light border */
+  --line: #cbd5e1;                  /* slate-300: clean visible graph lines */
+  --input: #e2e8f0;
+  --ring: #4f46e5;
 
   --radius: 0.625rem;
 }
@@ -99,50 +99,23 @@
     overflow-x: hidden;
   }
   ::selection {
-    background: color-mix(in oklch, var(--signal) 25%, transparent);
-    color: #ffffff;
+    background: #e0e7ff;
+    color: #1e1b4b;
   }
 }
 
-/* Subtle dot-grid background pattern */
+/* Subtle dot-grid pattern for light background */
 @utility bg-grid {
   background-image: radial-gradient(
     circle at center,
-    rgba(255, 255, 255, 0.06) 1px,
+    rgba(148, 163, 184, 0.25) 1px,
     transparent 1px
   );
-  background-size: 28px 28px;
+  background-size: 24px 24px;
 }
 
-/* Warm noise texture overlay */
+/* Soft ambient noise texture */
 @utility bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 256px 256px;
-}
-
-/* Premium glass panel */
-@utility hud-panel {
-  background: color-mix(in oklch, var(--surface) 92%, transparent);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
-    0 16px 48px -12px rgba(0, 0, 0, 0.6);
-}
-
-/* Signal gradient for buttons and highlights */
-@utility signal-gradient {
-  background: linear-gradient(135deg, oklch(0.72 0.14 280) 0%, oklch(0.68 0.16 300) 100%);
-}
-
-@utility text-balance {
-  text-wrap: balance;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html:focus-within {
-    scroll-behavior: auto;
-  }
 }

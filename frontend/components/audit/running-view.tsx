@@ -3,7 +3,7 @@
 import { motion } from 'motion/react'
 import { isResolved, STATUS_STYLE } from '@/lib/audit/status'
 import type { Site, SkillId } from '@/lib/audit/types'
-import { SKILL_MAP, RUN_ORDER, DIMENSIONS } from '@/lib/audit/skills'
+import { SKILL_MAP, RUN_ORDER } from '@/lib/audit/skills'
 import { cn } from '@/lib/utils'
 
 const SKILL_OUTPUT_SUMMARY: Record<SkillId, string> = {
@@ -48,35 +48,35 @@ export function RunningView({
     <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-between p-6">
       {/* Top Bar Status Pill */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2.5 rounded-full border border-indigo-500/20 bg-[#0e1424]/90 px-4 py-1.5 backdrop-blur-md shadow-md">
-          <span className="size-2 rounded-full bg-indigo-400 animate-pulse" />
-          <span className="font-mono text-[11px] font-semibold tracking-wider text-foreground uppercase">
+        <div className="flex items-center gap-2.5 rounded-full border border-slate-200/90 bg-white/95 px-4 py-2 backdrop-blur-md shadow-sm">
+          <span className="size-2 rounded-full bg-indigo-600 animate-pulse" />
+          <span className="text-xs font-bold tracking-wide text-slate-900">
             {phaseLabel}
           </span>
-          <span className="font-mono text-[10px] text-muted-foreground/60">•</span>
-          <span className="font-mono text-[11px] font-medium text-indigo-300">
-            {doneCount}/{totalCount} SKILLS
+          <span className="text-slate-300">•</span>
+          <span className="text-xs font-semibold text-indigo-600">
+            {doneCount}/{totalCount} Skills Complete
           </span>
         </div>
       </div>
 
-      {/* Right Sidebar: Multi-Agent Execution Timeline */}
-      <div className="pointer-events-auto absolute right-6 top-16 bottom-16 hidden lg:flex w-84 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0c1120]/92 backdrop-blur-2xl shadow-[0_24px_64px_rgba(0,0,0,0.65)]">
-        <div className="border-b border-white/6 bg-black/40 px-4 py-3.5">
+      {/* Right Sidebar: Execution Timeline */}
+      <div className="pointer-events-auto absolute right-6 top-16 bottom-16 hidden lg:flex w-84 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white/95 backdrop-blur-xl shadow-xl">
+        <div className="border-b border-slate-100 bg-slate-50/80 px-4 py-3.5">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] font-bold tracking-wider text-indigo-400 uppercase">
-              AGENT EXECUTION TELEMETRY
+            <span className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+              Execution Telemetry
             </span>
-            <span className="font-mono text-[10px] font-semibold text-indigo-300">
-              {progressPercent}% COMPLETE
+            <span className="font-mono text-xs font-bold text-indigo-600">
+              {progressPercent}% Complete
             </span>
           </div>
-          <p className="mt-1 text-xs font-semibold text-foreground truncate">{focusedSite.host}</p>
+          <p className="mt-1 text-xs font-bold text-slate-900 truncate">{focusedSite.host}</p>
 
           {/* Overall Progress Bar */}
-          <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
+          <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
             <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500"
+              className="h-full rounded-full bg-indigo-600"
               initial={{ width: 0 }}
               animate={{ width: `${progressPercent}%` }}
               transition={{ duration: 0.3 }}
@@ -84,7 +84,7 @@ export function RunningView({
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3 space-y-1.5 font-mono text-[11px]">
+        <div className="flex-1 overflow-y-auto p-3 space-y-1.5 text-xs">
           {RUN_ORDER.map((skillId) => {
             const skillDef = SKILL_MAP[skillId]
             const run = focusedSite.skills.find((s) => s.id === skillId)
@@ -99,49 +99,49 @@ export function RunningView({
                 className={cn(
                   'rounded-xl border p-2.5 transition-all duration-200',
                   isSkipped
-                    ? 'border-white/4 bg-transparent opacity-35'
+                    ? 'border-slate-100 bg-transparent opacity-40'
                     : isRunning
-                      ? 'border-indigo-500/40 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.15)]'
+                      ? 'border-indigo-200 bg-indigo-50/60 shadow-xs'
                       : isDone
-                        ? 'border-white/6 bg-white/[0.02]'
-                        : 'border-white/4 bg-transparent opacity-40',
+                        ? 'border-slate-200 bg-white shadow-2xs'
+                        : 'border-slate-100 bg-transparent opacity-50',
                 )}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 truncate">
                     <span
                       className={cn(
-                        'size-1.5 rounded-full shrink-0',
+                        'size-2 rounded-full shrink-0',
                         isSkipped
-                          ? 'bg-zinc-600'
+                          ? 'bg-slate-300'
                           : isRunning
-                            ? 'bg-indigo-400 animate-ping'
+                            ? 'bg-indigo-600 animate-ping'
                             : isDone
-                              ? 'bg-emerald-400'
-                              : 'bg-zinc-600',
+                              ? 'bg-emerald-500'
+                              : 'bg-slate-300',
                       )}
                     />
-                    <span className="text-xs font-semibold text-foreground truncate">
+                    <span className="text-xs font-bold text-slate-900 truncate">
                       {skillDef.short}
                     </span>
                   </div>
                   <span
                     className={cn(
-                      'text-[9px] uppercase px-1.5 py-0.5 rounded font-bold',
+                      'text-[10px] uppercase px-1.5 py-0.5 rounded font-bold',
                       isSkipped
-                        ? 'text-muted-foreground/60'
+                        ? 'text-slate-400'
                         : isRunning
-                          ? 'text-indigo-300 bg-indigo-500/20'
+                          ? 'text-indigo-700 bg-indigo-100'
                           : isDone
-                            ? 'text-emerald-400 bg-emerald-500/10'
-                            : 'text-muted-foreground/60',
+                            ? 'text-emerald-700 bg-emerald-100'
+                            : 'text-slate-400',
                     )}
                   >
                     {status}
                   </span>
                 </div>
 
-                <p className="mt-1 text-[10px] text-muted-foreground/75 truncate">
+                <p className="mt-1 text-[11px] text-slate-500 truncate">
                   {SKILL_OUTPUT_SUMMARY[skillId]}
                 </p>
               </div>
