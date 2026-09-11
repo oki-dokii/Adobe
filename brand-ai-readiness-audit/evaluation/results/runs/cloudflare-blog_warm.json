@@ -1,0 +1,95 @@
+{
+  "site_id": "cloudflare-blog",
+  "site": "https://blog.cloudflare.com/",
+  "site_type": "blog",
+  "tags": [
+    "blog",
+    "medium"
+  ],
+  "phase": "warm",
+  "timestamp": "2026-09-06T19:16:00Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 21472.564935684204,
+    "wall_ms": 21479.679107666016,
+    "crawl_ms": 17351.617097854614,
+    "render_ms": 341.8715000152588,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.5121231079101562,
+      "crawl-access-audit": 0.3209114074707031,
+      "render-extract-audit": 2547.7099418640137,
+      "citation-extractability-audit": 40.667057037353516,
+      "entity-identity-audit": 19.853830337524414,
+      "freshness-audit": 16.901016235351562,
+      "ai-answerability-audit": 28.611183166503906,
+      "engagement-handoff-audit": 736.375093460083,
+      "corroboration-consistency-audit": 729.445219039917
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.37288665771484375,
+    "merge_ms": 0.10085105895996094
+  },
+  "counts": {
+    "http_requests": 47,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 15,
+    "critical": 0,
+    "high": 0,
+    "medium": 15,
+    "low": 0,
+    "templates": 10
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 2,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=30, protected_requests=2. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "E",
+    "secondary": [
+      "F"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": false,
+    "saas": true,
+    "confidence": "medium",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 2,
+      "F": 2
+    }
+  },
+  "run_id": "ae9c66f2-97da-432f-84bc-b8d421efcd27",
+  "error": null
+}

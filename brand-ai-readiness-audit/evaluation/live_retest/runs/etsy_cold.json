@@ -1,0 +1,34 @@
+{
+  "site_id": "etsy",
+  "url": "https://www.etsy.com/",
+  "labeled_type": "marketplace",
+  "success": true,
+  "wall_ms": 1943.6416625976562,
+  "timing_total_ms": 1937.5312328338623,
+  "pages_fetched": 1,
+  "pages_rendered": 0,
+  "render_max": 10,
+  "access_kinds": {
+    "captcha": 1
+  },
+  "stopped_reason": "budget",
+  "cluster": "unknown",
+  "finding_count": 1,
+  "by_severity": {
+    "low": 1
+  },
+  "by_type": {
+    "F-001": 1
+  },
+  "finding_titles": [
+    {
+      "id": "F-001",
+      "type": null,
+      "severity": "low",
+      "title": "Insufficient evidence: no usable public HTML for closed-book questions",
+      "evidence": "fetched_pages=0; access_kinds=['captcha']; pages=1. Challenge/WAF/HTTP-error bodies are audit limitations, not missing-brand-content.",
+      "url": null
+    }
+  ],
+  "error": null
+}

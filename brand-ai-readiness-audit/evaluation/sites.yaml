@@ -1,0 +1,215 @@
+# Evaluation site matrix. URLs are not imported by marketplace lib code.
+# enabled: false skips the origin without deleting the case.
+
+defaults:
+  max_seconds: 280
+  page_cap: 40
+
+sites:
+  - id: example-small
+    url: https://example.com/
+    site_type: static
+    size: small
+    expected:
+      - tiny static IETF example
+      - few or no internal links
+    notes: Baseline of a trivial public origin.
+    enabled: true
+    tags: [static, small]
+
+  - id: jekyll-static
+    url: https://jekyllrb.com/
+    site_type: static
+    size: small
+    expected:
+      - mostly static HTML
+      - documentation-adjacent marketing
+    notes: Static-site generator homepage.
+    enabled: true
+    tags: [static, documentation, small]
+
+  - id: stripe-saas
+    url: https://stripe.com/
+    site_type: saas
+    size: medium
+    expected:
+      - SaaS marketing
+      - possible JS-enhanced layout
+      - public pricing may be present or gated
+    notes: Representative SaaS marketing origin.
+    enabled: true
+    tags: [saas, medium, js-possible]
+
+  - id: shopify-ecommerce
+    url: https://www.shopify.com/
+    site_type: ecommerce
+    size: large
+    expected:
+      - ecommerce platform marketing
+      - large template set
+    notes: Ecommerce / SaaS hybrid marketing site.
+    enabled: true
+    tags: [ecommerce, saas, large]
+
+  - id: python-docs
+    url: https://docs.python.org/3/
+    site_type: documentation
+    size: large
+    expected:
+      - sitemap-heavy docs
+      - many similar templates
+    notes: Stress — documentation corpus / sitemap fanout.
+    enabled: true
+    tags: [documentation, large, sitemap-heavy, stress]
+
+  - id: mdn-docs
+    url: https://developer.mozilla.org/en-US/
+    site_type: documentation
+    size: large
+    expected:
+      - developer documentation
+      - multilingual hreflang likely
+    notes: Developer platform + docs.
+    enabled: true
+    tags: [documentation, developer-platform, large, multilingual]
+
+  - id: react-dev
+    url: https://react.dev/
+    site_type: developer_platform
+    size: medium
+    expected:
+      - JS-heavy docs framework
+      - dual-fetch gap likely
+    notes: JS-heavy developer site for render-gap study.
+    enabled: true
+    tags: [developer-platform, js-heavy, medium, stress]
+
+  - id: nextjs
+    url: https://nextjs.org/
+    site_type: javascript_heavy
+    size: medium
+    expected:
+      - client-rendered marketing/docs
+    notes: JS-heavy framework homepage.
+    enabled: true
+    tags: [javascript-heavy, developer-platform, medium, stress]
+
+  - id: cloudflare-blog
+    url: https://blog.cloudflare.com/
+    site_type: blog
+    size: medium
+    expected:
+      - article list + posts
+      - dates on articles
+    notes: Engineering blog.
+    enabled: true
+    tags: [blog, medium]
+
+  - id: bbc-news
+    url: https://www.bbc.com/news
+    site_type: news
+    size: large
+    expected:
+      - high URL volume
+      - syndication / updating content
+    notes: News origin; robots and volume matter.
+    enabled: true
+    tags: [news, large, many-urls, stress]
+
+  - id: harvard
+    url: https://www.harvard.edu/
+    site_type: university
+    size: large
+    expected:
+      - institutional IA
+      - many templates
+    notes: University homepage.
+    enabled: true
+    tags: [university, large]
+
+  - id: nasa
+    url: https://www.nasa.gov/
+    site_type: government
+    size: large
+    expected:
+      - government CMS
+      - possible strict robots
+    notes: US government.
+    enabled: true
+    tags: [government, large]
+
+  - id: govuk
+    url: https://www.gov.uk/
+    site_type: government
+    size: large
+    expected:
+      - large GOV.UK IA
+      - possible redirect hops
+    notes: Stress — many URLs / redirects possible.
+    enabled: true
+    tags: [government, large, many-redirects, stress]
+
+  - id: redcross
+    url: https://www.redcross.org/
+    site_type: nonprofit
+    size: medium
+    expected:
+      - nonprofit fundraising IA
+    notes: Nonprofit.
+    enabled: true
+    tags: [nonprofit, medium]
+
+  - id: mozilla-i18n
+    url: https://www.mozilla.org/
+    site_type: multilingual
+    size: medium
+    expected:
+      - locale switcher / hreflang
+      - nonprofit + product
+    notes: Multilingual marketing.
+    enabled: true
+    tags: [multilingual, nonprofit, medium]
+
+  - id: philz
+    url: https://www.philzcoffee.com/
+    site_type: local_business
+    size: small
+    expected:
+      - local/multi-location coffee
+      - NAP-ish content possible
+    notes: Local business / small brand.
+    enabled: true
+    tags: [local-business, small]
+
+  - id: etsy
+    url: https://www.etsy.com/
+    site_type: marketplace
+    size: large
+    expected:
+      - marketplace homepage
+      - listing templates
+      - thin-by-design risk
+    notes: Marketplace stress.
+    enabled: true
+    tags: [marketplace, ecommerce, large, stress]
+
+  - id: wikipedia
+    url: https://www.wikipedia.org/
+    site_type: directory
+    size: large
+    expected:
+      - portal / directory of projects
+      - heavy outbound sameAs-like links
+    notes: Stress — corroboration-heavy / large.
+    enabled: true
+    tags: [directory, large, corroboration-heavy, stress]
+
+  - id: tania-portfolio
+    url: https://www.taniarascia.com/
+    site_type: portfolio
+    size: small
+    expected:
+      - personal/portfolio + blog mix
+    notes: Independent portfolio.
+    enabled: true
+    tags: [portfolio, blog, small]

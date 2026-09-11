@@ -1,0 +1,71 @@
+{
+  "site_id": "bbc-news",
+  "url": "https://www.bbc.com/news",
+  "labeled_type": "news",
+  "success": true,
+  "wall_ms": 53777.0516872406,
+  "timing_total_ms": 53770.33591270447,
+  "pages_fetched": 40,
+  "pages_rendered": 10,
+  "render_max": 10,
+  "access_kinds": {
+    "ok": 40
+  },
+  "stopped_reason": "early_stop",
+  "cluster": "A",
+  "finding_count": 5,
+  "by_severity": {
+    "high": 1,
+    "medium": 4
+  },
+  "by_type": {
+    "F-001": 1,
+    "F-002": 1,
+    "F-004": 1,
+    "F-003": 1,
+    "F-005": 1
+  },
+  "finding_titles": [
+    {
+      "id": "F-001",
+      "type": null,
+      "severity": "high",
+      "title": "YMYL pages lack a named reviewer or license disclosure",
+      "evidence": "Cluster A lexicon matched; sampled pages have no 'reviewed by' / license strings.",
+      "url": null
+    },
+    {
+      "id": "F-002",
+      "type": null,
+      "severity": "medium",
+      "title": "AI crawler tokens are disallowed while Googlebot is allowed",
+      "evidence": "Disallowed tokens: GPTBot, ChatGPT-User, Google-Extended, anthropic-ai, ClaudeBot, PerplexityBot, Bytespider, CCBot, Applebot-Extended. This may be intentional.",
+      "url": null
+    },
+    {
+      "id": "F-004",
+      "type": null,
+      "severity": "medium",
+      "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 16, 'k_categories_hit': ['K3'], 'stop",
+      "url": null
+    },
+    {
+      "id": "F-003",
+      "type": null,
+      "severity": "medium",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "evidence": "Span on https://www.bbc.com/pages/privacy-policy: 'h Broadcasting Corporation (the \u2018BBC\u2019). We are a global business operating as BBC Studios Distribution, BBC Studios Productions, and BBC Globa'; homepage lacks it.",
+      "url": null
+    },
+    {
+      "id": "F-005",
+      "type": null,
+      "severity": "medium",
+      "title": "First viewport text may not identify the brand",
+      "evidence": "Title 'BBC Home - Breaking News, World News, US News, Sports, Business, Innovation, Climate, Culture, Travel, Video & AudioBritish Broadcasting CorporationBritish Broadcasting Corporation' not in first 400 chars; no H1. ",
+      "url": null
+    }
+  ],
+  "error": null
+}

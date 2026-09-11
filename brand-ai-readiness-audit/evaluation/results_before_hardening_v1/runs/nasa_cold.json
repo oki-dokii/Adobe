@@ -1,0 +1,95 @@
+{
+  "site_id": "nasa",
+  "site": "https://www.nasa.gov/",
+  "site_type": "government",
+  "tags": [
+    "government",
+    "large"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T13:22:47Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 97954.74791526794,
+    "wall_ms": 97962.12577819824,
+    "crawl_ms": 91256.9408416748,
+    "render_ms": 864.8972511291504,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.40793418884277344,
+      "crawl-access-audit": 0.23794174194335938,
+      "render-extract-audit": 3789.803981781006,
+      "citation-extractability-audit": 309.17906761169434,
+      "entity-identity-audit": 30.1666259765625,
+      "freshness-audit": 29.805898666381836,
+      "ai-answerability-audit": 34.99913215637207,
+      "engagement-handoff-audit": 1117.5260543823242,
+      "corroboration-consistency-audit": 1384.9451541900635
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.4642009735107422,
+    "merge_ms": 0.08988380432128906
+  },
+  "counts": {
+    "http_requests": 60,
+    "pages_crawled": 40,
+    "pages_rendered": 19,
+    "render_count": 19,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 13,
+    "critical": 0,
+    "high": 3,
+    "medium": 10,
+    "low": 0,
+    "templates": 3
+  },
+  "robots_status": "ok",
+  "timeouts": 2,
+  "redirects": 14,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "A",
+    "secondary": [
+      "C",
+      "E"
+    ],
+    "ymyl": true,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 3,
+      "B": 0,
+      "C": 3,
+      "D": 0,
+      "E": 2,
+      "F": 0
+    }
+  },
+  "run_id": "5bc7816a-e750-4ee0-860d-244a7683c126",
+  "error": null
+}

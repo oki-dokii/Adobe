@@ -1,0 +1,92 @@
+{
+  "site_id": "philz",
+  "site": "https://www.philzcoffee.com/",
+  "site_type": "local_business",
+  "tags": [
+    "local-business",
+    "small"
+  ],
+  "phase": "warm",
+  "timestamp": "2026-09-06T13:27:50Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 52576.36785507202,
+    "wall_ms": 52582.98587799072,
+    "crawl_ms": 49841.40110015869,
+    "render_ms": 159.07859802246094,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.4448890686035156,
+      "crawl-access-audit": 0.41174888610839844,
+      "render-extract-audit": 1310.6369972229004,
+      "citation-extractability-audit": 441.13993644714355,
+      "entity-identity-audit": 13.510942459106445,
+      "freshness-audit": 4.040956497192383,
+      "ai-answerability-audit": 4.104137420654297,
+      "engagement-handoff-audit": 486.33289337158203,
+      "corroboration-consistency-audit": 474.017858505249
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.1499652862548828,
+    "merge_ms": 0.023126602172851562
+  },
+  "counts": {
+    "http_requests": 45,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 3,
+    "critical": 0,
+    "high": 2,
+    "medium": 0,
+    "low": 1,
+    "templates": 23
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 1,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "F",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": true,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 5
+    }
+  },
+  "run_id": "b913a531-966e-4ecc-a4da-daa4c7095ae7",
+  "error": null
+}

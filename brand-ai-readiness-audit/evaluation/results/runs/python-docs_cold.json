@@ -1,0 +1,95 @@
+{
+  "site_id": "python-docs",
+  "site": "https://docs.python.org/3/",
+  "site_type": "documentation",
+  "tags": [
+    "documentation",
+    "large",
+    "sitemap-heavy",
+    "stress"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T19:12:38Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 10700.031995773315,
+    "wall_ms": 10706.398248672485,
+    "crawl_ms": 9199.159860610962,
+    "render_ms": 26.84473991394043,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.4131793975830078,
+      "crawl-access-audit": 0.3681182861328125,
+      "render-extract-audit": 762.9597187042236,
+      "citation-extractability-audit": 0.014066696166992188,
+      "entity-identity-audit": 11.235952377319336,
+      "freshness-audit": 5.053997039794922,
+      "ai-answerability-audit": 9.307861328125,
+      "engagement-handoff-audit": 359.4927787780762,
+      "corroboration-consistency-audit": 351.78184509277344
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.15020370483398438,
+    "merge_ms": 0.028848648071289062
+  },
+  "counts": {
+    "http_requests": 42,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 2,
+    "critical": 0,
+    "high": 1,
+    "medium": 1,
+    "low": 0,
+    "templates": 19
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=30, protected_requests=1. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "D",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 3,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "705ed59b-d0b8-444c-859a-c09c81eb6629",
+  "error": null
+}

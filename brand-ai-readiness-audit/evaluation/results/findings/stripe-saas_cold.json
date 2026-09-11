@@ -1,0 +1,1014 @@
+{
+  "site": "stripe.com",
+  "summary": {
+    "total_findings": 15,
+    "critical": 15,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.30' vs later qualifier in es include GST. 1.7% + A$0.30 for domestic\u00a0cards* 3.5\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-002",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.30' vs later qualifier in domestic\u00a0cards* 3.5% + A$0.30 for international\u00a0cards\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-003",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$10.00' vs later qualifier in mer portal on Stripe. US$10.00 per\u00a0month Learn more Po\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-005",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.10' vs later qualifier in erson payments. 1.7% + A$0.10 for domestic\u00a0cards* 3.5\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-006",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.10' vs later qualifier in domestic\u00a0cards* 3.5% + A$0.10 for international\u00a0cards\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-007",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.15' vs later qualifier in \u00a0cards* +\n  \n  \n  \n    A$0.15 per authorisation for T\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-008",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.07' vs later qualifier in \u00a0to\u00a0Pay +\n  \n  \n  \n    A$0.07 per authorisation for o\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-009",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$89.00' vs later qualifier in d management at scale. A$89.00 BBPOS WisePad\u00a03 Excl.\u00a0G\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-010",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$449.00' vs later qualifier in OS WisePad\u00a03 Excl.\u00a0GST A$449.00 Stripe Reader\u00a0S710 Excl\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-011",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$449.00' vs later qualifier in  Reader\u00a0S710 Excl.\u00a0GST A$449.00 Stripe Reader\u00a0S700 Excl\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-012",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$469.00' vs later qualifier in  Reader\u00a0S700 Excl.\u00a0GST A$469.00 Stripe Reader\u00a0T600 Excl\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-013",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$23.00' vs later qualifier in y for free for 30 days A$23.00 per\u00a0month Annual subscr\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-014",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$101.00' vs later qualifier in y for free for 30 days A$101.00 per\u00a0month Annual subscr\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-015",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$500.00' vs later qualifier in r 83(b) tax election. US$500.00 one-off setup fee (incl\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-016",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '\u20ac0.25' vs later qualifier in internationally. 2.5% + \u20ac0.25 for UK\u00a0cards +\n  \n  \n  \u2026 / later span on https://stripe.com/en-at/pricing",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    }
+  ],
+  "findings_internal": [
+    {
+      "id": "F-001",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.30' vs later qualifier in es include GST. 1.7% + A$0.30 for domestic\u00a0cards* 3.5\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "d50be813749b887c",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-002",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.30' vs later qualifier in domestic\u00a0cards* 3.5% + A$0.30 for international\u00a0cards\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "40a28f5eefea2798",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-003",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$10.00' vs later qualifier in mer portal on Stripe. US$10.00 per\u00a0month Learn more Po\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "4000da9d48b79e2c",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing",
+        "https://stripe.com/en-ca/pricing",
+        "https://stripe.com/en-cz/pricing",
+        "https://stripe.com/en-fi/pricing"
+      ],
+      "affected_pages_count": 4,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-005",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.10' vs later qualifier in erson payments. 1.7% + A$0.10 for domestic\u00a0cards* 3.5\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "d37c087f9ebcc27a",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-006",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.10' vs later qualifier in domestic\u00a0cards* 3.5% + A$0.10 for international\u00a0cards\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "c117293b6eb25a61",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-007",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.15' vs later qualifier in \u00a0cards* +\n  \n  \n  \n    A$0.15 per authorisation for T\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "ea973f1dbaf30fce",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-008",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$0.07' vs later qualifier in \u00a0to\u00a0Pay +\n  \n  \n  \n    A$0.07 per authorisation for o\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "7b6274f0441d0356",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-009",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$89.00' vs later qualifier in d management at scale. A$89.00 BBPOS WisePad\u00a03 Excl.\u00a0G\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "0164a3d3d42d2632",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-010",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$449.00' vs later qualifier in OS WisePad\u00a03 Excl.\u00a0GST A$449.00 Stripe Reader\u00a0S710 Excl\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "1c517b0f9764a5c5",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-011",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$449.00' vs later qualifier in  Reader\u00a0S710 Excl.\u00a0GST A$449.00 Stripe Reader\u00a0S700 Excl\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "8c36ba1d294f35aa",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-012",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$469.00' vs later qualifier in  Reader\u00a0S700 Excl.\u00a0GST A$469.00 Stripe Reader\u00a0T600 Excl\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "7f17ab146d9e5743",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-013",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$23.00' vs later qualifier in y for free for 30 days A$23.00 per\u00a0month Annual subscr\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "199eeaf53f6a07c5",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-014",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$101.00' vs later qualifier in y for free for 30 days A$101.00 per\u00a0month Annual subscr\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "8b826907cf108ae7",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing"
+      ],
+      "affected_pages_count": 1,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-015",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '$500.00' vs later qualifier in r 83(b) tax election. US$500.00 one-off setup fee (incl\u2026 / later span on https://stripe.com/au/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/au/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "06f8d8eb7727a5ba",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/au/pricing",
+        "https://stripe.com/en-ca/pricing"
+      ],
+      "affected_pages_count": 2,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-016",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "critical",
+      "evidence": "Isolated '\u20ac0.25' vs later qualifier in internationally. 2.5% + \u20ac0.25 for UK\u00a0cards +\n  \n  \n  \u2026 / later span on https://stripe.com/en-at/pricing",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://stripe.com/en-at/pricing",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "ee7a7b2e6d28485b",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://stripe.com/en-at/pricing",
+        "https://stripe.com/en-fr/pricing",
+        "https://stripe.com/en-gr/pricing",
+        "https://stripe.com/en-it/pricing"
+      ],
+      "affected_pages_count": 4,
+      "template_id": "t-2",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    }
+  ],
+  "suppressed": [],
+  "coverage": {
+    "pages_fetched": 40,
+    "pages_content_usable": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "estimated_pages": 139,
+    "templates": 7,
+    "k_categories_hit": [
+      "K3",
+      "K6"
+    ],
+    "stopped_reason": "early_stop",
+    "pages_verified_per_template": {
+      "t-1": 2,
+      "t-2": 22,
+      "t-3": 3,
+      "t-4": 4,
+      "t-5": 5,
+      "t-6": 2,
+      "t-7": 2
+    },
+    "render_max": 10,
+    "renders_requested": 40,
+    "renders_performed": 10,
+    "renders_skipped_budget": 30,
+    "protected_render_requests": 40,
+    "protected_render_exceptions": 0,
+    "access_kinds": {
+      "ok": 40
+    },
+    "http_requests": 54,
+    "robots_status": "ok",
+    "timeout_count": 0,
+    "redirect_hops_total": 3,
+    "ssrf_blocks": 0
+  },
+  "site_type": {
+    "cluster": "F",
+    "secondary": [
+      "B"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": true,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 2,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 5
+    }
+  },
+  "skill_status": {
+    "successful_skills": [
+      "site-type-classifier",
+      "crawl-access-audit",
+      "render-extract-audit",
+      "citation-extractability-audit",
+      "entity-identity-audit",
+      "freshness-audit",
+      "ai-answerability-audit",
+      "engagement-handoff-audit",
+      "corroboration-consistency-audit"
+    ],
+    "failed_skills": [],
+    "skipped_dependent_skills": [],
+    "completed_findings": [
+      "F-001",
+      "F-002",
+      "F-003",
+      "F-005",
+      "F-006",
+      "F-007",
+      "F-008",
+      "F-009",
+      "F-010",
+      "F-011",
+      "F-012",
+      "F-013",
+      "F-014",
+      "F-015",
+      "F-016"
+    ],
+    "incomplete_areas": [],
+    "failures": [],
+    "by_skill": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    }
+  },
+  "limitations": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=30, protected_requests=40. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "timing": {
+    "crawl_ms": 54033.13493728638,
+    "render_ms": 785.9232425689697,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.3108978271484375,
+      "crawl-access-audit": 0.2999305725097656,
+      "render-extract-audit": 8320.913791656494,
+      "citation-extractability-audit": 2381.525993347168,
+      "entity-identity-audit": 4466.516017913818,
+      "freshness-audit": 133.55398178100586,
+      "ai-answerability-audit": 49.096107482910156,
+      "engagement-handoff-audit": 2186.163902282715,
+      "corroboration-consistency-audit": 5798.426866531372
+    },
+    "llm_ms": 0.0,
+    "llm_calls": 0,
+    "external_fetch_ms": 2126.4429092407227,
+    "merge_ms": 0.8592605590820312,
+    "report_ms": 0.8833408355712891,
+    "total_ms": 77372.46489524841,
+    "skipped": [],
+    "http_requests": 72,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "external_requests": 7
+  },
+  "metrics": {
+    "answerability": {
+      "per_question": {
+        "K3": "unanswerable",
+        "K6": "answered",
+        "K13": "answered"
+      },
+      "CoreAnswerabilityRate": 0.6666666666666666,
+      "AnswerConcentration": 32.5,
+      "note": "Weights uncalibrated; per-question outcomes are primary. Composite citability is not a finding."
+    },
+    "skills": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    },
+    "skill_status": {
+      "successful_skills": [
+        "site-type-classifier",
+        "crawl-access-audit",
+        "render-extract-audit",
+        "citation-extractability-audit",
+        "entity-identity-audit",
+        "freshness-audit",
+        "ai-answerability-audit",
+        "engagement-handoff-audit",
+        "corroboration-consistency-audit"
+      ],
+      "failed_skills": [],
+      "skipped_dependent_skills": [],
+      "completed_findings": [
+        "F-001",
+        "F-002",
+        "F-003",
+        "F-005",
+        "F-006",
+        "F-007",
+        "F-008",
+        "F-009",
+        "F-010",
+        "F-011",
+        "F-012",
+        "F-013",
+        "F-014",
+        "F-015",
+        "F-016"
+      ],
+      "incomplete_areas": [],
+      "failures": [],
+      "by_skill": {
+        "site-type-classifier": "ok",
+        "crawl-access-audit": "ok",
+        "render-extract-audit": "ok",
+        "citation-extractability-audit": "ok",
+        "entity-identity-audit": "ok",
+        "freshness-audit": "ok",
+        "ai-answerability-audit": "ok",
+        "engagement-handoff-audit": "ok",
+        "corroboration-consistency-audit": "ok"
+      }
+    },
+    "audit_status": "ok",
+    "protect_list": [
+      "K3",
+      "admit",
+      "citation-extractability-audit-det",
+      "coverage",
+      "dual-fetch-facts",
+      "report",
+      "site-type-classifier"
+    ]
+  }
+}

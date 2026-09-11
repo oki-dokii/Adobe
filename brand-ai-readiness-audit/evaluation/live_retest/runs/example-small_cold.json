@@ -1,0 +1,53 @@
+{
+  "site_id": "example-small",
+  "url": "https://example.com/",
+  "labeled_type": "static",
+  "success": true,
+  "wall_ms": 967.1499729156494,
+  "timing_total_ms": 897.9568481445312,
+  "pages_fetched": 1,
+  "pages_rendered": 1,
+  "render_max": 10,
+  "access_kinds": {
+    "ok": 1
+  },
+  "stopped_reason": "budget",
+  "cluster": "D",
+  "finding_count": 3,
+  "by_severity": {
+    "high": 1,
+    "medium": 2
+  },
+  "by_type": {
+    "F-001": 1,
+    "F-002": 1,
+    "F-003": 1
+  },
+  "finding_titles": [
+    {
+      "id": "F-001",
+      "type": null,
+      "severity": "high",
+      "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason'",
+      "url": null
+    },
+    {
+      "id": "F-002",
+      "type": null,
+      "severity": "medium",
+      "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason'",
+      "url": null
+    },
+    {
+      "id": "F-003",
+      "type": null,
+      "severity": "medium",
+      "title": "Closed-book: site does not answer K13 (How can a human contact the organization?)",
+      "evidence": "No supporting span in crawled corpus for K13. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason",
+      "url": null
+    }
+  ],
+  "error": null
+}

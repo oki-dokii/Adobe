@@ -1,0 +1,859 @@
+[
+  {
+    "site_id": "example-small",
+    "url": "https://example.com/",
+    "labeled_type": "static",
+    "success": true,
+    "wall_ms": 967.1499729156494,
+    "timing_total_ms": 897.9568481445312,
+    "pages_fetched": 1,
+    "pages_rendered": 1,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 1
+    },
+    "stopped_reason": "budget",
+    "cluster": "D",
+    "finding_count": 3,
+    "by_severity": {
+      "high": 1,
+      "medium": 2
+    },
+    "by_type": {
+      "F-001": 1,
+      "F-002": 1,
+      "F-003": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "high",
+        "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+        "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason'",
+        "url": null
+      },
+      {
+        "id": "F-002",
+        "type": null,
+        "severity": "medium",
+        "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+        "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason'",
+        "url": null
+      },
+      {
+        "id": "F-003",
+        "type": null,
+        "severity": "medium",
+        "title": "Closed-book: site does not answer K13 (How can a human contact the organization?)",
+        "evidence": "No supporting span in crawled corpus for K13. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "jekyll-static",
+    "url": "https://jekyllrb.com/",
+    "labeled_type": "static",
+    "success": true,
+    "wall_ms": 23661.510944366455,
+    "timing_total_ms": 23653.95212173462,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 40
+    },
+    "stopped_reason": "early_stop",
+    "cluster": "D",
+    "finding_count": 4,
+    "by_severity": {
+      "high": 1,
+      "medium": 3
+    },
+    "by_type": {
+      "F-003": 1,
+      "F-001": 1,
+      "F-002": 1,
+      "F-004": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-003",
+        "type": null,
+        "severity": "high",
+        "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+        "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 19, 'k_categories_hit': ['K3'], 'stop",
+        "url": null
+      },
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "medium",
+        "title": "High-value URL has no inbound links in the crawled graph",
+        "evidence": "0 in-edges for https://jekyllrb.com/docs/code_of_conduct/. Coverage 40/200. Isolation may be a coverage artifact.",
+        "url": null
+      },
+      {
+        "id": "F-002",
+        "type": null,
+        "severity": "medium",
+        "title": "High-value URL has no inbound links in the crawled graph",
+        "evidence": "0 in-edges for https://jekyllrb.com/docs/history/. Coverage 40/200. Isolation may be a coverage artifact.",
+        "url": null
+      },
+      {
+        "id": "F-004",
+        "type": null,
+        "severity": "medium",
+        "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+        "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 19, 'k_categories_hit': ['K3'], 'stop",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "stripe-saas",
+    "url": "https://stripe.com/",
+    "labeled_type": "saas",
+    "success": true,
+    "wall_ms": 108960.3009223938,
+    "timing_total_ms": 108947.34191894531,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 40
+    },
+    "stopped_reason": "early_stop",
+    "cluster": "F",
+    "finding_count": 15,
+    "by_severity": {
+      "critical": 15
+    },
+    "by_type": {
+      "F-001": 1,
+      "F-002": 1,
+      "F-003": 1,
+      "F-005": 1,
+      "F-006": 1,
+      "F-007": 1,
+      "F-008": 1,
+      "F-009": 1,
+      "F-010": 1,
+      "F-011": 1,
+      "F-012": 1,
+      "F-013": 1,
+      "F-014": 1,
+      "F-015": 1,
+      "F-016": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$0.30' vs later qualifier in es include GST. 1.7% + A$0.30 for domestic\u00a0cards* 3.5\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-002",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$0.30' vs later qualifier in domestic\u00a0cards* 3.5% + A$0.30 for international\u00a0cards\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-003",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$10.00' vs later qualifier in mer portal on Stripe. US$10.00 per\u00a0month Learn more Po\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-005",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$0.10' vs later qualifier in erson payments. 1.7% + A$0.10 for domestic\u00a0cards* 3.5\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-006",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$0.10' vs later qualifier in domestic\u00a0cards* 3.5% + A$0.10 for international\u00a0cards\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-007",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$0.15' vs later qualifier in \u00a0cards* +\n  \n  \n  \n    A$0.15 per authorisation for T\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-008",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$0.07' vs later qualifier in \u00a0to\u00a0Pay +\n  \n  \n  \n    A$0.07 per authorisation for o\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-009",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$89.00' vs later qualifier in d management at scale. A$89.00 BBPOS WisePad\u00a03 Excl.\u00a0G\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-010",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$449.00' vs later qualifier in OS WisePad\u00a03 Excl.\u00a0GST A$449.00 Stripe Reader\u00a0S710 Excl\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-011",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$449.00' vs later qualifier in  Reader\u00a0S710 Excl.\u00a0GST A$449.00 Stripe Reader\u00a0S700 Excl\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-012",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$469.00' vs later qualifier in  Reader\u00a0S700 Excl.\u00a0GST A$469.00 Stripe Reader\u00a0T600 Excl\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-013",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$23.00' vs later qualifier in y for free for 30 days A$23.00 per\u00a0month Annual subscr\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-014",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$101.00' vs later qualifier in y for free for 30 days A$101.00 per\u00a0month Annual subscr\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-015",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '$500.00' vs later qualifier in r 83(b) tax election. US$500.00 one-off setup fee (incl\u2026 / later span on https://stripe.com/au/pricing",
+        "url": null
+      },
+      {
+        "id": "F-016",
+        "type": null,
+        "severity": "critical",
+        "title": "Price amount is separated from its qualifying condition",
+        "evidence": "Isolated '\u20ac0.25' vs later qualifier in internationally. 2.5% + \u20ac0.25 for UK\u00a0cards +\n  \n  \n  \u2026 / later span on https://stripe.com/en-at/pricing",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "shopify-ecommerce",
+    "url": "https://www.shopify.com/",
+    "labeled_type": "ecommerce",
+    "success": true,
+    "wall_ms": 76755.12909889221,
+    "timing_total_ms": 76742.96188354492,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 40
+    },
+    "stopped_reason": "early_stop",
+    "cluster": "F",
+    "finding_count": 2,
+    "by_severity": {
+      "high": 2
+    },
+    "by_type": {
+      "F-002": 1,
+      "F-001": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-002",
+        "type": null,
+        "severity": "high",
+        "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+        "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 3, 'k_categories_hit': ['K3', 'K6'], ",
+        "url": null
+      },
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "high",
+        "title": "On-site typed facts disagree (prices)",
+        "evidence": "values=['0', '1', '114', '19', '2.30', '2100'] urls=['https://www.shopify.com/in/pricing', 'https://www.shopify.com/in/pricing', 'https://www.shopify.com/in/pricing', 'https://www.shopify.com/in/pricing']",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "etsy",
+    "url": "https://www.etsy.com/",
+    "labeled_type": "marketplace",
+    "success": true,
+    "wall_ms": 1943.6416625976562,
+    "timing_total_ms": 1937.5312328338623,
+    "pages_fetched": 1,
+    "pages_rendered": 0,
+    "render_max": 10,
+    "access_kinds": {
+      "captcha": 1
+    },
+    "stopped_reason": "budget",
+    "cluster": "unknown",
+    "finding_count": 1,
+    "by_severity": {
+      "low": 1
+    },
+    "by_type": {
+      "F-001": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "low",
+        "title": "Insufficient evidence: no usable public HTML for closed-book questions",
+        "evidence": "fetched_pages=0; access_kinds=['captcha']; pages=1. Challenge/WAF/HTTP-error bodies are audit limitations, not missing-brand-content.",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "govuk",
+    "url": "https://www.gov.uk/",
+    "labeled_type": "government",
+    "success": true,
+    "wall_ms": 103056.43105506897,
+    "timing_total_ms": 103044.49892044067,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 40
+    },
+    "stopped_reason": "early_stop",
+    "cluster": "A",
+    "finding_count": 15,
+    "by_severity": {
+      "high": 1,
+      "medium": 14
+    },
+    "by_type": {
+      "F-001": 1,
+      "F-023": 1,
+      "F-022": 1,
+      "F-002": 1,
+      "F-003": 1,
+      "F-004": 1,
+      "F-005": 1,
+      "F-006": 1,
+      "F-007": 1,
+      "F-008": 1,
+      "F-009": 1,
+      "F-010": 1,
+      "F-011": 1,
+      "F-012": 1,
+      "F-013": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "high",
+        "title": "YMYL pages lack a named reviewer or license disclosure",
+        "evidence": "Cluster A lexicon matched; sampled pages have no 'reviewed by' / license strings.",
+        "url": null
+      },
+      {
+        "id": "F-023",
+        "type": null,
+        "severity": "medium",
+        "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+        "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 40, 'templates': 7, 'k_categories_hit': ['K3'], 'stoppe",
+        "url": null
+      },
+      {
+        "id": "F-022",
+        "type": null,
+        "severity": "medium",
+        "title": "K3 is answered on an inner page, not the likely landing page",
+        "evidence": "Span on https://www.gov.uk/government/organisations/department-for-work-pensions/about: 'ring against our objectives. Who we are We provide our services in a number of ways, for example through J'; homepage lacks it.",
+        "url": null
+      },
+      {
+        "id": "F-002",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2025', '2025', '2025', '2025'] schema=['2026-08-14T18:31:16+01:00', '2025-06-30T09:07:49+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/tax-credits-agent-priority-line",
+        "url": null
+      },
+      {
+        "id": "F-003",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2025', '2025', '1900', '2025'] schema=['2026-08-14T19:01:31+01:00', '2025-12-19T15:22:09+00:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines",
+        "url": null
+      },
+      {
+        "id": "F-004",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2025', '2025'] schema=['2026-08-14T18:59:16+01:00', '2025-05-14T17:51:58+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/agent-dedicated-line-debt-management",
+        "url": null
+      },
+      {
+        "id": "F-005",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2025', '2025'] schema=['2026-08-14T18:52:47+01:00', '2025-05-14T17:51:31+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/central-agent-authorisation-team",
+        "url": null
+      },
+      {
+        "id": "F-006",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2025', '2025', '2025', '2025'] schema=['2026-08-14T18:39:14+01:00', '2025-12-19T15:23:35+00:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-customs-and-excise-and-duties",
+        "url": null
+      },
+      {
+        "id": "F-007",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2025', '1900', '1900', '2025'] schema=['2026-08-14T18:56:01+01:00', '2025-05-16T09:38:43+01:00'] on https://www.gov.uk/government/organisations/hm-revenue-customs/contact/budd-dal-plant-ymholiadau-cyffred",
+        "url": null
+      },
+      {
+        "id": "F-008",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['1979', '2012', '2012', '1948'] schema=['2026-09-04T10:35:03+01:00', '2026-08-20T15:34:57+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure",
+        "url": null
+      },
+      {
+        "id": "F-009",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['1979', '2012', '2012', '1948'] schema=['2026-09-04T10:35:03+01:00', '2026-08-20T15:34:57+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/complaints-procedure.cy",
+        "url": null
+      },
+      {
+        "id": "F-010",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2018', '2024', '2018', '2024'] schema=['2026-09-04T10:32:24+01:00', '2024-01-31T15:33:59+00:00'] on https://www.gov.uk/guidance/contact-the-department-for-work-and-pensions-about-its-policies",
+        "url": null
+      },
+      {
+        "id": "F-011",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2023', '2025', '2022', '2023'] schema=['2026-09-04T10:35:04+01:00', '2023-11-02T09:30:01+00:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about",
+        "url": null
+      },
+      {
+        "id": "F-012",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2018', '2018', '2018', '2018'] schema=['2026-09-04T10:36:15+01:00', '2021-09-13T13:37:25+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/accessible-documents-poli",
+        "url": null
+      },
+      {
+        "id": "F-013",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2023', '2025', '2010', '2014'] schema=['2026-09-04T10:35:02+01:00', '2024-04-22T10:22:13+01:00'] on https://www.gov.uk/government/organisations/department-for-work-pensions/about/equality-and-diversity",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "react-dev",
+    "url": "https://react.dev/",
+    "labeled_type": "developer_platform",
+    "success": true,
+    "wall_ms": 25690.996885299683,
+    "timing_total_ms": 25684.962034225464,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 40
+    },
+    "stopped_reason": "early_stop",
+    "cluster": "D",
+    "finding_count": 1,
+    "by_severity": {
+      "medium": 1
+    },
+    "by_type": {
+      "F-001": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "medium",
+        "title": "K3 is answered on an inner page, not the likely landing page",
+        "evidence": "Span on https://react.dev/blog/2025/04/23/react-labs-view-transitions-activity-and-more: 'till exploring, and we\u2019ll share more as we make progress. For more information on what Activity '; homepage lacks it.",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "bbc-news",
+    "url": "https://www.bbc.com/news",
+    "labeled_type": "news",
+    "success": true,
+    "wall_ms": 53777.0516872406,
+    "timing_total_ms": 53770.33591270447,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 40
+    },
+    "stopped_reason": "early_stop",
+    "cluster": "A",
+    "finding_count": 5,
+    "by_severity": {
+      "high": 1,
+      "medium": 4
+    },
+    "by_type": {
+      "F-001": 1,
+      "F-002": 1,
+      "F-004": 1,
+      "F-003": 1,
+      "F-005": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "high",
+        "title": "YMYL pages lack a named reviewer or license disclosure",
+        "evidence": "Cluster A lexicon matched; sampled pages have no 'reviewed by' / license strings.",
+        "url": null
+      },
+      {
+        "id": "F-002",
+        "type": null,
+        "severity": "medium",
+        "title": "AI crawler tokens are disallowed while Googlebot is allowed",
+        "evidence": "Disallowed tokens: GPTBot, ChatGPT-User, Google-Extended, anthropic-ai, ClaudeBot, PerplexityBot, Bytespider, CCBot, Applebot-Extended. This may be intentional.",
+        "url": null
+      },
+      {
+        "id": "F-004",
+        "type": null,
+        "severity": "medium",
+        "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+        "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 16, 'k_categories_hit': ['K3'], 'stop",
+        "url": null
+      },
+      {
+        "id": "F-003",
+        "type": null,
+        "severity": "medium",
+        "title": "K3 is answered on an inner page, not the likely landing page",
+        "evidence": "Span on https://www.bbc.com/pages/privacy-policy: 'h Broadcasting Corporation (the \u2018BBC\u2019). We are a global business operating as BBC Studios Distribution, BBC Studios Productions, and BBC Globa'; homepage lacks it.",
+        "url": null
+      },
+      {
+        "id": "F-005",
+        "type": null,
+        "severity": "medium",
+        "title": "First viewport text may not identify the brand",
+        "evidence": "Title 'BBC Home - Breaking News, World News, US News, Sports, Business, Innovation, Climate, Culture, Travel, Video & AudioBritish Broadcasting CorporationBritish Broadcasting Corporation' not in first 400 chars; no H1. ",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "wikipedia",
+    "url": "https://www.wikipedia.org/",
+    "labeled_type": "directory",
+    "success": true,
+    "wall_ms": 2089.118003845215,
+    "timing_total_ms": 2081.989049911499,
+    "pages_fetched": 1,
+    "pages_rendered": 1,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 1
+    },
+    "stopped_reason": "budget",
+    "cluster": "unknown",
+    "finding_count": 3,
+    "by_severity": {
+      "high": 1,
+      "medium": 2
+    },
+    "by_type": {
+      "F-001": 1,
+      "F-002": 1,
+      "F-003": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "high",
+        "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+        "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason'",
+        "url": null
+      },
+      {
+        "id": "F-002",
+        "type": null,
+        "severity": "medium",
+        "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+        "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason'",
+        "url": null
+      },
+      {
+        "id": "F-003",
+        "type": null,
+        "severity": "medium",
+        "title": "Closed-book: site does not answer K13 (How can a human contact the organization?)",
+        "evidence": "No supporting span in crawled corpus for K13. Coverage={'pages_fetched': 1, 'pages_content_usable': 1, 'pages_rendered': 1, 'render_count': 1, 'estimated_pages': 1, 'templates': 1, 'k_categories_hit': [], 'stopped_reason",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "tania-portfolio",
+    "url": "https://www.taniarascia.com/",
+    "labeled_type": "portfolio",
+    "success": true,
+    "wall_ms": 72860.91804504395,
+    "timing_total_ms": 72848.97518157959,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 40
+    },
+    "stopped_reason": "early_stop",
+    "cluster": "D",
+    "finding_count": 2,
+    "by_severity": {
+      "high": 1,
+      "medium": 1
+    },
+    "by_type": {
+      "F-002": 1,
+      "F-001": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-002",
+        "type": null,
+        "severity": "high",
+        "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+        "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 28, 'k_categories_hit': ['K3', 'K6'],",
+        "url": null
+      },
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "medium",
+        "title": "Organization sameAs URL returns 404",
+        "evidence": "https://bsky.app/profile/tania.dev status=404",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "nasa",
+    "url": "https://www.nasa.gov/",
+    "labeled_type": "government",
+    "success": true,
+    "wall_ms": 79947.72410392761,
+    "timing_total_ms": 79933.68721008301,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_max": 10,
+    "access_kinds": {
+      "ok": 39,
+      "error_document": 1
+    },
+    "stopped_reason": "early_stop",
+    "cluster": "A",
+    "finding_count": 9,
+    "by_severity": {
+      "high": 2,
+      "medium": 7
+    },
+    "by_type": {
+      "F-002": 1,
+      "F-001": 1,
+      "F-009": 1,
+      "F-003": 1,
+      "F-004": 1,
+      "F-005": 1,
+      "F-006": 1,
+      "F-007": 1,
+      "F-008": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-002",
+        "type": null,
+        "severity": "high",
+        "title": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+        "evidence": "short/common-looking name 'NASA'; no 'we are a {category}' sentence on https://www.nasa.gov/. No web search was used.",
+        "url": null
+      },
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "high",
+        "title": "YMYL pages lack a named reviewer or license disclosure",
+        "evidence": "Cluster A lexicon matched; sampled pages have no 'reviewed by' / license strings.",
+        "url": null
+      },
+      {
+        "id": "F-009",
+        "type": null,
+        "severity": "medium",
+        "title": "K3 is answered on an inner page, not the likely landing page",
+        "evidence": "Span on https://www.nasa.gov/privacy/: 'nsent from the child\u2019s parent. Finally, we provide many on-line tools and services in support of NASA\u2019s mission. A child under 13 years old m'; homepage lacks it.",
+        "url": null
+      },
+      {
+        "id": "F-003",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2026', '2012', '1959', '1963'] schema=['2023-07-25T11:19:07-04:00', '2023-07-25T11:19:07-04:00', '2012-02-16T16:30:00Z'] on https://www.nasa.gov/history/glenn-orbits-the-earth/",
+        "url": null
+      },
+      {
+        "id": "F-004",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2026', '2019', '2019', '2019'] schema=['2023-07-26T15:17:08-04:00', '2023-07-26T15:17:08-04:00', '2019-04-09T21:00:00Z'] on https://www.nasa.gov/centers-and-facilities/glenn/from-sky-gazing-to-astronaut-j",
+        "url": null
+      },
+      {
+        "id": "F-005",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2026', '2019', '1946', '1946'] schema=['2024-06-28T12:48:33-04:00', '2024-06-28T12:48:33-04:00', '2019-08-29T17:00:00Z'] on https://www.nasa.gov/history/naca-test-pilot-competed-in-cleveland-national-air-",
+        "url": null
+      },
+      {
+        "id": "F-006",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2026', '2008', '1947', '1949'] schema=['2024-03-13T14:28:37-04:00', '2024-03-13T14:28:37-04:00', '2008-04-10T22:46:00Z'] on https://www.nasa.gov/centers/glenn/about/history/crashtst.html",
+        "url": null
+      },
+      {
+        "id": "F-007",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2026', '2012', '1964', '1957'] schema=['2025-05-22T15:52:35-04:00', '2025-05-22T15:52:35-04:00', '2012-12-12T19:56:00Z'] on https://www.nasa.gov/centers/glenn/about/history/centaur.html",
+        "url": null
+      },
+      {
+        "id": "F-008",
+        "type": null,
+        "severity": "medium",
+        "title": "Date signals disagree across visible text and metadata",
+        "evidence": "visible years=['2026', '2013', '1966', '1962'] schema=['2024-03-14T09:38:53-04:00', '2024-03-14T09:38:53-04:00', '2013-03-01T23:13:00Z'] on https://www.nasa.gov/centers/glenn/about/history/centaur_anniv.html",
+        "url": null
+      }
+    ],
+    "error": null
+  },
+  {
+    "site_id": "redcross",
+    "url": "https://www.redcross.org/",
+    "labeled_type": "nonprofit",
+    "success": true,
+    "wall_ms": 1444.6446895599365,
+    "timing_total_ms": 1434.1988563537598,
+    "pages_fetched": 1,
+    "pages_rendered": 0,
+    "render_max": 10,
+    "access_kinds": {
+      "forbidden_content": 1
+    },
+    "stopped_reason": "budget",
+    "cluster": "unknown",
+    "finding_count": 1,
+    "by_severity": {
+      "low": 1
+    },
+    "by_type": {
+      "F-001": 1
+    },
+    "finding_titles": [
+      {
+        "id": "F-001",
+        "type": null,
+        "severity": "low",
+        "title": "Insufficient evidence: no usable public HTML for closed-book questions",
+        "evidence": "fetched_pages=0; access_kinds=['forbidden_content']; pages=1. Challenge/WAF/HTTP-error bodies are audit limitations, not missing-brand-content.",
+        "url": null
+      }
+    ],
+    "error": null
+  }
+]

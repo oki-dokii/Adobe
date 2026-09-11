@@ -1,0 +1,108 @@
+{
+  "site_id": "nasa",
+  "url": "https://www.nasa.gov/",
+  "labeled_type": "government",
+  "success": true,
+  "wall_ms": 79947.72410392761,
+  "timing_total_ms": 79933.68721008301,
+  "pages_fetched": 40,
+  "pages_rendered": 10,
+  "render_max": 10,
+  "access_kinds": {
+    "ok": 39,
+    "error_document": 1
+  },
+  "stopped_reason": "early_stop",
+  "cluster": "A",
+  "finding_count": 9,
+  "by_severity": {
+    "high": 2,
+    "medium": 7
+  },
+  "by_type": {
+    "F-002": 1,
+    "F-001": 1,
+    "F-009": 1,
+    "F-003": 1,
+    "F-004": 1,
+    "F-005": 1,
+    "F-006": 1,
+    "F-007": 1,
+    "F-008": 1
+  },
+  "finding_titles": [
+    {
+      "id": "F-002",
+      "type": null,
+      "severity": "high",
+      "title": "Brand name looks collision-prone and pages lack an early category/geo disambiguator",
+      "evidence": "short/common-looking name 'NASA'; no 'we are a {category}' sentence on https://www.nasa.gov/. No web search was used.",
+      "url": null
+    },
+    {
+      "id": "F-001",
+      "type": null,
+      "severity": "high",
+      "title": "YMYL pages lack a named reviewer or license disclosure",
+      "evidence": "Cluster A lexicon matched; sampled pages have no 'reviewed by' / license strings.",
+      "url": null
+    },
+    {
+      "id": "F-009",
+      "type": null,
+      "severity": "medium",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "evidence": "Span on https://www.nasa.gov/privacy/: 'nsent from the child\u2019s parent. Finally, we provide many on-line tools and services in support of NASA\u2019s mission. A child under 13 years old m'; homepage lacks it.",
+      "url": null
+    },
+    {
+      "id": "F-003",
+      "type": null,
+      "severity": "medium",
+      "title": "Date signals disagree across visible text and metadata",
+      "evidence": "visible years=['2026', '2012', '1959', '1963'] schema=['2023-07-25T11:19:07-04:00', '2023-07-25T11:19:07-04:00', '2012-02-16T16:30:00Z'] on https://www.nasa.gov/history/glenn-orbits-the-earth/",
+      "url": null
+    },
+    {
+      "id": "F-004",
+      "type": null,
+      "severity": "medium",
+      "title": "Date signals disagree across visible text and metadata",
+      "evidence": "visible years=['2026', '2019', '2019', '2019'] schema=['2023-07-26T15:17:08-04:00', '2023-07-26T15:17:08-04:00', '2019-04-09T21:00:00Z'] on https://www.nasa.gov/centers-and-facilities/glenn/from-sky-gazing-to-astronaut-j",
+      "url": null
+    },
+    {
+      "id": "F-005",
+      "type": null,
+      "severity": "medium",
+      "title": "Date signals disagree across visible text and metadata",
+      "evidence": "visible years=['2026', '2019', '1946', '1946'] schema=['2024-06-28T12:48:33-04:00', '2024-06-28T12:48:33-04:00', '2019-08-29T17:00:00Z'] on https://www.nasa.gov/history/naca-test-pilot-competed-in-cleveland-national-air-",
+      "url": null
+    },
+    {
+      "id": "F-006",
+      "type": null,
+      "severity": "medium",
+      "title": "Date signals disagree across visible text and metadata",
+      "evidence": "visible years=['2026', '2008', '1947', '1949'] schema=['2024-03-13T14:28:37-04:00', '2024-03-13T14:28:37-04:00', '2008-04-10T22:46:00Z'] on https://www.nasa.gov/centers/glenn/about/history/crashtst.html",
+      "url": null
+    },
+    {
+      "id": "F-007",
+      "type": null,
+      "severity": "medium",
+      "title": "Date signals disagree across visible text and metadata",
+      "evidence": "visible years=['2026', '2012', '1964', '1957'] schema=['2025-05-22T15:52:35-04:00', '2025-05-22T15:52:35-04:00', '2012-12-12T19:56:00Z'] on https://www.nasa.gov/centers/glenn/about/history/centaur.html",
+      "url": null
+    },
+    {
+      "id": "F-008",
+      "type": null,
+      "severity": "medium",
+      "title": "Date signals disagree across visible text and metadata",
+      "evidence": "visible years=['2026', '2013', '1966', '1962'] schema=['2024-03-14T09:38:53-04:00', '2024-03-14T09:38:53-04:00', '2013-03-01T23:13:00Z'] on https://www.nasa.gov/centers/glenn/about/history/centaur_anniv.html",
+      "url": null
+    }
+  ],
+  "error": null
+}

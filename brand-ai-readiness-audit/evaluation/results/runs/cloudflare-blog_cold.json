@@ -1,0 +1,96 @@
+{
+  "site_id": "cloudflare-blog",
+  "site": "https://blog.cloudflare.com/",
+  "site_type": "blog",
+  "tags": [
+    "blog",
+    "medium"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T19:15:38Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 30839.80917930603,
+    "wall_ms": 30857.317209243774,
+    "crawl_ms": 26859.817028045654,
+    "render_ms": 330.49941062927246,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.5080699920654297,
+      "crawl-access-audit": 0.30517578125,
+      "render-extract-audit": 2466.240882873535,
+      "citation-extractability-audit": 21.03710174560547,
+      "entity-identity-audit": 19.969701766967773,
+      "freshness-audit": 16.605854034423828,
+      "ai-answerability-audit": 29.284238815307617,
+      "engagement-handoff-audit": 714.9338722229004,
+      "corroboration-consistency-audit": 710.5050086975098
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.37217140197753906,
+    "merge_ms": 0.10776519775390625
+  },
+  "counts": {
+    "http_requests": 47,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 15,
+    "critical": 0,
+    "high": 0,
+    "medium": 15,
+    "low": 0,
+    "templates": 11
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 2,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Access limitation: https://www.cloudflare.com/plans/enterprise/contact/: HTTP 403 (bot-challenge / WAF interstitial). These bodies were not used as brand/answerability evidence.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=29, protected_requests=1. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "E",
+    "secondary": [
+      "F"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": false,
+    "saas": true,
+    "confidence": "medium",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 2,
+      "F": 2
+    }
+  },
+  "run_id": "211d6ade-884f-4b8d-8e53-716abbafedeb",
+  "error": null
+}

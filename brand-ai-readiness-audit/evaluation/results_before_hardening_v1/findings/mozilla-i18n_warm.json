@@ -1,0 +1,461 @@
+{
+  "site": "www.mozilla.org",
+  "summary": {
+    "total_findings": 5,
+    "critical": 0,
+    "high": 3,
+    "medium": 2,
+    "low": 0
+  },
+  "findings": [
+    {
+      "id": "F-002",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "high",
+      "evidence": "Isolated '$700,000' vs later qualifier in ing annual revenue from $700,000 to over $12 million, ex\u2026 / later span on https://www.mozilla.org/en-US/about/leadership/",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-003",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "high",
+      "evidence": "Isolated '$12' vs later qualifier in e from $700,000 to over $12 million, expanding the \u2026 / later span on https://www.mozilla.org/en-US/about/leadership/",
+      "suggested_action": "Put the amount and its condition in one self-contained sentence."
+    },
+    {
+      "id": "F-006",
+      "title": "On-site typed facts disagree (prices)",
+      "severity": "high",
+      "evidence": "values=['1', '10', '12', '2', '26', '30'] urls=['https://www.mozilla.org/en-US/about/legal/terms/mozilla/', 'https://www.mozilla.org/en-US/about/legal/terms/subscription-services/', 'https://www.mozilla.org/en-US/about/legal/terms/services/', 'https://www.mozilla.org/en-US/about/legal/terms/mdn-plus/']",
+      "suggested_action": "Reconcile current prices and mark superseded pages (e.g. old press) as historical."
+    },
+    {
+      "id": "F-001",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "severity": "medium",
+      "evidence": "0 in-edges for https://www.mozilla.org/about/legal/acceptable-use/. Coverage 40/41. Isolation may be a coverage artifact.",
+      "suggested_action": "Add an inbound link from a higher-centrality page to this URL."
+    },
+    {
+      "id": "F-007",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://www.mozilla.org/en-US/about/legal/terms/subscription-services/: 'your information. Your Payment Payment. We offer the Services as automatically renewing subscription services. When you sign up for the paid version '; homepage lacks it.",
+      "suggested_action": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer."
+    }
+  ],
+  "findings_internal": [
+    {
+      "id": "F-002",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "high",
+      "evidence": "Isolated '$700,000' vs later qualifier in ing annual revenue from $700,000 to over $12 million, ex\u2026 / later span on https://www.mozilla.org/en-US/about/leadership/",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://www.mozilla.org/en-US/about/leadership/",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "84d338cf1abdbf33",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.mozilla.org/en-US/about/leadership/",
+        "https://www.mozilla.org/en-US/about/leadership/mzla-technologies-corp/"
+      ],
+      "affected_pages_count": 2,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-003",
+      "title": "Price amount is separated from its qualifying condition",
+      "severity": "high",
+      "evidence": "Isolated '$12' vs later qualifier in e from $700,000 to over $12 million, expanding the \u2026 / later span on https://www.mozilla.org/en-US/about/leadership/",
+      "suggested_action": {
+        "summary": "Put the amount and its condition in one self-contained sentence.",
+        "priority": "medium",
+        "what": "Self-contained price sentence",
+        "where": "https://www.mozilla.org/en-US/about/leadership/",
+        "how": "",
+        "why": "RAG windows can cite the amount without the condition.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "citation-extractability-audit",
+      "finding_type": "qualifier_split",
+      "finding_key": "4cf9e79d77f40cd1",
+      "category": "citation",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Price amount is separated from its qualifying condition",
+      "description": "Price amount is separated from its qualifying condition",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.mozilla.org/en-US/about/leadership/",
+        "https://www.mozilla.org/en-US/about/leadership/mzla-technologies-corp/"
+      ],
+      "affected_pages_count": 2,
+      "template_id": "t-4",
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "citation-extractability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-006",
+      "title": "On-site typed facts disagree (prices)",
+      "severity": "high",
+      "evidence": "values=['1', '10', '12', '2', '26', '30'] urls=['https://www.mozilla.org/en-US/about/legal/terms/mozilla/', 'https://www.mozilla.org/en-US/about/legal/terms/subscription-services/', 'https://www.mozilla.org/en-US/about/legal/terms/services/', 'https://www.mozilla.org/en-US/about/legal/terms/mdn-plus/']",
+      "suggested_action": {
+        "summary": "Reconcile current prices and mark superseded pages (e.g. old press) as historical.",
+        "priority": "medium",
+        "what": "",
+        "where": "",
+        "how": "",
+        "why": "Internal knowledge conflict; this is not an off-site corroboration finding.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "on_site_fact_conflict",
+      "finding_key": "dbceaf856a39d791",
+      "category": "freshness",
+      "confidence": "high",
+      "confidence_basis": "deterministic reproduced or RFC-grounded",
+      "evidence_tier": "OBS",
+      "root_cause": "On-site typed facts disagree (prices)",
+      "description": "On-site typed facts disagree (prices)",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.mozilla.org/en-US/about/legal/terms/mozilla/",
+        "https://www.mozilla.org/en-US/about/legal/terms/subscription-services/",
+        "https://www.mozilla.org/en-US/about/legal/terms/services/",
+        "https://www.mozilla.org/en-US/about/legal/terms/mdn-plus/",
+        "https://www.mozilla.org/en-US/about/legal/terms/firefox/"
+      ],
+      "affected_pages_count": 5,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-001",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "severity": "medium",
+      "evidence": "0 in-edges for https://www.mozilla.org/about/legal/acceptable-use/. Coverage 40/41. Isolation may be a coverage artifact.",
+      "suggested_action": {
+        "summary": "Add an inbound link from a higher-centrality page to this URL.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.mozilla.org/about/legal/acceptable-use/",
+        "how": "",
+        "why": "Orphans are hard for crawlers to discover.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "crawl-access-audit",
+      "finding_type": "orphan",
+      "finding_key": "88b35b6c975bafe3",
+      "category": "access",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "High-value URL has no inbound links in the crawled graph",
+      "description": "High-value URL has no inbound links in the crawled graph",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.mozilla.org/about/legal/acceptable-use/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "crawl-access-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-007",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://www.mozilla.org/en-US/about/legal/terms/subscription-services/: 'your information. Your Payment Payment. We offer the Services as automatically renewing subscription services. When you sign up for the paid version '; homepage lacks it.",
+      "suggested_action": {
+        "summary": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://www.mozilla.org/en-US/about/legal/terms/subscription-services/",
+        "how": "",
+        "why": "W: right fact, wrong page.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "wrong_page",
+      "finding_key": "1ff156ef9ace134b",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "K3 is answered on an inner page, not the likely landing page",
+      "description": "K3 is answered on an inner page, not the likely landing page",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.mozilla.org/",
+        "https://www.mozilla.org/en-US/about/legal/terms/subscription-services/"
+      ],
+      "affected_pages_count": 2,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K3"
+      },
+      "status": "found"
+    }
+  ],
+  "suppressed": [],
+  "coverage": {
+    "pages_fetched": 40,
+    "pages_rendered": 36,
+    "render_count": 36,
+    "estimated_pages": 41,
+    "templates": 4,
+    "k_categories_hit": [
+      "K3",
+      "K6"
+    ],
+    "stopped_reason": "early_stop",
+    "pages_verified_per_template": {
+      "t-1": 8,
+      "t-2": 10,
+      "t-3": 3,
+      "t-4": 19
+    },
+    "render_max": 10,
+    "http_requests": 48,
+    "robots_status": "ok",
+    "timeout_count": 0,
+    "redirect_hops_total": 4,
+    "ssrf_blocks": 0
+  },
+  "site_type": {
+    "cluster": "F",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": false,
+    "saas": true,
+    "confidence": "medium",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 2
+    }
+  },
+  "skill_status": {
+    "successful_skills": [
+      "site-type-classifier",
+      "crawl-access-audit",
+      "render-extract-audit",
+      "citation-extractability-audit",
+      "entity-identity-audit",
+      "freshness-audit",
+      "ai-answerability-audit",
+      "engagement-handoff-audit",
+      "corroboration-consistency-audit"
+    ],
+    "failed_skills": [],
+    "skipped_dependent_skills": [],
+    "completed_findings": [
+      "F-002",
+      "F-003",
+      "F-006",
+      "F-001",
+      "F-007"
+    ],
+    "incomplete_areas": [],
+    "failures": [],
+    "by_skill": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    }
+  },
+  "limitations": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "timing": {
+    "crawl_ms": 12491.688966751099,
+    "render_ms": 285.3102684020996,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.5128383636474609,
+      "crawl-access-audit": 0.35500526428222656,
+      "render-extract-audit": 1155.5418968200684,
+      "citation-extractability-audit": 496.4563846588135,
+      "entity-identity-audit": 11.735916137695312,
+      "freshness-audit": 20.669937133789062,
+      "ai-answerability-audit": 16.353845596313477,
+      "engagement-handoff-audit": 471.0509777069092,
+      "corroboration-consistency-audit": 456.89892768859863
+    },
+    "llm_ms": 0.0,
+    "llm_calls": 0,
+    "external_fetch_ms": 0.0,
+    "merge_ms": 0.03814697265625,
+    "report_ms": 0.1888275146484375,
+    "total_ms": 15121.514320373535,
+    "skipped": [],
+    "http_requests": 48,
+    "pages_fetched": 40,
+    "pages_rendered": 36,
+    "render_count": 36,
+    "external_requests": 0
+  },
+  "metrics": {
+    "answerability": {
+      "per_question": {
+        "K3": "wrong_page",
+        "K6": "answered",
+        "K13": "answered"
+      },
+      "CoreAnswerabilityRate": 0.8333333333333334,
+      "AnswerConcentration": 20.0,
+      "note": "Weights uncalibrated; per-question outcomes are primary. Composite citability is not a finding."
+    },
+    "skills": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    },
+    "skill_status": {
+      "successful_skills": [
+        "site-type-classifier",
+        "crawl-access-audit",
+        "render-extract-audit",
+        "citation-extractability-audit",
+        "entity-identity-audit",
+        "freshness-audit",
+        "ai-answerability-audit",
+        "engagement-handoff-audit",
+        "corroboration-consistency-audit"
+      ],
+      "failed_skills": [],
+      "skipped_dependent_skills": [],
+      "completed_findings": [
+        "F-002",
+        "F-003",
+        "F-006",
+        "F-001",
+        "F-007"
+      ],
+      "incomplete_areas": [],
+      "failures": [],
+      "by_skill": {
+        "site-type-classifier": "ok",
+        "crawl-access-audit": "ok",
+        "render-extract-audit": "ok",
+        "citation-extractability-audit": "ok",
+        "entity-identity-audit": "ok",
+        "freshness-audit": "ok",
+        "ai-answerability-audit": "ok",
+        "engagement-handoff-audit": "ok",
+        "corroboration-consistency-audit": "ok"
+      }
+    },
+    "audit_status": "ok",
+    "protect_list": [
+      "K3",
+      "admit",
+      "citation-extractability-audit-det",
+      "coverage",
+      "dual-fetch-facts",
+      "report",
+      "site-type-classifier"
+    ]
+  }
+}

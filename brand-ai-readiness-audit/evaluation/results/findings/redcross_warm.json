@@ -1,0 +1,240 @@
+{
+  "site": "www.redcross.org",
+  "summary": {
+    "total_findings": 1,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 1
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "title": "Insufficient evidence: no usable public HTML for closed-book questions",
+      "severity": "low",
+      "evidence": "fetched_pages=0; access_kinds=['forbidden_content']; pages=1. Challenge/WAF/HTTP-error bodies are audit limitations, not missing-brand-content.",
+      "suggested_action": "Treat this origin as inaccessible for this audit; do not infer content gaps from block pages."
+    }
+  ],
+  "findings_internal": [
+    {
+      "id": "F-001",
+      "title": "Insufficient evidence: no usable public HTML for closed-book questions",
+      "severity": "low",
+      "evidence": "fetched_pages=0; access_kinds=['forbidden_content']; pages=1. Challenge/WAF/HTTP-error bodies are audit limitations, not missing-brand-content.",
+      "suggested_action": {
+        "summary": "Treat this origin as inaccessible for this audit; do not infer content gaps from block pages.",
+        "priority": "low",
+        "what": "",
+        "where": "",
+        "how": "",
+        "why": "A blocked response is not evidence that the site lacks answers.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "coverage_statement",
+      "finding_key": "32c5dff2c92311cd",
+      "category": "answerability",
+      "confidence": "high",
+      "confidence_basis": "",
+      "evidence_tier": "OBS",
+      "root_cause": "Insufficient evidence: no usable public HTML for closed-book questions",
+      "description": "Insufficient evidence: no usable public HTML for closed-book questions",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://www.redcross.org/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    }
+  ],
+  "suppressed": [],
+  "coverage": {
+    "pages_fetched": 1,
+    "pages_content_usable": 0,
+    "pages_rendered": 0,
+    "render_count": 0,
+    "estimated_pages": 1,
+    "templates": 1,
+    "k_categories_hit": [],
+    "stopped_reason": "budget",
+    "pages_verified_per_template": {
+      "t-1": 1
+    },
+    "render_max": 10,
+    "renders_requested": 0,
+    "renders_performed": 0,
+    "renders_skipped_budget": 0,
+    "protected_render_requests": 0,
+    "protected_render_exceptions": 0,
+    "access_kinds": {
+      "forbidden_content": 1
+    },
+    "http_requests": 3,
+    "robots_status": "fail_open",
+    "timeout_count": 0,
+    "redirect_hops_total": 0,
+    "ssrf_blocks": 0
+  },
+  "site_type": {
+    "cluster": "unknown",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "low",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "skill_status": {
+    "successful_skills": [
+      "site-type-classifier",
+      "crawl-access-audit",
+      "render-extract-audit",
+      "citation-extractability-audit",
+      "entity-identity-audit",
+      "freshness-audit",
+      "ai-answerability-audit",
+      "engagement-handoff-audit",
+      "corroboration-consistency-audit"
+    ],
+    "failed_skills": [],
+    "skipped_dependent_skills": [],
+    "completed_findings": [
+      "F-001"
+    ],
+    "incomplete_areas": [],
+    "failures": [],
+    "by_skill": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "partial",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    }
+  },
+  "limitations": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Access limitation: https://www.redcross.org/: HTTP 403 (HTTP 403 forbidden (body not used as public brand evidence)). These bodies were not used as brand/answerability evidence.",
+    "Headless render unavailable or skipped; dual-fetch used raw HTML as rendered unless tests injected rendered_html."
+  ],
+  "timing": {
+    "crawl_ms": 495.9120750427246,
+    "render_ms": 0.0,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.05507469177246094,
+      "crawl-access-audit": 0.015974044799804688,
+      "render-extract-audit": 0.0069141387939453125,
+      "citation-extractability-audit": 0.009775161743164062,
+      "entity-identity-audit": 0.012159347534179688,
+      "freshness-audit": 0.009059906005859375,
+      "ai-answerability-audit": 0.07104873657226562,
+      "engagement-handoff-audit": 0.0059604644775390625,
+      "corroboration-consistency-audit": 0.010013580322265625
+    },
+    "llm_ms": 0.0,
+    "llm_calls": 0,
+    "external_fetch_ms": 0.0,
+    "merge_ms": 0.030040740966796875,
+    "report_ms": 0.25391578674316406,
+    "total_ms": 496.27113342285156,
+    "skipped": [],
+    "http_requests": 3,
+    "pages_fetched": 1,
+    "pages_rendered": 0,
+    "render_count": 0,
+    "external_requests": 0
+  },
+  "metrics": {
+    "answerability": {
+      "per_question": {
+        "K3": "insufficient",
+        "K6": "insufficient",
+        "K13": "insufficient"
+      },
+      "CoreAnswerabilityRate": null,
+      "AnswerConcentration": 0.0,
+      "note": "Abstain: insufficient usable corpus."
+    },
+    "skills": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "partial",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    },
+    "skill_status": {
+      "successful_skills": [
+        "site-type-classifier",
+        "crawl-access-audit",
+        "render-extract-audit",
+        "citation-extractability-audit",
+        "entity-identity-audit",
+        "freshness-audit",
+        "ai-answerability-audit",
+        "engagement-handoff-audit",
+        "corroboration-consistency-audit"
+      ],
+      "failed_skills": [],
+      "skipped_dependent_skills": [],
+      "completed_findings": [
+        "F-001"
+      ],
+      "incomplete_areas": [],
+      "failures": [],
+      "by_skill": {
+        "site-type-classifier": "ok",
+        "crawl-access-audit": "ok",
+        "render-extract-audit": "ok",
+        "citation-extractability-audit": "ok",
+        "entity-identity-audit": "partial",
+        "freshness-audit": "ok",
+        "ai-answerability-audit": "ok",
+        "engagement-handoff-audit": "ok",
+        "corroboration-consistency-audit": "ok"
+      }
+    },
+    "audit_status": "ok",
+    "protect_list": [
+      "K3",
+      "admit",
+      "citation-extractability-audit-det",
+      "coverage",
+      "dual-fetch-facts",
+      "report",
+      "site-type-classifier"
+    ]
+  }
+}

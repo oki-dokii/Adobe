@@ -1,0 +1,96 @@
+{
+  "site_id": "stripe-saas",
+  "site": "https://stripe.com/",
+  "site_type": "saas",
+  "tags": [
+    "saas",
+    "medium",
+    "js-possible"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T19:09:32Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 77372.46489524841,
+    "wall_ms": 77381.09803199768,
+    "crawl_ms": 54033.13493728638,
+    "render_ms": 785.9232425689697,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.3108978271484375,
+      "crawl-access-audit": 0.2999305725097656,
+      "render-extract-audit": 8320.913791656494,
+      "citation-extractability-audit": 2381.525993347168,
+      "entity-identity-audit": 4466.516017913818,
+      "freshness-audit": 133.55398178100586,
+      "ai-answerability-audit": 49.096107482910156,
+      "engagement-handoff-audit": 2186.163902282715,
+      "corroboration-consistency-audit": 5798.426866531372
+    },
+    "external_fetch_ms": 2126.4429092407227,
+    "report_ms": 0.8833408355712891,
+    "merge_ms": 0.8592605590820312
+  },
+  "counts": {
+    "http_requests": 72,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 7,
+    "findings": 15,
+    "critical": 15,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "templates": 7
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 3,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=30, protected_requests=40. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "F",
+    "secondary": [
+      "B"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": true,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 2,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 5
+    }
+  },
+  "run_id": "2c0c8fdf-71f6-443e-85d6-57928454f00c",
+  "error": null
+}

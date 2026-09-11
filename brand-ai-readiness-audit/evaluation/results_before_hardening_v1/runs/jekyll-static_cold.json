@@ -1,0 +1,95 @@
+{
+  "site_id": "jekyll-static",
+  "site": "https://jekyllrb.com/",
+  "site_type": "static",
+  "tags": [
+    "static",
+    "documentation",
+    "small"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T13:08:02Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 21594.256162643433,
+    "wall_ms": 21606.820106506348,
+    "crawl_ms": 19534.57808494568,
+    "render_ms": 34.51681137084961,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.4189014434814453,
+      "crawl-access-audit": 0.3979206085205078,
+      "render-extract-audit": 1076.9829750061035,
+      "citation-extractability-audit": 0.011920928955078125,
+      "entity-identity-audit": 10.045051574707031,
+      "freshness-audit": 22.937774658203125,
+      "ai-answerability-audit": 25.074005126953125,
+      "engagement-handoff-audit": 468.2888984680176,
+      "corroboration-consistency-audit": 455.24024963378906
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.15687942504882812,
+    "merge_ms": 0.027179718017578125
+  },
+  "counts": {
+    "http_requests": 42,
+    "pages_crawled": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 4,
+    "critical": 0,
+    "high": 2,
+    "medium": 2,
+    "low": 0,
+    "templates": 21
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "D",
+    "secondary": [
+      "B"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 0,
+      "B": 2,
+      "C": 0,
+      "D": 3,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "d1228969-4723-4ab4-a8ad-b771fa3a0078",
+  "error": null
+}

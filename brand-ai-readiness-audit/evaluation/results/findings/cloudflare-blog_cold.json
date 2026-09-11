@@ -1,0 +1,1017 @@
+{
+  "site": "blog.cloudflare.com",
+  "summary": {
+    "total_findings": 15,
+    "critical": 0,
+    "high": 0,
+    "medium": 15,
+    "low": 0
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "severity": "medium",
+      "evidence": "0 in-edges for https://cloudflare.com/contact/. Coverage 40/200. Isolation may be a coverage artifact.",
+      "suggested_action": "Add an inbound link from a higher-centrality page to this URL."
+    },
+    {
+      "id": "F-031",
+      "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "severity": "medium",
+      "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 40, 'pages_content_usable': 39, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 11, 'k_categories_hit': ['K3'], 'stopped_reason': 'early_stop', 'pages_verified_per_template': {'t-1': 28, 't-2': 1, 't-3': 1, 't-4': 1, 't-5': 1, 't-6': 1, 't-7': 1, 't-8': 1, 't-9': 3, 't-10': 1, 't-11': 1}, 'render_max': 10, 'renders_requested': 39, 'renders_performed': 10, 'renders_skipped_budget': 29, 'protected_render_requests': 1, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 39, 'challenge': 1}, 'http_requests': 47, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 2, 'ssrf_blocks': 0}. K6",
+      "suggested_action": "Add a visible, extractable sentence that answers this question on the intent-matched page."
+    },
+    {
+      "id": "F-030",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://blog.cloudflare.com/aligning-our-prices-and-packaging-with-the-problems-we-help-customers-solve/: ' prices and packaging with the problems we help customers solve | Cloudflare Blog Skip to content Produc'; homepage lacks it.",
+      "suggested_action": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer."
+    },
+    {
+      "id": "F-002",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-003",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/tag/product-news/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-004",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/de-de/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-005",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/de-de/tag/product-news/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-006",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/es-es/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-007",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/es-es/tag/product-news/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-008",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/es-la/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-009",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/es-la/tag/product-news/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-010",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/fr-fr/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-011",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/fr-fr/tag/product-news/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-012",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/it-it/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    },
+    {
+      "id": "F-013",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/it-it/tag/product-news/",
+      "suggested_action": "Align dateModified/visible dates or drop fake update stamps."
+    }
+  ],
+  "findings_internal": [
+    {
+      "id": "F-001",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "severity": "medium",
+      "evidence": "0 in-edges for https://cloudflare.com/contact/. Coverage 40/200. Isolation may be a coverage artifact.",
+      "suggested_action": {
+        "summary": "Add an inbound link from a higher-centrality page to this URL.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://cloudflare.com/contact/",
+        "how": "",
+        "why": "Orphans are hard for crawlers to discover.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "crawl-access-audit",
+      "finding_type": "orphan",
+      "finding_key": "a0b855511204de22",
+      "category": "access",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "High-value URL has no inbound links in the crawled graph",
+      "description": "High-value URL has no inbound links in the crawled graph",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://cloudflare.com/contact/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "crawl-access-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-031",
+      "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "severity": "medium",
+      "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 40, 'pages_content_usable': 39, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 11, 'k_categories_hit': ['K3'], 'stopped_reason': 'early_stop', 'pages_verified_per_template': {'t-1': 28, 't-2': 1, 't-3': 1, 't-4': 1, 't-5': 1, 't-6': 1, 't-7': 1, 't-8': 1, 't-9': 3, 't-10': 1, 't-11': 1}, 'render_max': 10, 'renders_requested': 39, 'renders_performed': 10, 'renders_skipped_budget': 29, 'protected_render_requests': 1, 'protected_render_exceptions': 0, 'access_kinds': {'ok': 39, 'challenge': 1}, 'http_requests': 47, 'robots_status': 'ok', 'timeout_count': 0, 'redirect_hops_total': 2, 'ssrf_blocks': 0}. K6",
+      "suggested_action": {
+        "summary": "Add a visible, extractable sentence that answers this question on the intent-matched page.",
+        "priority": "medium",
+        "what": "What does it cost / how is it priced?",
+        "where": "",
+        "how": "",
+        "why": "Completeness gap, not a quotation-window issue.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "unanswerable",
+      "finding_key": "db18a41801716d38",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "description": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K6"
+      },
+      "status": "found"
+    },
+    {
+      "id": "F-030",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "severity": "medium",
+      "evidence": "Span on https://blog.cloudflare.com/aligning-our-prices-and-packaging-with-the-problems-we-help-customers-solve/: ' prices and packaging with the problems we help customers solve | Cloudflare Blog Skip to content Produc'; homepage lacks it.",
+      "suggested_action": {
+        "summary": "Put the answer on the query-landing page or make that inner URL the obvious canonical answer.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/aligning-our-prices-and-packaging-with-the-problems-we-help-customers-solve/",
+        "how": "",
+        "why": "W: right fact, wrong page.",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "ai-answerability-audit",
+      "finding_type": "wrong_page",
+      "finding_key": "19c91d8139f1d139",
+      "category": "answerability",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "K3 is answered on an inner page, not the likely landing page",
+      "description": "K3 is answered on an inner page, not the likely landing page",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/",
+        "https://blog.cloudflare.com/aligning-our-prices-and-packaging-with-the-problems-we-help-customers-solve/"
+      ],
+      "affected_pages_count": 2,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "ai-answerability-audit"
+      ],
+      "metrics": {
+        "question_id": "K3"
+      },
+      "status": "found"
+    },
+    {
+      "id": "F-002",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "5d856a011f6bb71a",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-003",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/tag/product-news/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/tag/product-news/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "8011012bb7e371f7",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/tag/product-news/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-004",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/de-de/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/de-de/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "4cd6dc2309689975",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/de-de/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-005",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/de-de/tag/product-news/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/de-de/tag/product-news/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "b4dcd92827345f0b",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/de-de/tag/product-news/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-006",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/es-es/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/es-es/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "f9391894d506250b",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/es-es/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-007",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/es-es/tag/product-news/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/es-es/tag/product-news/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "9dbc2cb69a7dc73f",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/es-es/tag/product-news/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-008",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/es-la/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/es-la/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "e0e211683561c749",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/es-la/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-009",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/es-la/tag/product-news/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/es-la/tag/product-news/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "9447515f059b2946",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/es-la/tag/product-news/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-010",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/fr-fr/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/fr-fr/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "a827df1353bb73df",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/fr-fr/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-011",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/fr-fr/tag/product-news/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/fr-fr/tag/product-news/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "22bf92ad488a6a0e",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/fr-fr/tag/product-news/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-012",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/it-it/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/it-it/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "730f1c33a10abbaa",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/it-it/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    },
+    {
+      "id": "F-013",
+      "title": "Date signals disagree across visible text and metadata",
+      "severity": "medium",
+      "evidence": "visible years=['2026', '2026', '2026', '2026'] schema=['CF295E1604697F9CAD18B5A232E871F6'] on https://blog.cloudflare.com/it-it/tag/product-news/",
+      "suggested_action": {
+        "summary": "Align dateModified/visible dates or drop fake update stamps.",
+        "priority": "medium",
+        "what": "",
+        "where": "https://blog.cloudflare.com/it-it/tag/product-news/",
+        "how": "",
+        "why": "Staleness is about fact change, not age-only (U7).",
+        "cost_tier": "content",
+        "proactive": false
+      },
+      "skill_id": "freshness-audit",
+      "finding_type": "date_divergence",
+      "finding_key": "9d745894d6266f28",
+      "category": "freshness",
+      "confidence": "medium",
+      "confidence_basis": "deterministic single page or hybrid",
+      "evidence_tier": "OBS",
+      "root_cause": "Date signals disagree across visible text and metadata",
+      "description": "Date signals disagree across visible text and metadata",
+      "evidence_items": [],
+      "affected_urls": [
+        "https://blog.cloudflare.com/it-it/tag/product-news/"
+      ],
+      "affected_pages_count": 1,
+      "template_id": null,
+      "parent_id": null,
+      "causal_role": "root",
+      "admission": {
+        "emitted": "emitted",
+        "rule": ""
+      },
+      "suppressed": false,
+      "suppress_reason": "",
+      "materiality": "pass",
+      "contributing_skills": [
+        "freshness-audit"
+      ],
+      "metrics": {},
+      "status": "found"
+    }
+  ],
+  "suppressed": [],
+  "coverage": {
+    "pages_fetched": 40,
+    "pages_content_usable": 39,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "estimated_pages": 200,
+    "templates": 11,
+    "k_categories_hit": [
+      "K3"
+    ],
+    "stopped_reason": "early_stop",
+    "pages_verified_per_template": {
+      "t-1": 28,
+      "t-2": 1,
+      "t-3": 1,
+      "t-4": 1,
+      "t-5": 1,
+      "t-6": 1,
+      "t-7": 1,
+      "t-8": 1,
+      "t-9": 3,
+      "t-10": 1,
+      "t-11": 1
+    },
+    "render_max": 10,
+    "renders_requested": 39,
+    "renders_performed": 10,
+    "renders_skipped_budget": 29,
+    "protected_render_requests": 1,
+    "protected_render_exceptions": 0,
+    "access_kinds": {
+      "ok": 39,
+      "challenge": 1
+    },
+    "http_requests": 47,
+    "robots_status": "ok",
+    "timeout_count": 0,
+    "redirect_hops_total": 2,
+    "ssrf_blocks": 0
+  },
+  "site_type": {
+    "cluster": "E",
+    "secondary": [
+      "F"
+    ],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": true,
+    "ecommerce": false,
+    "saas": true,
+    "confidence": "medium",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 2,
+      "F": 2
+    }
+  },
+  "skill_status": {
+    "successful_skills": [
+      "site-type-classifier",
+      "crawl-access-audit",
+      "render-extract-audit",
+      "citation-extractability-audit",
+      "entity-identity-audit",
+      "freshness-audit",
+      "ai-answerability-audit",
+      "engagement-handoff-audit",
+      "corroboration-consistency-audit"
+    ],
+    "failed_skills": [],
+    "skipped_dependent_skills": [],
+    "completed_findings": [
+      "F-001",
+      "F-031",
+      "F-030",
+      "F-002",
+      "F-003",
+      "F-004",
+      "F-005",
+      "F-006",
+      "F-007",
+      "F-008",
+      "F-009",
+      "F-010",
+      "F-011",
+      "F-012",
+      "F-013"
+    ],
+    "incomplete_areas": [],
+    "failures": [],
+    "by_skill": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    }
+  },
+  "limitations": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Access limitation: https://www.cloudflare.com/plans/enterprise/contact/: HTTP 403 (bot-challenge / WAF interstitial). These bodies were not used as brand/answerability evidence.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes.",
+    "Render budget exhausted: render_max=10, performed=10, skipped_budget=29, protected_requests=1. Protected categories affect fetch/render priority only; the cap is hard."
+  ],
+  "timing": {
+    "crawl_ms": 26859.817028045654,
+    "render_ms": 330.49941062927246,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.5080699920654297,
+      "crawl-access-audit": 0.30517578125,
+      "render-extract-audit": 2466.240882873535,
+      "citation-extractability-audit": 21.03710174560547,
+      "entity-identity-audit": 19.969701766967773,
+      "freshness-audit": 16.605854034423828,
+      "ai-answerability-audit": 29.284238815307617,
+      "engagement-handoff-audit": 714.9338722229004,
+      "corroboration-consistency-audit": 710.5050086975098
+    },
+    "llm_ms": 0.0,
+    "llm_calls": 0,
+    "external_fetch_ms": 0.0,
+    "merge_ms": 0.10776519775390625,
+    "report_ms": 0.37217140197753906,
+    "total_ms": 30839.80917930603,
+    "skipped": [],
+    "http_requests": 47,
+    "pages_fetched": 40,
+    "pages_rendered": 10,
+    "render_count": 10,
+    "external_requests": 0
+  },
+  "metrics": {
+    "answerability": {
+      "per_question": {
+        "K3": "wrong_page",
+        "K6": "unanswerable",
+        "K13": "answered"
+      },
+      "CoreAnswerabilityRate": 0.5,
+      "AnswerConcentration": 3.5,
+      "note": "Weights uncalibrated; per-question outcomes are primary. Composite citability is not a finding."
+    },
+    "skills": {
+      "site-type-classifier": "ok",
+      "crawl-access-audit": "ok",
+      "render-extract-audit": "ok",
+      "citation-extractability-audit": "ok",
+      "entity-identity-audit": "ok",
+      "freshness-audit": "ok",
+      "ai-answerability-audit": "ok",
+      "engagement-handoff-audit": "ok",
+      "corroboration-consistency-audit": "ok"
+    },
+    "skill_status": {
+      "successful_skills": [
+        "site-type-classifier",
+        "crawl-access-audit",
+        "render-extract-audit",
+        "citation-extractability-audit",
+        "entity-identity-audit",
+        "freshness-audit",
+        "ai-answerability-audit",
+        "engagement-handoff-audit",
+        "corroboration-consistency-audit"
+      ],
+      "failed_skills": [],
+      "skipped_dependent_skills": [],
+      "completed_findings": [
+        "F-001",
+        "F-031",
+        "F-030",
+        "F-002",
+        "F-003",
+        "F-004",
+        "F-005",
+        "F-006",
+        "F-007",
+        "F-008",
+        "F-009",
+        "F-010",
+        "F-011",
+        "F-012",
+        "F-013"
+      ],
+      "incomplete_areas": [],
+      "failures": [],
+      "by_skill": {
+        "site-type-classifier": "ok",
+        "crawl-access-audit": "ok",
+        "render-extract-audit": "ok",
+        "citation-extractability-audit": "ok",
+        "entity-identity-audit": "ok",
+        "freshness-audit": "ok",
+        "ai-answerability-audit": "ok",
+        "engagement-handoff-audit": "ok",
+        "corroboration-consistency-audit": "ok"
+      }
+    },
+    "audit_status": "ok",
+    "protect_list": [
+      "K3",
+      "admit",
+      "citation-extractability-audit-det",
+      "coverage",
+      "dual-fetch-facts",
+      "report",
+      "site-type-classifier"
+    ]
+  }
+}

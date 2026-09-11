@@ -1,0 +1,94 @@
+{
+  "site_id": "etsy",
+  "site": "https://www.etsy.com/",
+  "site_type": "marketplace",
+  "tags": [
+    "marketplace",
+    "ecommerce",
+    "large",
+    "stress"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T13:27:51Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 1043.586015701294,
+    "wall_ms": 1049.9169826507568,
+    "crawl_ms": 1032.8211784362793,
+    "render_ms": 0.26607513427734375,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.03981590270996094,
+      "crawl-access-audit": 10.264873504638672,
+      "render-extract-audit": 0.010013580322265625,
+      "citation-extractability-audit": 0.0059604644775390625,
+      "entity-identity-audit": 0.006198883056640625,
+      "freshness-audit": 0.0069141387939453125,
+      "ai-answerability-audit": 0.10180473327636719,
+      "engagement-handoff-audit": 0.003814697265625,
+      "corroboration-consistency-audit": 0.009298324584960938
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.29277801513671875,
+    "merge_ms": 0.0591278076171875
+  },
+  "counts": {
+    "http_requests": 3,
+    "pages_crawled": 1,
+    "pages_rendered": 1,
+    "render_count": 1,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 3,
+    "critical": 0,
+    "high": 1,
+    "medium": 2,
+    "low": 0,
+    "templates": 1
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 0,
+  "ssrf_blocks": 0,
+  "stopped_reason": "budget",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "partial",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "unknown",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "low",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "fed05523-a313-45de-b9b9-67c8f64bc8f7",
+  "error": null
+}

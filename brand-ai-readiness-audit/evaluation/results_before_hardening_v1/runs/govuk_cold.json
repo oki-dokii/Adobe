@@ -1,0 +1,96 @@
+{
+  "site_id": "govuk",
+  "site": "https://www.gov.uk/",
+  "site_type": "government",
+  "tags": [
+    "government",
+    "large",
+    "many-redirects",
+    "stress"
+  ],
+  "phase": "cold",
+  "timestamp": "2026-09-06T13:24:29Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 69728.74307632446,
+    "wall_ms": 69737.32781410217,
+    "crawl_ms": 67035.05611419678,
+    "render_ms": 532.130241394043,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 1.2998580932617188,
+      "crawl-access-audit": 0.3631114959716797,
+      "render-extract-audit": 1321.0370540618896,
+      "citation-extractability-audit": 375.1490116119385,
+      "entity-identity-audit": 12.987136840820312,
+      "freshness-audit": 13.741731643676758,
+      "ai-answerability-audit": 16.33310317993164,
+      "engagement-handoff-audit": 482.1932315826416,
+      "corroboration-consistency-audit": 469.897985458374
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 2.1178722381591797,
+    "merge_ms": 0.07915496826171875
+  },
+  "counts": {
+    "http_requests": 57,
+    "pages_crawled": 40,
+    "pages_rendered": 39,
+    "render_count": 39,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 15,
+    "critical": 0,
+    "high": 2,
+    "medium": 13,
+    "low": 0,
+    "templates": 8
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 5,
+  "ssrf_blocks": 0,
+  "stopped_reason": "early_stop",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Dual-fetch used the production renderer (noscript/template expansion and/or injected DOM). No claim is made that wall-clock stays under 5 minutes."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "ok",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "A",
+    "secondary": [
+      "C"
+    ],
+    "ymyl": true,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "high",
+    "votes": {
+      "A": 3,
+      "B": 0,
+      "C": 3,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "ec0e7bb2-d9fc-4b14-ad5e-b5cb561d5866",
+  "error": null
+}

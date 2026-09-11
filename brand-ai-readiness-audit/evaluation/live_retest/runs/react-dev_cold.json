@@ -1,0 +1,34 @@
+{
+  "site_id": "react-dev",
+  "url": "https://react.dev/",
+  "labeled_type": "developer_platform",
+  "success": true,
+  "wall_ms": 25690.996885299683,
+  "timing_total_ms": 25684.962034225464,
+  "pages_fetched": 40,
+  "pages_rendered": 10,
+  "render_max": 10,
+  "access_kinds": {
+    "ok": 40
+  },
+  "stopped_reason": "early_stop",
+  "cluster": "D",
+  "finding_count": 1,
+  "by_severity": {
+    "medium": 1
+  },
+  "by_type": {
+    "F-001": 1
+  },
+  "finding_titles": [
+    {
+      "id": "F-001",
+      "type": null,
+      "severity": "medium",
+      "title": "K3 is answered on an inner page, not the likely landing page",
+      "evidence": "Span on https://react.dev/blog/2025/04/23/react-labs-view-transitions-activity-and-more: 'till exploring, and we\u2019ll share more as we make progress. For more information on what Activity '; homepage lacks it.",
+      "url": null
+    }
+  ],
+  "error": null
+}

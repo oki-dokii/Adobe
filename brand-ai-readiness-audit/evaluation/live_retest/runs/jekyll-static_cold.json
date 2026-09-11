@@ -1,0 +1,62 @@
+{
+  "site_id": "jekyll-static",
+  "url": "https://jekyllrb.com/",
+  "labeled_type": "static",
+  "success": true,
+  "wall_ms": 23661.510944366455,
+  "timing_total_ms": 23653.95212173462,
+  "pages_fetched": 40,
+  "pages_rendered": 10,
+  "render_max": 10,
+  "access_kinds": {
+    "ok": 40
+  },
+  "stopped_reason": "early_stop",
+  "cluster": "D",
+  "finding_count": 4,
+  "by_severity": {
+    "high": 1,
+    "medium": 3
+  },
+  "by_type": {
+    "F-003": 1,
+    "F-001": 1,
+    "F-002": 1,
+    "F-004": 1
+  },
+  "finding_titles": [
+    {
+      "id": "F-003",
+      "type": null,
+      "severity": "high",
+      "title": "Closed-book: site does not answer K3 (What does this organization offer or do?)",
+      "evidence": "No supporting span in crawled corpus for K3. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 19, 'k_categories_hit': ['K3'], 'stop",
+      "url": null
+    },
+    {
+      "id": "F-001",
+      "type": null,
+      "severity": "medium",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "evidence": "0 in-edges for https://jekyllrb.com/docs/code_of_conduct/. Coverage 40/200. Isolation may be a coverage artifact.",
+      "url": null
+    },
+    {
+      "id": "F-002",
+      "type": null,
+      "severity": "medium",
+      "title": "High-value URL has no inbound links in the crawled graph",
+      "evidence": "0 in-edges for https://jekyllrb.com/docs/history/. Coverage 40/200. Isolation may be a coverage artifact.",
+      "url": null
+    },
+    {
+      "id": "F-004",
+      "type": null,
+      "severity": "medium",
+      "title": "Closed-book: site does not answer K6 (What does it cost / how is it priced?)",
+      "evidence": "No supporting span in crawled corpus for K6. Coverage={'pages_fetched': 40, 'pages_content_usable': 40, 'pages_rendered': 10, 'render_count': 10, 'estimated_pages': 200, 'templates': 19, 'k_categories_hit': ['K3'], 'stop",
+      "url": null
+    }
+  ],
+  "error": null
+}

@@ -1,0 +1,93 @@
+{
+  "site_id": "philz",
+  "site": "https://www.philzcoffee.com/",
+  "site_type": "local_business",
+  "tags": [
+    "local-business",
+    "small"
+  ],
+  "phase": "warm",
+  "timestamp": "2026-09-06T19:20:23Z",
+  "success": true,
+  "audit_status": "ok",
+  "failure_class": "OK",
+  "failure_detail": "",
+  "runtime": {
+    "total_ms": 3699.413776397705,
+    "wall_ms": 3709.132671356201,
+    "crawl_ms": 3699.1169452667236,
+    "render_ms": 0.0,
+    "extraction_ms": 0.0,
+    "skill_ms": {
+      "site-type-classifier": 0.031948089599609375,
+      "crawl-access-audit": 0.102996826171875,
+      "render-extract-audit": 0.003814697265625,
+      "citation-extractability-audit": 0.0050067901611328125,
+      "entity-identity-audit": 0.00476837158203125,
+      "freshness-audit": 0.00476837158203125,
+      "ai-answerability-audit": 0.03814697265625,
+      "engagement-handoff-audit": 0.0057220458984375,
+      "corroboration-consistency-audit": 0.007867813110351562
+    },
+    "external_fetch_ms": 0.0,
+    "report_ms": 0.1461505889892578,
+    "merge_ms": 0.019311904907226562
+  },
+  "counts": {
+    "http_requests": 6,
+    "pages_crawled": 1,
+    "pages_rendered": 0,
+    "render_count": 0,
+    "llm_calls": 0,
+    "external_fetches": 0,
+    "findings": 1,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 1,
+    "templates": 1
+  },
+  "robots_status": "ok",
+  "timeouts": 0,
+  "redirects": 1,
+  "ssrf_blocks": 0,
+  "stopped_reason": "budget",
+  "failed_skills": [],
+  "skipped_skills": [],
+  "warnings": [
+    "Y-01: referrer personalization, geo, and returning-visitor behavior are untestable in a stateless crawl.",
+    "Access limitation: https://philzcoffee.com/: HTTP 200 (captcha / bot verification). These bodies were not used as brand/answerability evidence.",
+    "Headless render unavailable or skipped; dual-fetch used raw HTML as rendered unless tests injected rendered_html."
+  ],
+  "skill_by_status": {
+    "site-type-classifier": "ok",
+    "crawl-access-audit": "ok",
+    "render-extract-audit": "ok",
+    "citation-extractability-audit": "ok",
+    "entity-identity-audit": "partial",
+    "freshness-audit": "ok",
+    "ai-answerability-audit": "ok",
+    "engagement-handoff-audit": "ok",
+    "corroboration-consistency-audit": "ok"
+  },
+  "classified_site_type": {
+    "cluster": "unknown",
+    "secondary": [],
+    "ymyl": false,
+    "multilingual": false,
+    "product_like": false,
+    "ecommerce": false,
+    "saas": false,
+    "confidence": "low",
+    "votes": {
+      "A": 0,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "E": 0,
+      "F": 0
+    }
+  },
+  "run_id": "f721e1aa-2d8a-40c5-a8e5-5755483a0788",
+  "error": null
+}
