@@ -138,49 +138,7 @@ export function TreeNode({
       {/* ================= 1. ROOT ORIGIN NODE ================= */}
       {variant === 'root' && (
         <div className="relative grid place-items-center" style={{ width: size + 16, height: size + 16 }}>
-          {/* Subtle Ambient Halo */}
-          <span
-            className="absolute inset-2 rounded-full pointer-events-none transition-opacity duration-300"
-            style={{
-              boxShadow: `0 0 24px ${hex}35, inset 0 0 12px ${hex}20`,
-            }}
-          />
-
-          {/* Rotating Technical Reticle Collar (Processing State) */}
-          {rootState === 'processing' && !reduced && (
-            <motion.svg
-              width={size + 16}
-              height={size + 16}
-              viewBox={`0 0 ${size + 16} ${size + 16}`}
-              className="absolute pointer-events-none"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 24, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
-            >
-              <circle
-                cx={(size + 16) / 2}
-                cy={(size + 16) / 2}
-                r={(size + 10) / 2}
-                fill="none"
-                stroke={color}
-                strokeWidth="0.8"
-                strokeDasharray="2 6"
-                opacity={0.6}
-              />
-            </motion.svg>
-          )}
-
-          {/* Expanding Energy Wave (Receiving / Processing) */}
-          {(rootState === 'receiving' || rootState === 'processing') && !reduced && (
-            <motion.span
-              aria-hidden
-              className="absolute rounded-full pointer-events-none"
-              style={{ border: `1.2px solid ${color}` }}
-              animate={{ width: [size, size + 42], height: [size, size + 42], opacity: [0.65, 0] }}
-              transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, ease: 'easeOut' }}
-            />
-          )}
-
-          {/* Root Origin Master SVG */}
+          {/* Clean Root Badge */}
           <svg
             width={size + 16}
             height={size + 16}
@@ -188,67 +146,22 @@ export function TreeNode({
             className="overflow-visible"
             aria-hidden
           >
-            {/* 8 Radial Optical Reticle Ticks at 45° increments */}
-            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
-              const rad = (angle * Math.PI) / 180
-              const c = (size + 16) / 2
-              const r1 = size / 2 + 3.5
-              const r2 = size / 2 + 6.5
-              return (
-                <line
-                  key={angle}
-                  x1={c + Math.cos(rad) * r1}
-                  y1={c + Math.sin(rad) * r1}
-                  x2={c + Math.cos(rad) * r2}
-                  y2={c + Math.sin(rad) * r2}
-                  stroke={color}
-                  strokeWidth="1.0"
-                  strokeLinecap="round"
-                  opacity={0.55}
-                />
-              )
-            })}
-
             {/* Main Outer Chassis */}
             <circle
               cx={(size + 16) / 2}
               cy={(size + 16) / 2}
               r={size / 2}
-              fill="rgba(8, 12, 20, 0.96)"
+              fill="#ffffff"
               stroke={color}
-              strokeWidth={selected ? 2.4 : 1.8}
+              strokeWidth={selected ? 2.5 : 2.0}
+              className="shadow-xs"
             />
-
-            {/* Middle Precision Ring */}
-            <circle
-              cx={(size + 16) / 2}
-              cy={(size + 16) / 2}
-              r={size * 0.36}
-              fill="none"
-              stroke={color}
-              strokeWidth="1.0"
-              strokeDasharray="4 3"
-              opacity={0.5}
-            />
-
-            {/* Inner Aperture Collar */}
-            <circle
-              cx={(size + 16) / 2}
-              cy={(size + 16) / 2}
-              r={size * 0.22}
-              fill="none"
-              stroke={color}
-              strokeWidth="1.2"
-              opacity={0.8}
-            />
-
             {/* Central Origin Pupil */}
             <circle
               cx={(size + 16) / 2}
               cy={(size + 16) / 2}
-              r="3.2"
+              r={size / 4}
               fill={color}
-              style={{ filter: `drop-shadow(0 0 6px ${hex})` }}
             />
           </svg>
         </div>

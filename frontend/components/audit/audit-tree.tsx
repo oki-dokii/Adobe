@@ -759,30 +759,6 @@ export function AuditTree({
               </g>
             )}
 
-            {/* Center Origin Ring */}
-            <motion.circle
-              cx={cx}
-              cy={cy}
-              r={phase === 'landing' ? 34 : 48}
-              fill="transparent"
-              stroke="var(--signal)"
-              strokeWidth={phase === 'landing' ? 1.05 : 1.2}
-              opacity={phase === 'landing' ? 0.34 : showRoot ? 0.3 : 0}
-              animate={
-                reduced
-                  ? { opacity: phase === 'landing' ? 0.34 : 0.28 }
-                  : isActive(rootStatus)
-                    ? { opacity: [0.22, 0.42, 0.22], r: phase === 'landing' ? 34 : [46, 50, 46] }
-                    : { opacity: phase === 'landing' ? 0.34 : showRoot ? 0.3 : 0 }
-              }
-              transition={{ duration: 4.8, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
-            />
-            {phase === 'landing' && (
-              <>
-                <circle cx={cx} cy={cy} r={14} fill="none" stroke="var(--foreground)" strokeWidth={0.6} opacity={0.18} />
-                <circle cx={cx} cy={cy} r={5.5} fill="var(--signal)" opacity={0.55} />
-              </>
-            )}
           </svg>
 
         <div className="absolute inset-0">

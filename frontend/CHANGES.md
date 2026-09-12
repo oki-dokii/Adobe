@@ -6,12 +6,21 @@
 
 ---
 
-## [Unreleased] — Light Theme & Human-Crafted UI Overhaul
+## [Unreleased] — Reticle & Concentric Ring Visual Cleanup
 
 ### Summary
-Complete redesign from dark/neon to a **clean, bright, editorial Light Theme** (inspired by Stripe, Linear, Apple Developer, and modern enterprise SaaS suites). Eliminated AI-generated tropes (harsh neon glows, robot buzzwords, tacky gradient text clips, cyber reticles) in favor of high-contrast typography, natural copywriting, pure white cards, and refined royal indigo accents.
+Removed static radar/reticle visual artifacts, 8 radial tick spokes, center origin concentric circles, and background mouse displacement lines for a clean, unobstructed dashboard presentation.
 
 ---
+
+#### Reticle Cleanup (`ambient-background.tsx`, `audit-tree.tsx`, `tree-node.tsx`)
+- **Ambient Background**: Removed `computeAmbientRoots` radial line paths, mouse coordinate tracking, and displacement calculations.
+- **Audit Tree Origin**: Removed center origin concentric SVG circles (`r=34`, `r=14`, `r=5.5`).
+- **Root Node Chassis**: Removed 8 radial tick spokes, precision ring, aperture collar, and rotating reticle collar, replacing them with a clean node badge.
+
+---
+
+## [1.1.0] — Light Theme & Editorial UI Overhaul
 
 ### Key Transformations
 
