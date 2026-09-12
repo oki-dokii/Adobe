@@ -92,6 +92,7 @@ def run_audit(
     client: Optional[HttpClient] = None,
     rendered_map: Optional[dict[str, str]] = None,
     page_cap: int = 40,
+    render_max: int = 40,
 ) -> dict:
     reset_ids()
     validate_seed(url)
@@ -99,7 +100,7 @@ def run_audit(
     http = client or HttpClient()
     timing = TimingLog()
     t_all = time.time()
-    plan = plan_skip_ladder(clock)
+    plan = plan_skip_ladder(clock, render_max_default=render_max)
     # PROTECT_LIST is consulted for every skip decision
     _ = PROTECT_LIST
 
@@ -306,11 +307,13 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Brand AI readiness audit (read-only)")
     p.add_argument("--url", required=True)
     p.add_argument("--max-seconds", type=float, default=280.0)
+    p.add_argument("--page-cap", type=int, default=40)
+    p.add_argument("--render-max", type=int, default=40)
     p.add_argument("--json-out", default="")
     p.add_argument("--md-out", default="")
     args = p.parse_args(argv)
     try:
-        report = run_audit(args.url, max_seconds=args.max_seconds)
+        report = run_audit(args.url, max_seconds=args.max_seconds, page_cap=args.page_cap, render_max=args.render_max)
     except (ValueError, HttpError) as e:
         print(str(e), file=sys.stderr)
         return 2

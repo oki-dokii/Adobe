@@ -69,12 +69,13 @@ export function useAuditSession() {
                 setSites((cur) => cur.map((s) => (s.id === site.id ? { ...s, result } : s))),
             },
             speed,
+            skippedSkillIds,
           ),
         )
         return prev
       })
     },
-    [],
+    [skippedSkillIds],
   )
 
   const reset = useCallback(() => {

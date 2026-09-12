@@ -65,8 +65,8 @@ export function PerceptionConsole({
       )}
     >
       {/* Header */}
-      <header className="flex items-start justify-between gap-2 border-b border-white/8 bg-black/40 px-4 py-3.5">
-        <div className="min-w-0">
+      <header className="flex flex-col gap-2 border-b border-white/8 bg-black/40 px-4 py-3.5">
+        <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
             <h2 className="font-mono text-[11px] font-bold tracking-wider text-foreground uppercase">
               PERCEPTION
@@ -76,19 +76,21 @@ export function PerceptionConsole({
                 type="button"
                 aria-expanded={open}
                 onClick={onToggleOpen}
-                className="cursor-pointer rounded border border-white/10 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground hover:border-white/20 hover:text-foreground transition-colors"
+                className="cursor-pointer rounded border border-white/10 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground hover:border-white/20 hover:text-foreground transition-colors shrink-0"
               >
                 COLLAPSE
               </button>
             )}
           </div>
-          <p className="mt-1 text-[11px] leading-snug text-muted-foreground">
-            Ask what an assistant would say from extractable evidence.
-          </p>
+          {(usedClientFallback || perception?.usedFallback !== false) && (
+            <span className="shrink-0 rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-right font-mono text-[9px] font-semibold leading-tight tracking-wide text-amber-200/90">
+              SIMULATED
+            </span>
+          )}
         </div>
-        <span className="shrink-0 rounded border border-amber-500/30 bg-amber-500/10 px-2 py-1 text-right font-mono text-[8px] font-semibold leading-tight tracking-wide text-amber-200/90">
-          SIMULATED · NOT A LIVE MODEL SCRAPE
-        </span>
+        <p className="text-[11px] leading-snug text-muted-foreground">
+          Ask what an assistant would say from extractable evidence.
+        </p>
       </header>
 
       {/* Main Body */}

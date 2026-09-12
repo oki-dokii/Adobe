@@ -18,17 +18,20 @@ export function normalizeSpans(answer: string, spans: PerceptionSpan[], question
   let gap = 0
   for (const s of cleaned) {
     if (s.start > cursor) {
-      out.push({
-        id: `s-gap-${gap++}`,
-        text: answer.slice(cursor, s.start),
-        start: cursor,
-        end: s.start,
-        findingIds: [],
-        skillIds: hint,
-        evidenceIds: [],
-        causeIds: [],
-        grounding: 'inferred',
-      })
+      const text = answer.slice(cursor, s.start)
+      if (text.trim().length > 0) {
+        out.push({
+          id: `s-gap-${gap++}`,
+          text,
+          start: cursor,
+          end: s.start,
+          findingIds: [],
+          skillIds: hint,
+          evidenceIds: [],
+          causeIds: [],
+          grounding: 'inferred',
+        })
+      }
     }
     const start = Math.max(s.start, cursor)
     out.push({ ...s, start, text: answer.slice(start, s.end), skillIds: uniq(s.skillIds).slice(0, 3) })

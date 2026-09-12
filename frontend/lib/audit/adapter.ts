@@ -19,7 +19,7 @@ import type {
   Severity,
   SkillId,
 } from './types'
-import { SKILL_MAP } from './skills'
+import { DIMENSIONS, RUN_ORDER, SKILL_MAP } from './skills'
 
 const SKILL_IDS = new Set<string>(Object.keys(SKILL_MAP))
 
@@ -88,6 +88,21 @@ export interface BackendAuditPayload {
     score: number
     label?: 'strong' | 'adequate' | 'at-risk' | 'weak'
   }>
+  coverage?: { pages_fetched?: number; pages_rendered?: number }
+  limitations?: string[]
+  metrics?: {
+    audit_status?: string
+    skill_status?: {
+      skipped_dependent_skills?: string[]
+      failed_skills?: string[]
+      by_skill?: Record<string, string>
+    }
+  }
+  skill_status?: {
+    skipped_dependent_skills?: string[]
+    failed_skills?: string[]
+    by_skill?: Record<string, string>
+  }
 }
 
 function asSeverity(raw: unknown, fallback: Severity = 'medium'): Severity {
@@ -113,11 +128,10 @@ function dimensionOf(skillId: SkillId): Dimension {
 }
 
 function isLimitation(f: BackendFinding): boolean {
-  if (f.is_limitation) return true
+  if (f.is_limitation === true) return true
   const type = (f.finding_type ?? '').toLowerCase()
-  if (type.includes('limit') || type.includes('blocked') || type.includes('insufficient')) return true
-  const blob = `${f.title} ${f.evidence ?? ''} ${f.limitation_reason ?? ''}`.toLowerCase()
-  return /\b(403|blocked|challenge|insufficient[- ]evidence|could not be inspected)\b/.test(blob)
+  if (type === 'limitation' || f.category === 'limitation') return true
+  return false
 }
 
 function actionOf(f: BackendFinding): Recommendation {
@@ -178,11 +192,83 @@ function labelForScore(score: number): NonNullable<BackendAuditPayload['dimensio
  * Map a backend audit payload onto the UI `AuditResult`.
  * Unknown skill ids fall back rather than fabricating new skills.
  */
+function deriveDimensionScores(findings: Finding[]): AuditResult['dimensionScores'] {
+  return (Object.keys(DIMENSIONS) as Dimension[]).map((dimension) => {
+    let score = 90
+    for (const f of findings) {
+      if (f.isLimitation || f.dimension !== dimension) continue
+      if (f.severity === 'critical') score -= 14
+      else if (f.severity === 'high') score -= 9
+      else if (f.severity === 'medium') score -= 5
+      else score -= 2
+    }
+    score = Math.max(15, Math.min(96, score))
+    return { dimension, score, label: labelForScore(score)! }
+  })
+}
+
+function deriveRootCauses(findings: Finding[], raw: BackendFinding[]): AuditResult['rootCauses'] {
+  const byId = new Map(raw.map((f) => [f.id, f]))
+  const childCount = new Map<string, number>()
+  for (const f of raw) {
+    if (f.parent_id) childCount.set(f.parent_id, (childCount.get(f.parent_id) ?? 0) + 1)
+  }
+  const parentIds = [...childCount.keys()]
+  if (parentIds.length === 0) {
+    const bySkill = new Map<SkillId, Finding[]>()
+    for (const f of findings) {
+      if (f.isLimitation) continue
+      const list = bySkill.get(f.skillId) ?? []
+      list.push(f)
+      bySkill.set(f.skillId, list)
+    }
+    return [...bySkill.entries()].map(([skillId, group]) => ({
+      id: `rc-${skillId}`,
+      label: SKILL_MAP[skillId]?.label ?? skillId,
+      detail: group[0]?.title ?? '',
+      parentId: null,
+      severity: group[0]?.severity ?? 'medium',
+      findingIds: group.map((f) => f.id),
+    }))
+  }
+  return parentIds.map((id) => {
+    const parent = byId.get(id)
+    const kids = findings.filter((f) => f.rootCauseId === id || f.id === id)
+    return {
+      id,
+      label: parent?.title ?? id,
+      detail: parent?.evidence ?? parent?.description ?? '',
+      parentId: parent?.parent_id ?? null,
+      severity: asSeverity(parent?.severity),
+      findingIds: kids.map((f) => f.id),
+    }
+  })
+}
+
+function overallLabelFor(scores: AuditResult['dimensionScores']): string {
+  if (!scores.length) return 'Audited'
+  const avg = scores.reduce((a, s) => a + s.score, 0) / scores.length
+  if (avg >= 75) return 'AI-ready'
+  if (avg >= 60) return 'Mostly ready'
+  if (avg >= 45) return 'At risk'
+  return 'Not ready'
+}
+
+/**
+ * Map a backend audit payload onto the UI `AuditResult`.
+ * Unknown skill ids fall back rather than fabricating new skills.
+ */
 export function adaptBackendResult(payload: BackendAuditPayload): AuditResult {
   const raw = (payload.findings_internal?.length ? payload.findings_internal : payload.findings) ?? []
   const findings: Finding[] = raw.map((f) => {
     const skillId = asSkillId(f.skill_id)
     const limitation = isLimitation(f)
+    const why =
+      f.whyItMatters ||
+      f.why_it_matters ||
+      (typeof f.suggested_action === 'object' ? f.suggested_action.why : '') ||
+      f.root_cause ||
+      'This observation affects how automated systems can use the brand as a source.'
     return {
       id: f.id,
       skillId,
@@ -190,15 +276,11 @@ export function adaptBackendResult(payload: BackendAuditPayload): AuditResult {
       title: f.title,
       severity: asSeverity(f.severity),
       confidence: asConfidence(f.confidence),
-      description: f.description || f.title,
-      whyItMatters:
-        f.whyItMatters ||
-        f.why_it_matters ||
-        (typeof f.suggested_action === 'object' ? f.suggested_action.why : '') ||
-        'This observation affects how automated systems can use the brand as a source.',
+      description: f.description && f.description !== f.title ? f.description : f.evidence || f.title,
+      whyItMatters: why,
       evidence: evidenceOf(f),
       affectedPages: f.affected_pages_count ?? f.affected_urls?.length ?? 0,
-      sampledPages: f.sampled_pages ?? Math.max(f.affected_pages_count ?? 0, 1),
+      sampledPages: f.sampled_pages ?? Math.max(f.affected_pages_count ?? 0, payload.coverage?.pages_fetched ?? 1),
       recommendation: actionOf(f),
       rootCauseId: f.parent_id || undefined,
       isLimitation: limitation,
@@ -206,14 +288,33 @@ export function adaptBackendResult(payload: BackendAuditPayload): AuditResult {
     }
   })
 
-  const rootCauses: RootCause[] = (payload.root_causes ?? []).map((rc) => ({
-    id: rc.id,
-    label: rc.label ?? rc.id,
-    detail: rc.detail ?? '',
-    parentId: rc.parent_id ?? null,
-    severity: asSeverity(rc.severity),
-    findingIds: rc.finding_ids ?? findings.filter((f) => f.rootCauseId === rc.id).map((f) => f.id),
-  }))
+  for (const [i, line] of (payload.limitations ?? []).entries()) {
+    if (!line.trim()) continue
+    findings.push({
+      id: `lim-${i}`,
+      skillId: 'audit-orchestrator',
+      dimension: 'discoverability',
+      title: 'Audit limitation',
+      severity: 'low',
+      confidence: 'medium',
+      description: line,
+      whyItMatters: 'The audit continued with reduced coverage rather than inventing missing evidence.',
+      evidence: [{ id: `lim-${i}-e`, label: 'Limitation', detail: line }],
+      affectedPages: 0,
+      sampledPages: payload.coverage?.pages_fetched ?? 0,
+      recommendation: {
+        id: `lim-${i}-r`,
+        title: 'Re-run if coverage was insufficient',
+        detail: line,
+        priority: 'low',
+        effort: 'low',
+      },
+      isLimitation: true,
+      limitationReason: line,
+    })
+  }
+
+  const rootCauses: RootCause[] = deriveRootCauses(findings, raw)
 
   const defects = findings.filter((f) => !f.isLimitation)
   const counts = {
@@ -224,16 +325,25 @@ export function adaptBackendResult(payload: BackendAuditPayload): AuditResult {
   }
 
   const dimensionScores =
-    payload.dimension_scores?.map((d) => ({
-      dimension: d.dimension,
-      score: d.score,
-      label: d.label ?? labelForScore(d.score)!,
-    })) ?? []
+    payload.dimension_scores && payload.dimension_scores.length > 0
+      ? payload.dimension_scores.map((d) => ({
+          dimension: d.dimension,
+          score: d.score,
+          label: d.label ?? labelForScore(d.score)!,
+        }))
+      : deriveDimensionScores(findings)
+
+  const overallLabel = payload.summary?.overall_label ?? overallLabelFor(dimensionScores)
+  const overallSummary =
+    payload.summary?.overall_summary ||
+    (counts.total === 0
+      ? 'The audit completed with 0 structural defects detected across all evaluated skills.'
+      : `${counts.total} issue${counts.total === 1 ? '' : 's'} identified (${counts.critical} critical, ${counts.high} high, ${counts.medium} medium). Technical optimizations recommended to improve AI discoverability.`)
 
   return {
     dimensionScores,
-    overallLabel: payload.summary?.overall_label ?? (counts.critical ? 'At risk' : 'Mostly ready'),
-    overallSummary: payload.summary?.overall_summary ?? '',
+    overallLabel,
+    overallSummary,
     counts,
     rootCauses,
     findings,

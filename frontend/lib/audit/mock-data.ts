@@ -23,7 +23,7 @@ import type {
 } from './types'
 import { RUN_ORDER, SKILL_MAP } from './skills'
 
-export const IS_DEMO = true
+export const IS_DEMO = false
 
 export const SAMPLE_URLS = [
   'https://stripe.com',
