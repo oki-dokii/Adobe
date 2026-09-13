@@ -52,3 +52,19 @@ def annotate(findings: list[Finding], sampled_pages: int) -> dict:
     top = sorted(enriched, key=lambda x: ({"critical": 4, "high": 3, "medium": 2, "low": 1}[x["businessExposureSeverity"]], {"critical": 4, "high": 3, "medium": 2, "low": 1}[x["severity"]]), reverse=True)[:3]
     return {"findings": enriched, "dimension_scores": dimension_scores, "overall_index": overall_index,
             "top3PriorityActions": [{"finding_id": x["id"], "summary": x["suggested_action"]["summary"], "priority": x["suggested_action"]["priority"]} for x in top]}
+
+
+def run(snapshot, user_findings: list[Finding] | None = None, sampled_pages: int | None = None) -> "SkillResult":
+    """Callable skill entrypoint: annotates findings and returns dimension scores."""
+    from lib.models import SkillResult
+    findings_list = user_findings if user_findings is not None else []
+    pages = sampled_pages if sampled_pages is not None else (len(snapshot.pages) if snapshot and hasattr(snapshot, "pages") else 0)
+    result = annotate(findings_list, pages)
+    return SkillResult(
+        skill_id="business-impact-layer",
+        run_id=getattr(snapshot, "run_id", "run-0"),
+        findings=[],  # no new findings; annotation only
+        metrics=result,
+        timing_ms=0.0,
+    )
+

@@ -232,12 +232,17 @@ def run(snapshot: CrawlSnapshot, question_ids: list[str] | None = None) -> Skill
             per_q[spec["id"]] = "unanswerable"
             answered_scores.append(0.0)
             sev = "high" if spec["id"] == "K3" else "medium"
+            cov_summary = (
+                f"pages_fetched={snapshot.coverage.get('pages_fetched', len(snapshot.pages))}, pages_rendered={snapshot.coverage.get('pages_rendered', 0)}"
+                if isinstance(snapshot.coverage, dict)
+                else str(snapshot.coverage)[:60]
+            )
             f = make_finding(
                 skill_id="ai-answerability-audit",
                 finding_type="unanswerable",
                 title=f"Closed-book: site does not answer {spec['id']} ({spec['q']})",
                 severity=sev,
-                evidence=f"No supporting span in crawled corpus for {spec['id']}. Coverage={snapshot.coverage}. "
+                evidence=f"No supporting span in crawled corpus for {spec['id']}. Coverage: {cov_summary}. "
                 + ("K6" if spec["id"] == "K6" else ""),
                 action=SuggestedAction(
                     summary="Add a visible, extractable sentence that answers this question on the intent-matched page.",

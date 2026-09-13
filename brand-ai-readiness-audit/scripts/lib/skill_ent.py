@@ -58,6 +58,19 @@ def run(snapshot: CrawlSnapshot, client: HttpClient | None = None, fetch_sameas:
             pass
     if disambiguators["geo"] or disambiguators["category"]:
         dis = True
+    else:
+        # Check meta description / og:description for category marker (substantial summary is a passive disambiguator)
+        meta_desc = ""
+        for tag in re.findall(r'<meta[^>]+(?:name=["\']description["\']|property=["\']og:description["\'])[^>]+content=["\']([^"\']+)', home.raw_html, re.I):
+            meta_desc = tag
+            break
+        if not meta_desc:
+            for tag in re.findall(r'<meta[^>]+content=["\']([^"\']+)[^>]+(?:name=["\']description["\']|property=["\']og:description["\'])', home.raw_html, re.I):
+                meta_desc = tag
+                break
+        if meta_desc and len(meta_desc.strip()) >= 20:
+            dis = True
+            disambiguators["category"] = meta_desc.strip()[:60]
 
     same = parsed["same_as"]
     ent = Entity(name=name, same_as=same, collision_risk=risk, collision_evidence=evidence, disambiguators=disambiguators)

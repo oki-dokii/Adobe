@@ -122,21 +122,32 @@ class Finding:
                 "summary": sa.summary,
                 "priority": sa.priority,
             }
+            for fld in ("what", "where", "how", "why", "cost_tier"):
+                val = getattr(sa, fld, "")
+                if val:
+                    action[fld] = val
         elif isinstance(sa, dict):
             action = {
                 "summary": sa.get("summary", str(sa)),
                 "priority": sa.get("priority", "medium"),
             }
+            for fld in ("what", "where", "how", "why", "cost_tier"):
+                val = sa.get(fld, "")
+                if val:
+                    action[fld] = val
         else:
             action = {
                 "summary": str(sa),
                 "priority": "medium",
             }
+        ev = self.evidence or ""
+        ev_summary = ev[:120].rstrip() + ("…" if len(ev) > 120 else "")
         return {
             "id": self.id,
             "title": self.title,
             "severity": self.severity,
             "evidence": self.evidence,
+            "evidence_summary": ev_summary,
             "finding_type": self.finding_type,
             "finding_key": self.finding_key,
             "suggested_action": action,

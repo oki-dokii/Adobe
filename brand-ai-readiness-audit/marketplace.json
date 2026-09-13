@@ -17,6 +17,6 @@
     { "id": "freshness-audit", "path": "skills/freshness-audit", "entrypoint": false },
     { "id": "corroboration-consistency-audit", "path": "skills/corroboration-consistency-audit", "entrypoint": false },
     { "id": "engagement-handoff-audit", "path": "skills/engagement-handoff-audit", "entrypoint": false },
-    { "id": "business-impact-layer", "path": "skills/business-impact-layer", "entrypoint": false }
+    { "id": "business-impact-layer", "path": "skills/business-impact-layer", "entrypoint": false, "callable": true, "entrypoint_fn": "run" }
   ]
 }

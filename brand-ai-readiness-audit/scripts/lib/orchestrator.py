@@ -93,7 +93,7 @@ def run_audit(
     client: Optional[HttpClient] = None,
     rendered_map: Optional[dict[str, str]] = None,
     page_cap: int = 40,
-    render_max: int = 40,
+    render_max: int = 10,  # skip-ladder default; override to 40 for benchmark
 ) -> dict:
     reset_ids()
     validate_seed(url)
@@ -328,7 +328,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--url", required=True)
     p.add_argument("--max-seconds", type=float, default=280.0)
     p.add_argument("--page-cap", type=int, default=40)
-    p.add_argument("--render-max", type=int, default=40)
+    p.add_argument("--render-max", type=int, default=10)
     p.add_argument("--json-out", default="")
     p.add_argument("--md-out", default="")
     args = p.parse_args(argv)
