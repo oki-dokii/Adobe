@@ -152,10 +152,15 @@ class Finding:
             "severity": self.severity,
             "evidence": self.evidence,
             "evidence_summary": ev_summary,
+            "confidence": self.confidence,
+            "confidence_basis": self.confidence_basis or "deterministic",
+            "evidence_tier": self.evidence_tier or "OBS",
             "finding_type": self.finding_type,
             "finding_key": self.finding_key,
             "suggested_action": action,
         }
+        if self.contributing_skills:
+            output["contributing_skills"] = self.contributing_skills
         if coverage_basis is not None:
             output["coverage_basis"] = coverage_basis
         return output

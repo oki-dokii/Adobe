@@ -171,3 +171,107 @@ def test_bare_domain_auto_healing():
     assert report["site"] == "example.org"
     assert report["run_id"] is not None
 
+
+def test_finding_to_handout_and_enriched_metadata():
+    from lib.business_impact import annotate
+    action = SuggestedAction(summary="Fix robots", priority="critical")
+    f1 = make_finding(
+        skill_id="crawl-access-audit",
+        finding_type="robots_fail_closed",
+        title="Robots fail closed",
+        severity="critical",
+        evidence="robots.txt 500 error",
+        action=action,
+        urls=["https://example.com/robots.txt"],
+        confidence="high",
+        confidence_basis="http_status_code",
+        evidence_tier="OBS",
+        contributing_skills=["crawl-access-audit"],
+    )
+    handout = f1.to_handout(coverage_basis="5 of 10 pages")
+    assert handout["confidence_basis"] == "http_status_code"
+    assert handout["evidence_tier"] == "OBS"
+    assert handout["contributing_skills"] == ["crawl-access-audit"]
+    assert handout["coverage_basis"] == "5 of 10 pages"
+
+    ann = annotate([f1], sampled_pages=5)
+    enriched = ann["findings"][0]
+    assert enriched["confidence_basis"] == "http_status_code"
+    assert enriched["evidence_tier"] == "OBS"
+    assert enriched["contributing_skills"] == ["crawl-access-audit"]
+    assert "consequenceChain" in enriched
+    assert len(enriched["consequenceChain"]) == 3
+    assert "businessImpact" in enriched
+
+
+def test_distinct_consequence_chains_across_finding_types():
+    from lib.business_impact import annotate
+    types_to_test = ["robots_fail_closed", "table_no_th", "unanswerable", "stale_copyright", "collision_risk"]
+    findings = [
+        make_finding(
+            skill_id="test",
+            finding_type=ft,
+            title=f"Finding for {ft}",
+            severity="high",
+            evidence=f"Evidence for {ft}",
+            action=SuggestedAction(summary=f"Fix {ft}", priority="high"),
+            urls=["https://example.com/test"],
+        )
+        for ft in types_to_test
+    ]
+    ann = annotate(findings, sampled_pages=5)
+    chains = [tuple(f["consequenceChain"]) for f in ann["findings"]]
+    interpretations = [f["businessImpact"]["businessInterpretation"] for f in ann["findings"]]
+    consequences = [f["businessImpact"]["potentialConsequence"] for f in ann["findings"]]
+    # All consequence chains must be pairwise distinct
+    assert len(set(chains)) == len(types_to_test)
+    # All business interpretations must be pairwise distinct
+    assert len(set(interpretations)) == len(types_to_test)
+    # All potential consequences must be pairwise distinct
+    assert len(set(consequences)) == len(types_to_test)
+
+
+def test_markdown_opening_bluf_coverage_basis_and_top_finding():
+    from lib.report import render_markdown
+    report = {
+        "site": "example.com",
+        "summary": {"critical": 1, "high": 0, "medium": 1, "low": 0, "total_findings": 2},
+        "coverage_basis": "5 of ~50 estimated pages sampled (10% coverage)",
+        "coverage_summary": "Sampled 5 pages.",
+        "findings": [
+            {
+                "id": "F-001",
+                "title": "Robots disallows AI bots",
+                "severity": "critical",
+                "evidence": "Disallow: / on GPTBot",
+                "suggested_action": {"summary": "Allow GPTBot in robots.txt", "priority": "critical"},
+                "confidence": 0.99,
+                "confidence_basis": "deterministic",
+                "evidence_tier": "OBS",
+                "contributing_skills": ["crawl-access-audit"],
+                "coverage_basis": "5 of ~50 estimated pages sampled (10% coverage)",
+            },
+            {
+                "id": "F-002",
+                "title": "Missing meta description",
+                "severity": "medium",
+                "evidence": "No meta desc found",
+                "suggested_action": {"summary": "Add meta description", "priority": "medium"},
+                "confidence": 0.90,
+                "confidence_basis": "deterministic",
+                "evidence_tier": "OBS",
+            },
+        ],
+    }
+    md = render_markdown(report)
+    lines = md.splitlines()
+    assert lines[0] == "# Brand AI readiness audit — example.com"
+    bluf = lines[2]
+    assert "example.com audit:" in bluf
+    assert "Checked crawl access, machine readability" in bluf
+    assert "5 of ~50 estimated pages sampled (10% coverage)" in bluf
+    assert "Top priority: [F-001] Robots disallows AI bots (CRITICAL)" in bluf
+    assert "**Coverage Basis**:" in md
+    assert "**Primary Finding**:" in md
+
+

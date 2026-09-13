@@ -93,15 +93,34 @@ def build_report(
 
 def render_markdown(report: dict[str, Any]) -> str:
     s = report["summary"]
+    user_findings = report.get("findings", [])
+    coverage_basis = report.get("coverage_basis") or f"{report.get('coverage', {}).get('pages_fetched', '?')} pages sampled"
+
+    sev_rank = {"critical": 4, "high": 3, "medium": 2, "low": 1}
+    top_finding = None
+    if user_findings:
+        top_finding = max(user_findings, key=lambda f: sev_rank.get(f.get("severity", "low"), 0))
+
+    if top_finding:
+        top_action = top_finding.get("suggested_action")
+        act_str = top_action.get("summary", "") if isinstance(top_action, dict) else str(top_action or "")
+        top_str = f"Top priority: [{top_finding.get('id', '')}] {top_finding.get('title', '')} ({top_finding.get('severity', '').upper()}) — {act_str}"
+    else:
+        top_str = "Top priority: No critical or high AI readiness barriers detected across sampled pages."
+
+    checked_str = "crawl access, machine readability, citation mechanics, answerability, entity identity, freshness, and handoff"
     bluf = (
-        f"{report['site']} audit: {s['critical']} critical, {s['high']} high, "
-        f"{s['medium']} medium, {s['low']} low findings "
-        f"(coverage: {report.get('coverage', {}).get('pages_fetched', '?')} pages fetched)."
+        f"{report['site']} audit: Checked {checked_str} across {coverage_basis}. "
+        f"Result: {s['critical']} critical, {s['high']} high, {s['medium']} medium, {s['low']} low findings. "
+        f"{top_str}"
     )
     lines = [
         f"# Brand AI readiness audit — {report['site']}",
         "",
         bluf,
+        "",
+        f"**Coverage Basis**: {coverage_basis}",
+        f"**Primary Finding**: {top_str}",
         "",
         report.get("coverage_summary", ""),
         "",
@@ -119,7 +138,7 @@ def render_markdown(report: dict[str, Any]) -> str:
     for lim in report.get("limitations") or []:
         lines.append(f"- {lim}")
     lines += ["", "## Findings"]
-    for f in report["findings"]:
+    for f in user_findings:
         sa = f["suggested_action"]
         if isinstance(sa, dict):
             action_text = f"[{sa.get('priority', 'medium').upper()}] {sa.get('summary', '')}"
@@ -129,6 +148,13 @@ def render_markdown(report: dict[str, Any]) -> str:
             f"### {f['id']}: {f['title']}",
             f"- Severity: {f['severity']}",
             f"- Evidence: {f['evidence']}",
+            f"- Confidence: {f.get('confidence', '0.90')} ({f.get('confidence_basis', 'deterministic')}) | Tier: {f.get('evidence_tier', 'OBS')}",
+        ]
+        if f.get("contributing_skills"):
+            lines.append(f"- Contributing skills: {', '.join(f['contributing_skills'])}")
+        if f.get("coverage_basis"):
+            lines.append(f"- Coverage basis: {f['coverage_basis']}")
+        lines += [
             f"- Suggested action: {action_text}",
             "",
         ]
