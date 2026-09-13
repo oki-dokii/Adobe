@@ -6,6 +6,33 @@ A deterministic, zero-LLM agent skill suite for evaluating how automated AI craw
 
 ---
 
+## Executive Overview: Marketplace Skills & Composition
+
+This marketplace is configured via `marketplace.json` with a single entry point (`audit-orchestrator`) that composes 10 specialized modular skills into an automated pipeline.
+
+### What Each Skill Does
+1. **`audit-orchestrator`** *(Designated Entry Point)*: Coordinates the crawl lifecycle, enforces runtime budgets, composes the skill DAG, deduplicates findings across templates, and generates synchronized JSON and Markdown reports.
+2. **`site-type-classifier`**: Classifies sites into behavioral archetypes (A: Advice/YMYL, B: Directory/Nonprofit, C: Gov/Edu, D: Docs, E: Media, F: SaaS/Commerce) to eliminate false defects (e.g., exempting non-profits from commercial pricing gaps).
+3. **`crawl-access-audit`**: Evaluates machine discovery, RFC 9309 robots fail-closed behavior, targeted AI crawler token blocks (`GPTBot`, `ClaudeBot`, `PerplexityBot`), XML sitemap freshness, and WAF/bot challenge barriers.
+4. **`render-extract-audit`**: Dual-fetch delta comparison between static network HTML and client-rendered DOM to detect facts locked behind JavaScript hydration, `<template>`/`<noscript>`, or CSS hiding (`display:none`).
+5. **`citation-extractability-audit`**: Audits extractability bottlenecks in dense retrieval, including semantic table headers (`<th>`), price-condition qualifier splits, and Schema-vs-visible text contradictions.
+6. **`ai-answerability-audit`**: Evaluates 13 essential closed-book buyer questions (K1–K13) via deterministic sentence-level fact-span extraction, avoiding generative hallucinations.
+7. **`entity-identity-audit`**: Validates Organization JSON-LD identity graphs, checks for dead `sameAs` links, detects product-brand relationship gaps, and identifies name collision risks.
+8. **`freshness-audit`**: Evaluates temporal signals, detecting stale copyright dates, outdated schema `dateModified` fields, and `Last-Modified` temporal drift.
+9. **`corroboration-consistency-audit`**: Verifies first-party claims against explicitly linked external authoritative registries (Wikidata, Wikipedia, SEC filings).
+10. **`engagement-handoff-audit`**: Inspects the AI-to-human referral experience, verifying 50ms initial viewport brand clarity, Scroll-to-Text-Fragment deep linking, and navigation information scent.
+11. **`business-impact-layer`**: Translates technical findings into 34 research-grounded causal chains, 4 dimension scores (Discoverability, Understanding, Trust, Engagement), and buyer funnel priority actions.
+
+### How the Entry Point Composes Them
+The entry point **`audit-orchestrator`** (`skills/audit-orchestrator`) composes the skills through a dependency-aware directed acyclic graph (DAG):
+1. **Unified Ingestion**: The orchestrator performs a polite, bounded crawl of the target domain using a single shared `CrawlSnapshot`, avoiding redundant network requests.
+2. **Taxonomy & Rendering Prerequisite**: First runs `site-type-classifier` (establishing baseline expectations) and `render-extract-audit` (producing the rendered DOM representation).
+3. **Parallel Stateless Evaluation**: Feeds the shared snapshot and rendered DOM into the 7 core detection skills (`crawl-access`, `citation-extractability`, `ai-answerability`, `entity-identity`, `freshness`, `corroboration-consistency`, `engagement-handoff`).
+4. **Admission, Deduplication & Scoring**: The orchestrator pipes all emitted findings through the cluster deduplication layer and feeds canonical findings to `business-impact-layer` for causal chain attribution and dimension scoring.
+5. **Dual Report Synchronization**: Emits synchronized machine-readable JSON (`report.json`) and an executive BLUF Markdown document (`report.md`).
+
+---
+
 ## Quick Start
 
 ### Installation & Dependencies
