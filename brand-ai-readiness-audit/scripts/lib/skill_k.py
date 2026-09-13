@@ -39,13 +39,17 @@ K3_IDENTITY = [
     re.compile(r"\b(?:build|deploy|create|scale|manage|run)\s+[a-z\s,-]{3,30}\s+(?:with|on|for)\b", re.I),
     re.compile(r"\bthe (?:all-in-one|unified|enterprise|developer|modern)\s+[a-z]{3,}", re.I),
     re.compile(r"\b(?:financial|developer|agentic|cloud)\s+infrastructure\b", re.I),
+    re.compile(r"\b(?:software|tools?|suite|engine|app|editor|system)\s+(?:for|to|that)\s+[a-z]{3,}", re.I),
+    re.compile(r"\b(?:designed|built|crafted|made)\s+for\s+[a-z]{3,}", re.I),
+    re.compile(r"\beverything you need to\s+[a-z]{3,}", re.I),
+    re.compile(r"\b[a-z]{3,}\s+tools?\s+for\s+[a-z]{3,}", re.I),
 ]
 
 # Clusters where "what does it cost?" is usually the wrong question.
 _K6_GAP_CLUSTERS = frozenset({"A", "C", "D", "E", "unknown"})
 
 
-def k3_span(text: str) -> str | None:
+def k3_span(text: str, meta_desc: str = "") -> str | None:
     blob = text or ""
     hit = _find_span(blob, [K3_OFFERING.pattern])
     if hit:
@@ -55,6 +59,15 @@ def k3_span(text: str) -> str | None:
         if m:
             i = max(0, m.start() - 40)
             return blob[i : m.end() + 40]
+    if meta_desc:
+        m_hit = _find_span(meta_desc, [K3_OFFERING.pattern])
+        if m_hit:
+            return m_hit
+        for pat in K3_IDENTITY:
+            m = pat.search(meta_desc)
+            if m:
+                i = max(0, m.start() - 40)
+                return meta_desc[i : m.end() + 40]
     return None
 
 
@@ -199,7 +212,12 @@ def run(snapshot: CrawlSnapshot, question_ids: list[str] | None = None) -> Skill
             elif spec["id"] == "K3":
                 if p.page_type == "legal":
                     continue
-                span = k3_span(blob)
+                meta_desc = ""
+                if p.raw_html:
+                    for tag in re.findall(r'<meta[^>]+(?:name=["\']description["\']|property=["\']og:description["\'])[^>]+content=["\']([^"\']+)', p.raw_html, re.I):
+                        meta_desc = tag.strip()
+                        break
+                span = k3_span(blob, meta_desc=meta_desc)
             else:
                 span = _find_span(blob, spec["pats"])
             if span:

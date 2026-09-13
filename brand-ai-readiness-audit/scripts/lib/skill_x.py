@@ -102,7 +102,11 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
                     evidence=f"{txt!r} inside closed <details> on {p.url}",
                     action=SuggestedAction(
                         summary="Keep central claims visible without requiring a click (trivia may stay collapsed).",
+                        what="Default-visible factual content or open attribute on key accordion",
                         where=p.url,
+                        how="Add 'open' attribute to top <details open> or hoist core pricing and feature statements above accordion blocks.",
+                        why="AI assistants link users directly via Scroll-to-Text-Fragment (#:~:text=...); if the text is collapsed in a closed <details>, browsers fail to scroll and highlight, bouncing the visitor.",
+                        cost_tier="markup",
                     ),
                     urls=[p.url],
                     category="engagement",
@@ -123,7 +127,11 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
                     evidence=f"Price tokens in closed <details> but not default-visible text on {p.url}",
                     action=SuggestedAction(
                         summary="Keep central claims visible without requiring a click (trivia may stay collapsed).",
+                        what="Default-visible price terms or open attribute on pricing details",
                         where=p.url,
+                        how="Add 'open' attribute to pricing <details open> so amounts are immediately visible when arriving from AI citations.",
+                        why="AI search assistants deep-link visitors directly to pricing quotes; hidden amounts frustrate users who arrived specifically for that cited price.",
+                        cost_tier="markup",
                     ),
                     urls=[p.url],
                     category="engagement",

@@ -95,6 +95,8 @@ def run_audit(
     page_cap: int = 40,
     render_max: int = 10,  # skip-ladder default; override to 40 for benchmark
 ) -> dict:
+    if url and "://" not in url and not url.startswith(("//", "file:", "ftp:", "javascript:", "data:")):
+        url = "https://" + url.strip()
     reset_ids()
     validate_seed(url)
     clock = Clock.start_run(max_seconds)

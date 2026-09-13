@@ -123,3 +123,51 @@ def test_skill_k_compact_coverage():
         # Check that huge internal dict is not dumped raw
         assert "huge_internal_field" not in f.evidence
         assert "pages_fetched=2" in f.evidence
+
+
+def test_k3_tagline_grammar_and_meta_fallback():
+    from lib.skill_k import k3_span
+    # Tagline grammar without "we are a"
+    assert k3_span("Acme builds tools for developers to automate testing.") is not None
+    assert k3_span("Design suite crafted for creators and engineers.") is not None
+    assert k3_span("Everything you need to deploy modern applications.") is not None
+    # Main text is visual-only, but meta description has the identity
+    meta = "Apex provides high-performance telemetry infrastructure for cloud native systems."
+    assert k3_span("Welcome. Explore art.", meta_desc=meta) is not None
+
+
+def test_skill_v_json_ld_schema_voting():
+    from lib.skill_v import run as run_v
+    html = """<!doctype html><html><head>
+    <title>ToolHub</title>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ToolHub"}</script>
+    </head><body><main><p>Welcome to our application.</p></main></body></html>"""
+    snap = crawl(BASE + "/", C(routes_for({"/": html})), Clock.start_run(30), page_cap=2)
+    v_res = run_v(snap)
+    assert snap.site_type.cluster == "F"
+    assert snap.site_type.saas is True
+
+
+def test_render_nextjs_hydration_expansion():
+    from lib.render import expand_noscript
+    html = """<html><body><div id="__next"></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"description":"NextGen observability platform","tier":"Enterprise $99"}}}</script></body></html>"""
+    expanded = expand_noscript(html)
+    assert "dual-fetch-hydration" in expanded
+    assert "NextGen observability platform" in expanded
+
+
+def test_action_snippets_how_populated():
+    from lib.skill_cit import run as run_cit
+    table_html = """<html><body><main><table><tr><td>Plan</td><td>Price</td></tr><tr><td>Pro</td><td>$29</td></tr></table></main></body></html>"""
+    snap = crawl(BASE + "/", C(routes_for({"/": table_html})), Clock.start_run(30), page_cap=2)
+    cit_res = run_cit(snap)
+    tbl_findings = [f for f in cit_res.findings if f.finding_type == "table_no_th"]
+    assert len(tbl_findings) > 0
+    assert "scope='col'" in tbl_findings[0].suggested_action.how
+
+
+def test_bare_domain_auto_healing():
+    report = run_audit("example.org", client=C(routes_for({"/": HOME})), max_seconds=30, page_cap=2)
+    assert report["site"] == "example.org"
+    assert report["run_id"] is not None
+

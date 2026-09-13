@@ -50,12 +50,43 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
         votes["F"] += 2
     if any(t in blob for t in ECOM_TERMS):
         votes["F"] += 3
+
+    # Structured schema detection from JSON-LD
+    schema_types: set[str] = set()
+    for p in snapshot.fetched_pages()[:8]:
+        for raw_ld in getattr(p, "json_ld", []):
+            try:
+                import json
+                ld = json.loads(raw_ld) if isinstance(raw_ld, str) else raw_ld
+                nodes = [ld] if isinstance(ld, dict) else ld if isinstance(ld, list) else []
+                for n in nodes:
+                    if isinstance(n, dict):
+                        t = str(n.get("@type", ""))
+                        if t:
+                            schema_types.add(t.lower())
+            except Exception:
+                pass
+
+    if any(t in schema_types for t in ("softwareapplication", "webapplication", "saas")):
+        votes["F"] += 3
+    if any(t in schema_types for t in ("product", "offer", "store", "itemavailability")):
+        votes["F"] += 3
+    if any(t in schema_types for t in ("newsarticle", "reportagepost")):
+        votes["E"] += 3
+    if any(t in schema_types for t in ("techarticle", "apiarticle")):
+        votes["D"] += 3
+    if any(t in schema_types for t in ("medicalwebpage", "medicalcondition")):
+        votes["A"] += 3
+        ymyl_advice = True
+    if any(t in schema_types for t in ("governmentorganization", "publicinstitution")):
+        votes["C"] += 3
+
     ranked = sorted(votes.items(), key=lambda kv: -kv[1])
     primary = ranked[0][0] if ranked[0][1] > 0 else "unknown"
     secondary = [c for c, n in ranked[1:] if n > 0]
     ymyl = ymyl_advice and not (saas_matches >= 2)
-    saas = votes["F"] > 0 and any(t in blob for t in SAAS_TERMS) and not any(t in blob for t in ECOM_TERMS)
-    ecom = any(t in blob for t in ECOM_TERMS)
+    ecom = any(t in blob for t in ECOM_TERMS) or any(t in schema_types for t in ("product", "offer", "store"))
+    saas = (votes["F"] > 0 and any(t in blob for t in SAAS_TERMS) and not ecom) or any(t in schema_types for t in ("softwareapplication", "webapplication"))
     st = SiteType(
         cluster=primary,
         secondary=secondary,

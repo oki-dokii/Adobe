@@ -83,9 +83,12 @@ def run(snapshot: CrawlSnapshot, client: HttpClient | None = None, fetch_sameas:
             severity="high",
             evidence="; ".join(evidence) + f"; no 'we are a {{category}}' sentence on {home.url}. No web search was used.",
             action=SuggestedAction(
-                summary='Add an early sentence of the form “{Brand} is a {category} in {geo}.”',
+                summary=f'Add an early sentence of the form “{name} is a {{category}} in {{geo}}.”',
+                what=f'Explicit category and geographic disambiguator for {name}',
                 where=home.url,
+                how=f'Add an opening tagline or JSON-LD: <script type="application/ld+json">{{"@context":"https://schema.org","@type":"Organization","name":"{name}","disambiguatingDescription":"[Category] based in [City, Region]"}}</script>',
                 why="Entity-resolution mix-ups; absence of an external knowledge-base entry is not a defect.",
+                cost_tier="content",
             ),
             urls=[home.url],
             category="entity",
