@@ -1,39 +1,29 @@
 ---
 name: audit-orchestrator
-description: Run a read-only Brand AI readiness audit of a website: crawl under robots.txt, compose detection skills, merge findings, and emit JSON+Markdown with evidence and suggested actions. Use when given a public site URL and a 5-minute budget.
+description: Run the read-only, shared-snapshot Brand AI readiness audit and emit the final JSON report.
 license: MIT
 ---
-# audit-orchestrator
 
 ## When to use
-User provides a public website URL to audit AI discoverability and post-citation engagement.
+Use when given one public HTTP(S) site or domain and a complete cross-dimension audit is required. It composes specialized skills; it does not replace their checks.
 
 ## Inputs
-`url` (required). Optional `max_seconds` (default 280).
-
-## Preconditions
-Network or fixture HTTP. No credentials. GET/HEAD only.
+One `url`/domain. Optional `max_seconds` (default 280), `page_cap` (default 40), and `render_max` (default 40).
 
 ## Procedure
-1. Validate http(s); reject userinfo and blocked seed IPs.
-2. Fetch robots.txt — RFC 9309 4xx fail-open, 5xx fail-closed; stop crawl on fail-closed.
-3. Time-bounded crawl (shared lib); SimHash templates; coverage AE22.
-4. site-type-classifier (protect V).
-5. crawl-access-audit.
-6. Dual-fetch/render fact URLs (protect); render-extract-audit sets extractability_flags.
-7. Parallel: citation (det protected), entity-identity, freshness.
-8. ai-answerability-audit with K3 protected; skip-ladder may shrink other K ids.
-9. engagement-handoff-audit; corroboration-consistency-audit only if remaining ≥ 45s.
-10. admit() U13–U18; parent_id merge; cap 15 user-facing findings; dual report.
-
-## Deterministic vs hybrid
-Orchestration is deterministic. Skills may use bounded LLM; this v1 implementation uses deterministic checks only (llm_calls=0).
+1. Run `scripts/run.py --url <https-url> --json-out <report.json>`; it validates the public HTTP(S) seed and starts one rate-limited, robots-respecting crawl in `scripts/lib/crawl.py`.
+2. Share that single in-memory `CrawlSnapshot` with the nine detection skills: site-type, access, render, citation, entity, freshness, answerability, corroboration, and handoff. Detection skills do not independently recrawl; only the bounded, explicit linked-source checks may use the orchestrator HTTP client.
+3. Invoke the nine detection skills, apply existing `admit()` and `merge_findings()` finding-type/finding-key logic, then invoke the eleventh marketplace skill, `business-impact-layer`, for dimensions and overall index.
+4. Emit the final report. All objective HTTP, robots, parsing, and matching checks are implemented in scripts; this release uses no LLM judgment.
 
 ## Output
-FinalAuditReport JSON (handout fields id, title, severity, evidence, suggested_action) plus Markdown render of the same object.
+Final JSON always includes `{ site: string, audited_at: ISO8601 string, summary: { total_findings: number, critical: number, high: number, medium: number, low: number }, findings: [{ id, title, severity, evidence, suggested_action: { summary, priority } }] }`. It additionally includes internal canonical findings, `dimension_scores`, `overall_index`, timing, coverage, limitations, and top actions.
 
-## FP/FN
-Do not emit live “not cited by ChatGPT” claims (U12). Always include Y-01 limitations.
+## Confidence & failure handling
+Robots disallow stops or constrains crawling and is reported by crawl-access-audit. 403s, bot challenges, missing data, failed dependencies, and ambiguous evidence become limitations, LOW-confidence evidence, or omissions—never fabricated findings. The report remains a partial audit when a skill fails.
 
-## Allowed tools
-Hint only: HTTP GET/HEAD, code execution. Not a sandbox.
+## Declared tool needs
+Python execution and read-only, rate-limited HTTP GET/HEAD to the target domain; explicit linked public URLs only for corroboration; no authentication, forms, destructive actions, or target-site writes.
+
+## Runtime budget
+The default 280-second deadline leaves report overhead inside five minutes. The shared crawl is capped at 40 pages and bounded rendering, and the existing skip ladder reduces work or skips linked corroboration as time runs low. Very slow origins or many render-heavy pages can still exhaust the budget; the concrete mitigation is to lower `--page-cap`/`--render-max`, while retaining the protected core checks.

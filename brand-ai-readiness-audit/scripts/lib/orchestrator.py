@@ -12,10 +12,11 @@ from typing import Callable, Optional
 from urllib.parse import urlparse
 
 from lib.admit import admit
+from lib.business_impact import annotate as annotate_business_impact
 from lib.clock import PROTECT_LIST, Clock, plan_skip_ladder
 from lib.crawl import crawl
 from lib.findings import reset_ids
-from lib.http import HttpClient, HttpError
+from lib.http_client import HttpClient, HttpError
 from lib.merge import merge_findings, rank_user_facing
 from lib.models import CrawlSnapshot, Finding, SkillError, SkillFailure, SkillResult, TimingLog
 from lib.report import build_report, render_markdown
@@ -92,14 +93,17 @@ def run_audit(
     client: Optional[HttpClient] = None,
     rendered_map: Optional[dict[str, str]] = None,
     page_cap: int = 40,
+    render_max: int = 10,  # skip-ladder default; override to 40 for benchmark
 ) -> dict:
+    if url and "://" not in url and not url.startswith(("//", "file:", "ftp:", "javascript:", "data:")):
+        url = "https://" + url.strip()
     reset_ids()
     validate_seed(url)
     clock = Clock.start_run(max_seconds)
     http = client or HttpClient()
     timing = TimingLog()
     t_all = time.time()
-    plan = plan_skip_ladder(clock)
+    plan = plan_skip_ladder(clock, render_max_default=render_max)
     # PROTECT_LIST is consulted for every skip decision
     _ = PROTECT_LIST
 
@@ -117,6 +121,92 @@ def run_audit(
     timing.pages_rendered = snapshot.timing.pages_rendered
     timing.render_count = snapshot.timing.render_count
     snapshot.deadline_ts = clock.deadline_ts
+
+    # A zero-page transport failure or robots block is not a content audit.
+    # Do not run content-dependent skills or manufacture clean scores.
+    crawl_stop = snapshot.coverage.get("stopped_reason")
+    if crawl_stop in {"unreachable", "access_blocked", "robots_disallow", "robots"}:
+        blocked = crawl_stop in {"robots_disallow", "robots"}
+        rc = run_c(snapshot)
+        timing.total_ms = (time.time() - t_all) * 1000
+        timing.http_requests = getattr(http, "request_count", snapshot.timing.http_requests)
+        snapshot.timing = timing
+        transport_findings = rc.findings
+        skill_status = {
+            "successful_skills": ["crawl-access-audit"],
+            "failed_skills": [],
+            "skipped_dependent_skills": [
+                "site-type-classifier", "render-extract-audit", "citation-extractability-audit",
+                "entity-identity-audit", "freshness-audit", "ai-answerability-audit",
+                "engagement-handoff-audit", "corroboration-consistency-audit",
+            ],
+            "completed_findings": [f.id for f in transport_findings],
+            "incomplete_areas": [
+                "site-type-classifier", "render-extract-audit", "citation-extractability-audit",
+                "entity-identity-audit", "freshness-audit", "ai-answerability-audit",
+                "engagement-handoff-audit", "corroboration-consistency-audit",
+            ],
+            "failures": [],
+            "by_skill": {"crawl-access-audit": "ok"},
+        }
+        report = build_report(
+            site=urlparse(url).hostname or url,
+            findings=transport_findings,
+            overflow=[],
+            site_type={},
+            coverage=snapshot.coverage,
+            limitations=snapshot.limitations,
+            timing=timing,
+            metrics={
+                "answerability": None,
+                "skills": {"crawl-access-audit": "ok"},
+                "skill_status": skill_status,
+                "audit_status": "blocked" if blocked else "incomplete",
+                "protect_list": sorted(PROTECT_LIST),
+            },
+        )
+        reason_map = {
+            "DNS_FAILURE": "DNS resolution failed",
+            "TLS_FAILURE": "TLS handshake failed",
+            "FETCH_TIMEOUT": "connection timeout",
+        }
+        if snapshot.coverage.get("stopped_reason") == "robots":
+            reason = "robots.txt returned a 5xx; RFC 9309 requires fail-closed behavior"
+        elif snapshot.coverage.get("stopped_reason") == "robots_disallow":
+            reason = "robots.txt disallowed the crawler"
+        elif snapshot.coverage.get("stopped_reason") == "access_blocked":
+            kinds = snapshot.coverage.get("access_kinds", {})
+            reason = f"No usable pages fetched; origin returned access barriers ({kinds})"
+        else:
+            reason = reason_map.get(snapshot.coverage.get("fetch_error"), "transport connection failed")
+        report.update({
+            "audit_status": "blocked" if blocked else "incomplete",
+            "reason": reason,
+            "readiness_index": None,
+            "overall_index": None,
+            "dimension_scores": None,
+            "buyer_question_scorecard": None,
+            "top3PriorityActions": None,
+            "missingFacts": None,
+            "corroboration": None,
+            "findings_internal": [f.to_internal() for f in transport_findings],
+            "skill_status": skill_status,
+            "timing": {**report["timing"], "pages_fetched": 0, "http_requests": timing.http_requests},
+            "run_id": snapshot.run_id,
+            "robots_status": snapshot.robots_status,
+            "errors": snapshot.errors,
+        })
+        report["metrics"]["raw_finding_counts"] = {
+            skill: {"total": None, "high_critical": None, "status": "not_run"}
+            for skill in (
+                "ai-answerability-audit",
+                "citation-extractability-audit",
+                "render-extract-audit",
+                "corroboration-consistency-audit",
+            )
+        }
+        report["markdown"] = render_markdown(report)
+        return report
 
     # Re-plan after crawl so remaining time is honest
     plan = plan_skip_ladder(clock, render_max_default=plan.render_max)
@@ -238,10 +328,24 @@ def run_audit(
     fetched = float((snapshot.coverage or {}).get("pages_fetched") or 0)
     est = float((snapshot.coverage or {}).get("estimated_pages") or 0)
     coverage_pct = (fetched / est) if est else None
-    admitted = [
-        admit(f, snapshot.site_type, pages_verified=max(2, int(fetched)), coverage_pct=coverage_pct)
-        for f in all_findings
-    ]
+    page_templates = {
+        (p.final_url or p.url): p.template_id
+        for p in snapshot.fetched_pages()
+        if p.template_id
+    }
+    admitted = []
+    for f in all_findings:
+        templates = {page_templates[u] for u in f.affected_urls if u in page_templates}
+        admitted.append(
+            admit(
+                f,
+                snapshot.site_type,
+                pages_verified=max(2, int(fetched)),
+                coverage_pct=coverage_pct,
+                sampled_pages=int(fetched),
+                template_ids=templates,
+            )
+        )
     merged = merge_findings(admitted)
     user, overflow = rank_user_facing(merged, cap=15)
     timing.merge_ms = (time.time() - t_merge) * 1000
@@ -267,6 +371,20 @@ def run_audit(
         "failures": [sf.__dict__ for sf in snapshot.skill_failures],
         "by_skill": {k: v.status for k, v in results.items()},
     }
+    raw_finding_counts = {
+        name: {
+            "total": len(result.findings),
+            "high_critical": sum(1 for finding in result.findings if finding.severity in ("high", "critical")),
+        }
+        for name, result in results.items()
+    }
+    raw_finding_counts["corroboration-consistency-audit"] = {
+        "total": len(rh.findings) if rh else 0,
+        "high_critical": sum(1 for finding in (rh.findings if rh else []) if finding.severity in ("high", "critical")),
+    }
+    # Re-index user-facing findings consecutively so suppressed internal IDs never leak
+    for idx, f in enumerate(user, start=1):
+        f.id = f"F-{idx:03d}"
     report = build_report(
         site=urlparse(url).hostname or url,
         findings=user + [f for f in merged if f.suppressed],
@@ -281,10 +399,36 @@ def run_audit(
             "skill_status": skill_status,
             "audit_status": "partial" if failed or skipped_dep else "ok",
             "protect_list": sorted(PROTECT_LIST),
+            "raw_finding_counts": raw_finding_counts,
         },
     )
-    report["findings"] = [f.to_handout() for f in user]
-    report["findings_internal"] = [f.to_internal() for f in user]
+    report["findings"] = [f.to_handout(coverage_basis=report["coverage_basis"]) for f in user]
+    # Presentation-only enrichment; no new findings or fabricated estimates.
+    report.update(annotate_business_impact(user, int(fetched), k_metrics.get("per_question")))
+    # The presentation layer replaces the public finding list with enriched
+    # dictionaries; preserve the report-wide sampling disclosure on those
+    # dictionaries as well as on the canonical handout objects.
+    for enriched_finding in report.get("findings", []):
+        enriched_finding["coverage_basis"] = report["coverage_basis"]
+    gap_findings = [
+        f for result in (rd, rcit, rk)
+        for f in result.findings
+        if f.severity in ("high", "critical")
+    ]
+    report["missingFacts"] = (
+        [f.to_handout(coverage_basis=report["coverage_basis"]) for f in gap_findings]
+        if gap_findings
+        else "No High/Critical answerability, extractability, or render gaps detected"
+    )
+    if rh is None:
+        report["corroboration"] = "Corroboration checks not run (budget skip)"
+    elif rh.findings:
+        report["corroboration"] = [f.to_handout(coverage_basis=report["coverage_basis"]) for f in rh.findings]
+    else:
+        report["corroboration"] = "No corroboration issues detected"
+    # Serialize enriched metrics as well as the canonical internal Finding shape.
+    report["findings_internal"] = [f.to_internal(coverage_basis=report["coverage_basis"]) for f in user]
+    report["findings"] = report["findings"]
     report["skill_status"] = skill_status
     report["markdown"] = render_markdown(report)
     timing.report_ms = (time.time() - t_rep) * 1000
@@ -299,6 +443,7 @@ def run_audit(
     report["robots_status"] = snapshot.robots_status
     report["errors"] = snapshot.errors
     report["limitations"] = snapshot.limitations
+    report["audit_status"] = report["metrics"]["audit_status"]
     return report
 
 
@@ -306,11 +451,13 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="Brand AI readiness audit (read-only)")
     p.add_argument("--url", required=True)
     p.add_argument("--max-seconds", type=float, default=280.0)
+    p.add_argument("--page-cap", type=int, default=40)
+    p.add_argument("--render-max", type=int, default=10)
     p.add_argument("--json-out", default="")
     p.add_argument("--md-out", default="")
     args = p.parse_args(argv)
     try:
-        report = run_audit(args.url, max_seconds=args.max_seconds)
+        report = run_audit(args.url, max_seconds=args.max_seconds, page_cap=args.page_cap, render_max=args.render_max)
     except (ValueError, HttpError) as e:
         print(str(e), file=sys.stderr)
         return 2

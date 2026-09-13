@@ -11,7 +11,16 @@ from lib.models import CrawlSnapshot, SiteType, SkillResult, SuggestedAction
 
 YMYL_ADVICE = re.compile(
     r"\b(?:medical|clinic|diagnosis|diagnosed|physician|prescriptions?|"
-    r"legal advice|attorney|malpractice)\b",
+    r"legal advice|attorney|malpractice|"
+    r"investment advice|tax advice|financial advice|licensed attorney|"
+    r"liability claim|contract law|securities|fiduciary)\b",
+    re.I,
+)
+
+YMYL_LEGAL_FINANCE = re.compile(
+    r"\b(?:legal advice|attorney|malpractice|liability|contract law|"
+    r"investment advice|tax advice|financial advice|securities|fiduciary|"
+    r"tax return|tax planning|estate planning)\b",
     re.I,
 )
 SAAS_TERMS = ("saas", "subscription", "workspace", "platform", "api", "cloud", "login", "pricing", "sign up", "signup", "developer platform", "infrastructure")
@@ -50,12 +59,43 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
         votes["F"] += 2
     if any(t in blob for t in ECOM_TERMS):
         votes["F"] += 3
+
+    # Structured schema detection from JSON-LD
+    schema_types: set[str] = set()
+    for p in snapshot.fetched_pages()[:8]:
+        for raw_ld in getattr(p, "json_ld", []):
+            try:
+                import json
+                ld = json.loads(raw_ld) if isinstance(raw_ld, str) else raw_ld
+                nodes = [ld] if isinstance(ld, dict) else ld if isinstance(ld, list) else []
+                for n in nodes:
+                    if isinstance(n, dict):
+                        t = str(n.get("@type", ""))
+                        if t:
+                            schema_types.add(t.lower())
+            except Exception:
+                pass
+
+    if any(t in schema_types for t in ("softwareapplication", "webapplication", "saas")):
+        votes["F"] += 3
+    if any(t in schema_types for t in ("product", "offer", "store", "itemavailability")):
+        votes["F"] += 3
+    if any(t in schema_types for t in ("newsarticle", "reportagepost")):
+        votes["E"] += 3
+    if any(t in schema_types for t in ("techarticle", "apiarticle")):
+        votes["D"] += 3
+    if any(t in schema_types for t in ("medicalwebpage", "medicalcondition")):
+        votes["A"] += 3
+        ymyl_advice = True
+    if any(t in schema_types for t in ("governmentorganization", "publicinstitution")):
+        votes["C"] += 3
+
     ranked = sorted(votes.items(), key=lambda kv: -kv[1])
     primary = ranked[0][0] if ranked[0][1] > 0 else "unknown"
     secondary = [c for c, n in ranked[1:] if n > 0]
     ymyl = ymyl_advice and not (saas_matches >= 2)
-    saas = votes["F"] > 0 and any(t in blob for t in SAAS_TERMS) and not any(t in blob for t in ECOM_TERMS)
-    ecom = any(t in blob for t in ECOM_TERMS)
+    ecom = any(t in blob for t in ECOM_TERMS) or any(t in schema_types for t in ("product", "offer", "store"))
+    saas = (votes["F"] > 0 and any(t in blob for t in SAAS_TERMS) and not ecom) or any(t in schema_types for t in ("softwareapplication", "webapplication"))
     st = SiteType(
         cluster=primary,
         secondary=secondary,
@@ -70,10 +110,10 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
     snapshot.site_type = st
     findings = []
     if ymyl and primary == "A":
-        disclosed = bool(
+        disclosed_medical = bool(
             re.search(r"(?<!no )reviewed by|\bmedical reviewer\b|\blicensed\b|\bnpi\b", blob)
         )
-        if not disclosed:
+        if not disclosed_medical:
             f = make_finding(
                 skill_id="site-type-classifier",
                 finding_type="ymy_disclosure",
@@ -90,6 +130,40 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
                 ),
                 urls=[p.url for p in snapshot.fetched_pages()[:3]],
                 category="site_type",
+            )
+            attach_confidence(f, deterministic=True, reproduced=False)
+            findings.append(f)
+
+    # Gap 5 (Research Topic V Cluster A): legal/finance YMYL — check for jurisdiction/license disclosure
+    if bool(YMYL_LEGAL_FINANCE.search(blob)):
+        # Check for visible license/jurisdiction language
+        legal_finance_disclosed = bool(
+            re.search(
+                r"\blicensed\b|\bjurisdiction\b|\bbar license\b|\bbar number\b|"
+                r"\bregistered investment|\bsec registered|\bcpa\b|\bcertified financial|"
+                r"\badvisor license|\bregistered advisor|\bfiduciary duty\b",
+                blob,
+                re.I,
+            )
+        )
+        if not legal_finance_disclosed:
+            f = make_finding(
+                skill_id="site-type-classifier",
+                finding_type="ymyl_legal_finance_disclosure",
+                title="Legal/finance advice pages lack visible license or jurisdiction disclosure",
+                severity="high",
+                evidence="Legal/finance advice lexicon matched; sampled pages have no license, jurisdiction, or advisor-registration disclosure in visible text.",
+                action=SuggestedAction(
+                    summary="Add a visible license number, bar registration, or jurisdiction statement near legal/financial advice.",
+                    priority="high",
+                    what="Visible license/jurisdiction/advisor-registration disclosure",
+                    where="Legal or financial advice pages",
+                    how="Add 'Licensed in [State]. Bar #XXXXX.' or 'SEC-registered investment advisor' in plain text near advice content.",
+                    why="Topic V Cluster A: YMYL legal/finance advice requires mandatory disclosure; absence is a compliance/trust signal gap, not a style issue.",
+                ),
+                urls=[p.url for p in snapshot.fetched_pages()[:3]],
+                category="site_type",
+                evidence_tier="FACT",
             )
             attach_confidence(f, deterministic=True, reproduced=False)
             findings.append(f)

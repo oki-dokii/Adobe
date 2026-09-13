@@ -1,7 +1,7 @@
 # audit-orchestrator
 
 ## 1. Purpose
-Single marketplace entrypoint: run a read-only audit of an arbitrary website for AI discoverability and on-site engagement, compose the other nine skills, emit one evidence-backed report.
+Single marketplace entrypoint: run a read-only audit of an arbitrary website for AI discoverability and on-site engagement, compose the nine detection skills, invoke the eleventh post-processing skill, and emit one evidence-backed report.
 
 ## 2. Scope
 Validation, robots, crawl orchestration, skill DAG, U suppression, T merge, S scoring, AC recs, AB dual render, coverage/limitations.

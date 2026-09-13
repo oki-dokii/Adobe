@@ -144,24 +144,24 @@ const SKILL_MICRO_SPECS: Record<SkillId, MicroDef[]> = {
     { id: 'status-403', label: '403 challenge boundary', kind: 'evidence', dist: 52, angleShift: -0.34, level: 3, parentCheckId: 'status-codes' },
     { id: 'challenges', label: 'Bot challenge responses', kind: 'check', dist: 84, angleShift: 0.22, level: 2 },
     { id: 'sitemap-xml', label: 'Sitemap indexing', kind: 'check', dist: 98, angleShift: 0.58, level: 2 },
-    { id: 'sampled-pages', label: '18 sampled pages', kind: 'page', dist: 50, angleShift: 0.40, level: 3, parentCheckId: 'sitemap-xml' },
+    { id: 'sampled-pages', label: 'Sampled pages', kind: 'page', dist: 50, angleShift: 0.40, level: 3, parentCheckId: 'sitemap-xml' },
   ],
   'render-extract-audit': [
     { id: 'server-html', label: 'Server HTML shell', kind: 'signal', dist: 78, angleShift: -0.54, level: 2 },
     { id: 'client-dom', label: 'Hydrated client DOM', kind: 'signal', dist: 90, angleShift: 0.48, level: 2 },
-    { id: 'main-ratio', label: 'Main text ratio (11%)', kind: 'evidence', dist: 56, angleShift: 0.12, level: 3, parentCheckId: 'client-dom' },
+    { id: 'main-ratio', label: 'Extracted main-text evidence', kind: 'evidence', dist: 56, angleShift: 0.12, level: 3, parentCheckId: 'client-dom' },
     { id: 'dom-stability', label: 'Layout shift & stability', kind: 'check', dist: 106, angleShift: -0.04, level: 2 },
   ],
   'site-type-classifier': [
     { id: 'template-detect', label: 'Template structure', kind: 'check', dist: 76, angleShift: -0.54, level: 2 },
     { id: 'content-taxonomy', label: 'Content taxonomy', kind: 'check', dist: 94, angleShift: -0.10, level: 2 },
-    { id: 'site-class', label: 'SaaS / Web App classification', kind: 'fact', dist: 52, angleShift: 0.08, level: 3, parentCheckId: 'content-taxonomy' },
+    { id: 'site-class', label: 'Engine site-cluster classification', kind: 'fact', dist: 52, angleShift: 0.08, level: 3, parentCheckId: 'content-taxonomy' },
     { id: 'commerce-signals', label: 'Commerce & auth signals', kind: 'check', dist: 80, angleShift: 0.50, level: 2 },
   ],
   'entity-identity-audit': [
     { id: 'org-schema', label: 'Organization schema markup', kind: 'check', dist: 80, angleShift: -0.54, level: 2 },
     { id: 'brand-aliases', label: 'Brand alias resolution', kind: 'check', dist: 98, angleShift: 0.04, level: 2 },
-    { id: 'disambiguation', label: 'Disambiguation confidence (98%)', kind: 'evidence', dist: 54, angleShift: 0.24, level: 3, parentCheckId: 'brand-aliases' },
+    { id: 'disambiguation', label: 'Category/geo disambiguation evidence', kind: 'evidence', dist: 54, angleShift: 0.24, level: 3, parentCheckId: 'brand-aliases' },
     { id: 'kg-entity', label: 'Knowledge Graph alignment', kind: 'fact', dist: 82, angleShift: 0.54, level: 2 },
   ],
   'ai-answerability-audit': [
@@ -179,14 +179,14 @@ const SKILL_MICRO_SPECS: Record<SkillId, MicroDef[]> = {
   'freshness-audit': [
     { id: 'published-date', label: 'Published timestamp', kind: 'signal', dist: 76, angleShift: -0.48, level: 2 },
     { id: 'modified-signal', label: 'Modified header delta', kind: 'signal', dist: 96, angleShift: 0.02, level: 2 },
-    { id: 'temporal-decay', label: 'Temporal decay half-life', kind: 'evidence', dist: 54, angleShift: -0.22, level: 3, parentCheckId: 'modified-signal' },
-    { id: 'update-cadence', label: 'Changelog update cadence', kind: 'check', dist: 114, angleShift: 0.48, level: 2 },
+    { id: 'temporal-decay', label: 'Date-signal divergence evidence', kind: 'evidence', dist: 54, angleShift: -0.22, level: 3, parentCheckId: 'modified-signal' },
+    { id: 'update-cadence', label: 'On-site fact consistency', kind: 'check', dist: 114, angleShift: 0.48, level: 2 },
   ],
   'corroboration-consistency-audit': [
     { id: 'onsite-claims', label: 'On-site statements', kind: 'signal', dist: 80, angleShift: -0.56, level: 2 },
     { id: 'external-sources', label: 'Third-party agreement sources', kind: 'signal', dist: 82, angleShift: 0.54, level: 2 },
     { id: 'consensus-fact', label: 'Contradiction check', kind: 'fact', dist: 106, angleShift: -0.04, level: 2 },
-    { id: 'contradiction-count', label: '0 contradictions detected', kind: 'evidence', dist: 56, angleShift: 0.24, level: 3, parentCheckId: 'consensus-fact' },
+    { id: 'contradiction-count', label: 'Linked claim comparison outcome', kind: 'evidence', dist: 56, angleShift: 0.24, level: 3, parentCheckId: 'consensus-fact' },
   ],
   'engagement-handoff-audit': [
     { id: 'action-legibility', label: 'Action legibility for assistants', kind: 'check', dist: 84, angleShift: -0.48, level: 2 },

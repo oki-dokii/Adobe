@@ -9,6 +9,9 @@ from typing import Any, Optional
 FINDING_TYPES = frozenset(
     {
         "robots_fail_closed",
+        "transport_unreachable",
+        "access_blocked",
+        "robots_disallow",
         "ai_token_disallow",
         "orphan",
         "trap_facet",
@@ -66,14 +69,15 @@ class SuggestedAction:
     proactive: bool = False
 
     def to_public(self) -> dict[str, Any]:
-        return {
+        out = {
             "summary": self.summary,
             "priority": self.priority,
-            "what": self.what,
-            "where": self.where,
-            "how": self.how,
-            "why": self.why,
         }
+        for fld in ("what", "where", "how", "why"):
+            val = getattr(self, fld, "")
+            if val:
+                out[fld] = val
+        return out
 
 
 @dataclass
@@ -114,7 +118,7 @@ class Finding:
     metrics: dict[str, Any] = field(default_factory=dict)
     status: str = "found"
 
-    def to_handout(self) -> dict[str, Any]:
+    def to_handout(self, *, coverage_basis: str | None = None) -> dict[str, Any]:
         sa = self.suggested_action
         action: Any
         if isinstance(sa, SuggestedAction):
@@ -122,26 +126,49 @@ class Finding:
                 "summary": sa.summary,
                 "priority": sa.priority,
             }
+            for fld in ("what", "where", "how", "why", "cost_tier"):
+                val = getattr(sa, fld, "")
+                if val:
+                    action[fld] = val
         elif isinstance(sa, dict):
             action = {
                 "summary": sa.get("summary", str(sa)),
                 "priority": sa.get("priority", "medium"),
             }
+            for fld in ("what", "where", "how", "why", "cost_tier"):
+                val = sa.get(fld, "")
+                if val:
+                    action[fld] = val
         else:
             action = {
                 "summary": str(sa),
                 "priority": "medium",
             }
-        return {
+        ev = self.evidence or ""
+        ev_summary = ev[:120].rstrip() + ("…" if len(ev) > 120 else "")
+        output = {
             "id": self.id,
             "title": self.title,
             "severity": self.severity,
             "evidence": self.evidence,
+            "evidence_summary": ev_summary,
+            "confidence": self.confidence,
+            "confidence_basis": self.confidence_basis or "deterministic",
+            "evidence_tier": self.evidence_tier or "OBS",
+            "finding_type": self.finding_type,
+            "finding_key": self.finding_key,
             "suggested_action": action,
         }
+        if self.contributing_skills:
+            output["contributing_skills"] = self.contributing_skills
+        if coverage_basis is not None:
+            output["coverage_basis"] = coverage_basis
+        return output
 
-    def to_internal(self) -> dict[str, Any]:
+    def to_internal(self, *, coverage_basis: str | None = None) -> dict[str, Any]:
         d = asdict(self)
+        if coverage_basis is not None:
+            d["coverage_basis"] = coverage_basis
         return d
 
 

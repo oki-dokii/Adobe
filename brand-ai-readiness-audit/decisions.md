@@ -233,11 +233,11 @@ Benchmarking an additional 26 live domains (Hugging Face, Ollama, Modal, Astral,
 
 ---
 
-## 10. Deepened internal capabilities within the 10 marketplace skills (2026-09-09)
+## 10. Deepened internal capabilities within the 11 marketplace skills (2026-09-09)
 
-### Capabilities deepened without breaking the 10-skill locked architecture
+### Capabilities deepened without breaking the 11-skill marketplace architecture
 
-Rather than adding redundant skill directories, we deepened detection within the existing 10 skills:
+Rather than adding redundant detection directories, we deepened detection within the existing nine detection skills and kept the business-impact-layer as the eleventh post-processing skill:
 
 1. **`interaction_insert` detector in `skill_d.py` (`render-extract-audit`)**:
    - *Problem*: Critical facts (pricing, subscription terms) hidden inside collapsed accordions, client-side tab panels, or toggle modals were not flagged when invisible in initial raw DOM.
@@ -260,7 +260,7 @@ A line-by-line audit of `/Users/sohambanerjee/Adobe/6a8ffdf33590a_round3-handout
 | Requirement / Criterion | Handout Specification | Implementation Status | Notes |
 |---|---|---|---|
 | **Marketplace Format** | `marketplace.json` at root; exactly one `entrypoint: true` skill | **Compliant** | `audit-orchestrator` is the unique entrypoint. |
-| **AgentSkills Spec** | Every skill folder agentskills.io compliant (`SKILL.md` with YAML frontmatter) | **Compliant** | All 10 skills contain valid `SKILL.md` with name, description, and MIT license. |
+| **AgentSkills Spec** | Every skill folder agentskills.io compliant (`SKILL.md` with YAML frontmatter) | **Compliant** | All 11 skills contain valid `SKILL.md` with name, description, and MIT license. |
 | **Two Core Problem Halves** | Detect both Off-site discoverability and On-site engagement | **Compliant** | Gates 1-3 + Answerability cover discoverability; `engagement-handoff-audit` covers post-referral bounce. |
 | **Recommend-Only** | Read-only sandbox; no mutation of live websites | **Compliant** | Read-only crawler, GET/HEAD only, zero POST/PUT/PATCH across the codebase. |
 | **Robots.txt Adherence** | RFC 9309 compliant (4xx fail-open, 5xx fail-closed) | **Compliant** | Fully implemented in `lib/robots.py` and audited in `skill_c.py`. |
@@ -280,4 +280,3 @@ When you change detection:
 3. **Change** — files and the rule in one sentence.
 4. **Reasoning** — what user action the finding is supposed to drive, and why this rule preserves that.
 5. **Regression** — test name on `*.example` / `site.test` fixtures.
-

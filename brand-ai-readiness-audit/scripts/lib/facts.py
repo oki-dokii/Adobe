@@ -67,9 +67,7 @@ YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 def _directionality(source_kind: str) -> str:
     if source_kind in ("linkedin", "twitter", "facebook", "company_profile"):
         return "low"
-    if source_kind == "wikipedia_infobox":
-        return "medium"
-    if source_kind == "wikidata":
+    if source_kind == "linked_public_profile":
         return "medium"
     if source_kind == "press":
         return "snapshot"

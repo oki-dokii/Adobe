@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from urllib.parse import urlparse
 from urllib.robotparser import RobotFileParser
 
-from lib.http import HttpClient, HttpError
+from lib.http_client import HttpClient, HttpError
 from lib.url import origin
 
 # Closed list of AI / crawler tokens to document (LOCKED).

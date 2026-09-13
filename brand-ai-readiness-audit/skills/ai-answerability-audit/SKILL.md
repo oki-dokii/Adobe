@@ -1,12 +1,24 @@
 ---
 name: ai-answerability-audit
-description: Closed-book: does crawled text answer realistic questions with a supporting span? Distinguishes unanswerable vs wrong_page vs expected_gap. Always include K3. Do not score K9/K10 as defects.
+description: Check whether the shared extracted text contains supporting spans for the engine's implemented buyer questions.
 license: MIT
 ---
-# ai-answerability-audit
 
 ## When to use
-Completeness vs extractability.
+Use after render-extract-audit and site-type-classifier. It assesses answerable buyer questions, rather than citation qualifier integrity or freshness.
+
+## Inputs
+Shared `CrawlSnapshot` with extraction flags and site type. Standalone use accepts `--url` and creates one independent bounded crawl plus required site-type/render preparation; orchestrated use accepts `--snapshot` and does not recrawl.
 
 ## Procedure
-Regex/span answers only (uncited LLM answers invalid). K3 protected. V-F quote CTA is not a public-price defect. Metrics CoreAnswerabilityRate are report-layer, not findings. Composite citability is a HYP metric, not a finding title.
+1. Run `scripts/run.py --snapshot <trusted-snapshot.pickle>`.
+2. `scripts/lib/skill_k.py` deterministically finds required support spans and applies existing site-type gating; semantic LLM judgment is not used in this release.
+
+## Output
+`SkillResult` JSON with `findings`: `{ id, finding_type, finding_key, title, severity, businessExposureSeverity: null, evidence, suggested_action, confidence }` and question metrics.
+
+## Confidence & failure handling
+Missing pages or ambiguous spans result in LOW confidence or omission according to the existing check; 403/challenges/robots restrictions are upstream limitations, never invented answers. Detected via deterministic keyword/pattern matching; may not recognize an answer phrased in unexpected language. Treat 'insufficient' or 'unanswerable' as 'not found via automated pattern match,' not as definitive proof the information is absent. This method boundary is intentionally disclosed to preserve zero-LLM determinism without overclaiming negative omniscience.
+
+## Declared tool needs
+Read-only snapshot/Python execution only; upstream network access is target-domain GET/HEAD only, robots-respecting.

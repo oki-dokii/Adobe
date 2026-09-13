@@ -7,7 +7,7 @@ import time
 
 from lib.confidence import attach_confidence
 from lib.findings import make_finding
-from lib.http import USER_AGENT
+from lib.http_client import USER_AGENT
 from lib.models import CrawlSnapshot, SkillResult, SuggestedAction
 from lib.robots import AI_TOKENS
 from lib.url import is_locale_path_segment, trap_flags
@@ -46,11 +46,57 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
     if snapshot.coverage.get("stopped_reason") == "unreachable":
         f = make_finding(
             skill_id="crawl-access-audit",
-            finding_type="robots_fail_closed",
-            title="Origin unreachable (DNS/TLS/transport)",
+            finding_type="transport_unreachable",
+            title="Origin unreachable; audit incomplete",
             severity="critical",
-            evidence="Seed fetch failed at transport layer.",
-            action=SuggestedAction(summary="Fix DNS/TLS so the origin responds to GET.", priority="critical"),
+            evidence=(
+                f"Seed fetch failed before any target page was fetched "
+                f"({snapshot.coverage.get('fetch_error', 'transport failure')})."
+            ),
+            action=SuggestedAction(
+                summary="Resolve the transport failure, then rerun the audit.",
+                priority="critical",
+            ),
+            urls=[snapshot.seed_url],
+            category="access",
+            evidence_tier="FACT",
+        )
+        attach_confidence(f, deterministic=True, reproduced=True)
+        findings.append(f)
+
+    if snapshot.coverage.get("stopped_reason") == "robots_disallow":
+        f = make_finding(
+            skill_id="crawl-access-audit",
+            finding_type="robots_disallow",
+            title="robots.txt disallows the audit crawler",
+            severity="critical",
+            evidence="The seed URL was not fetched because robots.txt disallows the audit crawler.",
+            action=SuggestedAction(
+                summary="Allow compliant crawlers on the public paths intended for AI discovery.",
+                priority="critical",
+            ),
+            urls=[snapshot.seed_url],
+            category="access",
+            evidence_tier="FACT",
+        )
+        attach_confidence(f, deterministic=True, reproduced=True)
+        findings.append(f)
+
+    if snapshot.coverage.get("stopped_reason") == "access_blocked":
+        kinds = snapshot.coverage.get("access_kinds", {})
+        f = make_finding(
+            skill_id="crawl-access-audit",
+            finding_type="access_blocked",
+            title="No usable pages were available because the origin returned an access barrier",
+            severity="high",
+            evidence=(
+                f"pages_content_usable=0; access_kinds={kinds}. "
+                "Challenge/error bodies were excluded from content analysis."
+            ),
+            action=SuggestedAction(
+                summary="Provide a crawlable public response or rerun from an allowed audit vantage point.",
+                priority="high",
+            ),
             urls=[snapshot.seed_url],
             category="access",
             evidence_tier="FACT",
@@ -190,16 +236,53 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
             continue
         url_keys = {canonical_key(p.final_url or p.url) for p in grp}
         can_keys = {canonical_key(p.canonical) for p in grp if p.canonical}
-        if len(url_keys) < 2 or (can_keys and len(can_keys) < 2):
+        if len(url_keys) < 2:
             continue
-        # Localized template copies (/in/pricing vs /en-at/pricing) are hreflang, not broken canonicals.
-        locale_n = 0
-        for p in grp:
-            segs = [s for s in urlparse(p.final_url or p.url).path.split("/") if s]
-            if segs and is_locale_path_segment(segs[0]):
-                locale_n += 1
-        if locale_n == len(grp) and locale_n >= 2:
+        # Server-default variants such as /about/background and
+        # /about/background/index.html represent the same path. They are not
+        # duplicate-content evidence when canonical targets are absent or
+        # normalize to the same directory target.
+        def directory_key(url: str) -> str:
+            key = canonical_key(url).rstrip("/")
+            if key.endswith("/index.html"):
+                return key[:-10].rstrip("/") or "/"
+            if key.endswith(".html"):
+                return key[:-5].rstrip("/") or "/"
+            return key
+
+        directory_urls = {directory_key(p.final_url or p.url) for p in grp}
+        directory_canonicals = {directory_key(p.canonical) for p in grp if p.canonical}
+        if len(directory_urls) == 1 and (not directory_canonicals or len(directory_canonicals) == 1):
             continue
+        # Localized template copies (/about vs /au/about vs /by/about vs /in/pricing)
+        # are legitimate country/language variants with matching canonicals, not broken duplicate pages.
+        from lib.url import locale_stripped_path
+        stripped_url_paths = {locale_stripped_path(p.final_url or p.url) for p in grp}
+        if len(stripped_url_paths) == 1:
+            base_path = next(iter(stripped_url_paths))
+            # A localized copy is safe only when each source URL's canonical
+            # preserves its own locale segment. A single shared canonical for
+            # several locales is signal dilution, not a harmless template copy.
+            def locale_segment(url: str) -> str:
+                parts = [part for part in urlparse(url).path.split('/') if part]
+                return parts[0].lower() if parts and is_locale_path_segment(parts[0]) else ''
+
+            # A missing canonical remains an unknown/omitted signal for this
+            # template-copy guard (the legacy behavior covered by the
+            # localized-template test). A present canonical must be checked
+            # per source URL below.
+            if not can_keys:
+                continue
+            is_locale_cluster = True
+            for p in grp:
+                if not p.canonical or locale_stripped_path(p.canonical) != base_path:
+                    is_locale_cluster = False
+                    break
+                if locale_segment(p.final_url or p.url) != locale_segment(p.canonical):
+                    is_locale_cluster = False
+                    break
+            if is_locale_cluster:
+                continue
         f = make_finding(
             skill_id="crawl-access-audit",
             finding_type="canonical_dup",
@@ -219,7 +302,7 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
 
     n_lm = snapshot.coverage.get("sitemap_lastmod_n") or 0
     u_lm = snapshot.coverage.get("sitemap_lastmod_unique") or 0
-    if n_lm >= 20 and u_lm == 1:
+    if n_lm >= 5 and u_lm == 1:
         f = make_finding(
             skill_id="crawl-access-audit",
             finding_type="coverage_statement",

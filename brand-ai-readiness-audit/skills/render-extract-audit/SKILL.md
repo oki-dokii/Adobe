@@ -1,15 +1,24 @@
 ---
 name: render-extract-audit
-description: Check whether decision facts exist as extractable text without interaction (dual-fetch), including D41 permanently hidden text. Use after raw crawl; sets extractability_flags for later skills.
+description: Compare raw and rendered shared-crawl content for extractability of decision facts.
 license: MIT
 ---
-# render-extract-audit
 
 ## When to use
-Gate 2: humans see facts that extractors might miss.
+Use after crawling and before citation or answerability checks. It owns raw-versus-rendered extractability, not whether a fact is well-qualified.
+
+## Inputs
+Shared `CrawlSnapshot` with raw HTML and any bounded rendered HTML. Standalone use accepts `--url` and creates an independent bounded crawl; orchestrated use accepts `--snapshot` and does not recrawl.
 
 ## Procedure
-Compare raw vs rendered for fact-bearing prices. U2: JS chrome with facts in raw is not a defect. Accordion content already in DOM is not this skill (handoff). D41: hidden text with no toggle. Do not recommend llms.txt.
+1. Run `scripts/run.py --snapshot <trusted-snapshot.pickle>`.
+2. `scripts/lib/skill_d.py` deterministically parses both representations, updates page extractability flags, and emits evidence-backed findings.
 
 ## Output
-extractability_flags on pages; js_fact_lock, d41_hidden, pdf_only_fact, image_locked_fact.
+`SkillResult` JSON with `findings`: `{ id, finding_type, finding_key, title, severity, businessExposureSeverity: null, evidence, suggested_action, confidence }`; updated extractability flags remain in the in-memory orchestrator snapshot.
+
+## Confidence & failure handling
+If rendering is unavailable, the script does not claim a render-only defect; it records the limitation and omits unproven findings. 403/challenges and robots restrictions remain upstream evidence with LOW confidence where applicable.
+
+## Declared tool needs
+Read-only snapshot/Python execution. Rendering and network fetching are orchestrator-owned, read-only GET/HEAD to the target domain, robots-respecting, and budgeted.

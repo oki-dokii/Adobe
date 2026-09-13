@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+import re
 import time
 
 from lib.confidence import attach_confidence
@@ -10,6 +12,56 @@ from lib.findings import make_finding
 from lib.models import CrawlSnapshot, ExtractabilityFlags, SkillResult, SuggestedAction
 from lib.money import has_offer_price, offer_price_strings
 from lib.sanitize import looks_like_injection
+
+# B-F3: schema types whose transactional fields we check for visible-text parity
+_SCHEMA_PARITY_TYPES = frozenset({
+    "offer", "product", "organization", "localbusiness",
+    "restaurant", "service",
+})
+
+
+def _schema_visible_parity(raw: dict, main_text: str, page_type: str, url: str) -> list:
+    """B-F3: detect schema-asserted transactional facts absent from visible text.
+
+    Returns a list of (field_name, schema_value) tuples that are missing from
+    main_text. Only checks types known to carry transactional/factual fields.
+    No LLM — purely deterministic string matching.
+    """
+    gaps = []
+    for ld_raw in raw.get("json_ld") or []:
+        try:
+            ld = json.loads(ld_raw) if isinstance(ld_raw, str) else ld_raw
+            nodes = [ld] if isinstance(ld, dict) else (ld if isinstance(ld, list) else [])
+            for node in nodes:
+                if not isinstance(node, dict):
+                    continue
+                node_type = str(node.get("@type") or "").lower()
+                if node_type not in _SCHEMA_PARITY_TYPES:
+                    continue
+                # Check price
+                price_val = node.get("price")
+                if price_val and str(price_val).replace(".", "").replace(",", "").isdigit():
+                    price_str = str(price_val)
+                    # Accept any numeric fragment in visible text (e.g. "$299" matches price="299.00")
+                    price_digits = re.sub(r"[^0-9]", "", price_str)[:6]
+                    if price_digits and price_digits not in re.sub(r"[^0-9]", "", main_text):
+                        gaps.append(("price", price_str))
+                # Check address locality
+                addr = node.get("address")
+                if isinstance(addr, dict):
+                    locality = addr.get("addressLocality") or ""
+                    street = addr.get("streetAddress") or ""
+                    if locality and locality.lower() not in main_text.lower():
+                        gaps.append(("address.locality", locality))
+                    elif street and not any(
+                        tok in main_text.lower()
+                        for tok in re.split(r"[\s,]+", street.lower())
+                        if len(tok) >= 3
+                    ):
+                        gaps.append(("address.street", street))
+        except Exception:
+            pass
+    return gaps
 
 
 FACT_PAGES = {"home", "about", "pricing", "product", "contact"}
@@ -150,6 +202,40 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
             notes="; ".join(notes),
         )
         p.landmarks = raw["landmarks"]
+
+        # Gap 7 (Research B-F3): schema-vs-visible-text parity check
+        # Only run on pages that have JSON-LD and are fact-bearing
+        if fact_bearing and raw.get("json_ld"):
+            gaps = _schema_visible_parity(raw, raw["main_text"] or "", p.page_type, p.url)
+            for field, value in gaps[:2]:  # cap to 2 per page
+                f = make_finding(
+                    skill_id="render-extract-audit",
+                    finding_type="schema_only_fact",
+                    title=f"Schema-asserted {field} not present in visible text",
+                    severity="medium",
+                    evidence=(
+                        f"JSON-LD asserts {field}={value!r} but this value has no matching "
+                        f"string in visible main_text on {p.url}. "
+                        "Lightweight crawlers that do not execute schema-only annotation may miss this fact."
+                    ),
+                    action=SuggestedAction(
+                        summary=f"Add a visible text mention of {field} ({value!r}) on this page so the fact is readable without schema parsing.",
+                        where=p.url,
+                        what=f"Visible text statement of {field}",
+                        how=f"Add a line like 'Price: {value}' or 'Located in {value}' in the page body, not only in JSON-LD.",
+                        why="B-F3: schema is a reinforcement signal, not a substitute for plain-text extraction; "
+                            "crawlers that read schema-only facts have lower extractability confidence.",
+                        cost_tier="content",
+                    ),
+                    urls=[p.url],
+                    template_id=p.template_id,
+                    category="render",
+                    evidence_tier="FACT",
+                )
+                attach_confidence(f, deterministic=True, reproduced=False)
+                f.confidence = "medium"
+                f.confidence_basis = "Deterministic: JSON-LD field value vs. visible text string comparison; no LLM."
+                findings.append(f)
 
     return SkillResult(
         skill_id="render-extract-audit",

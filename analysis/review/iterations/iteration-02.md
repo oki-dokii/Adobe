@@ -22,4 +22,4 @@ SK-I name “freshness” slightly wider than dates — document as temporal **a
 Redundancy I×H now MEDIUM not CRITICAL. FP W-03. Novelty protect-list.
 
 ## vs previous
-Better SoC; still 10 skills. **This is the first material boundary fix after v1.**
+Better SoC; now 11 marketplace skills with a separate post-processing layer. **This is the first material boundary fix after v1.**

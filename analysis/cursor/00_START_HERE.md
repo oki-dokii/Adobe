@@ -3,7 +3,7 @@
 Do **not** re-research. Do **not** invent extra skills. Do **not** implement until the human approves — this pack is the spec the next agent executes after approval.
 
 ## What we are building
-Adobe Round 3 marketplace `brand-ai-readiness-audit`: 10 skills, **one entrypoint** `audit-orchestrator`, read-only, robots.txt, <5 min, zip ≤50MB, report with `id, title, severity, evidence, suggested_action`.
+Adobe Round 3 marketplace `brand-ai-readiness-audit`: 11 skills, **one entrypoint** `audit-orchestrator`, read-only, robots.txt, <5 min, zip ≤50MB, report with `id, title, severity, evidence, suggested_action`.
 
 ## Read in this order
 1. `01_ARCHITECTURE.md` (this folder)

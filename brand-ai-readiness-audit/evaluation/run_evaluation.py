@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "evaluation"))
 
-from lib.http import HttpError  # noqa: E402
+from lib.http_client import HttpError  # noqa: E402
 from lib.orchestrator import run_audit  # noqa: E402
 from safety_preflight import SafetyError, assert_production_safety  # noqa: E402
 

@@ -75,7 +75,7 @@ That is not a defense of v0. It means the **decomposition axis (mechanism + reme
 11. Typed internal AC12 without AG15.
 12. Multilingual K language.
 13. Coverage as first-class user finding/section.
-14. Skip-ladder so 10 skills do not equal 10 LLM passes.
+14. Skip-ladder so 11 marketplace skills do not equal 11 LLM passes.
 15. STTF paraphrase FN.
 
 None of these justify an 11th skill.

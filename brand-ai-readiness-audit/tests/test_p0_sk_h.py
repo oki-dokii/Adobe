@@ -12,10 +12,29 @@ sys.path.insert(0, str(ROOT / "tests"))
 from fake_http import make_opener, public_resolve
 from lib.clock import Clock
 from lib.crawl import crawl
-from lib.http import HttpClient
+from lib.findings import make_finding
+from lib.http_client import HttpClient
+from lib.models import SuggestedAction
 from lib.orchestrator import run_audit
 from lib.skill_h import run as run_h
 from test_skills_orchestrator import BASE, C, HOME, routes_for
+
+
+def test_public_handout_exposes_stable_finding_identifiers():
+    finding = make_finding(
+        skill_id="engagement-handoff-audit",
+        finding_type="scent_break",
+        title="Navigation breadcrumbs missing on category pages",
+        severity="medium",
+        evidence="Category template lacks nav and breadcrumb links.",
+        action=SuggestedAction(summary="Add persistent wayfinding."),
+        urls=["https://example.com/products/coffee"],
+        template_id="t-7",
+    )
+    handout = finding.to_handout()
+    assert handout["finding_type"] == "scent_break"
+    assert handout["finding_key"]
+    assert handout["id"]
 
 
 def test_a_no_sameas_is_not_a_user_finding():

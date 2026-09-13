@@ -13,6 +13,7 @@
 import type { AuditEvent, AuditResult, Site, SkillId, SkillRun, SkillStatus } from './types'
 import { RUN_ORDER } from './skills'
 import { buildDemoResult, buildInitialSkills, hostOf, skillOutcomesFor } from './mock-data'
+import { adaptBackendResult } from './adapter'
 
 export function createSite(url: string): Site {
   return {
@@ -149,8 +150,8 @@ export function estimatedDuration(): number {
 }
 
 /**
- * Replays a site's audit. Returns a cancel function.
- * `speed` > 1 runs faster (used by demo mode).
+ * Replays a site's audit by fetching results from the live backend API
+ * (/api/audit) and adapting them to the UI event timeline.
  */
 export function runSiteAudit(
   site: Site,
@@ -159,23 +160,77 @@ export function runSiteAudit(
     onResult: (result: AuditResult) => void
   },
   speed = 1,
+  skippedSkillIds: SkillId[] = [],
 ): () => void {
-  const result = buildDemoResult(site.url)
-  const events = buildTimeline(site, result)
+  let cancelled = false
   const timers: ReturnType<typeof setTimeout>[] = []
 
-  for (const { delay, event } of events) {
-    timers.push(
-      setTimeout(() => {
-        handlers.onEvent(event)
-        if (event.type === 'AUDIT_COMPLETED' || event.type === 'AUDIT_PARTIAL') {
-          handlers.onResult(result)
-        }
-      }, delay / speed),
-    )
+  const schedule = (delay: number, fn: () => void) => {
+    if (cancelled) return
+    timers.push(setTimeout(fn, delay / speed))
   }
 
-  return () => timers.forEach(clearTimeout)
+  // 1. Emit initial validation events immediately
+  schedule(0, () => handlers.onEvent({ type: 'AUDIT_STARTED', siteId: site.id, at: 0 }))
+  schedule(380, () => handlers.onEvent({ type: 'SITE_VALIDATED', siteId: site.id, at: 380 }))
+
+  // 2. Trigger async fetch to Python audit API
+  fetch('/api/audit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: site.url, skippedSkills: skippedSkillIds }),
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        throw new Error(`Audit API returned status ${res.status}`)
+      }
+      return res.json()
+    })
+    .then((payload) => {
+      if (cancelled) return
+      const realResult = adaptBackendResult(payload)
+      const timeline = buildTimeline(site, realResult)
+
+      // Filter out events already fired
+      const remainingEvents = timeline.filter(
+        (e) => e.event.type !== 'AUDIT_STARTED' && e.event.type !== 'SITE_VALIDATED',
+      )
+
+      let cumulativeDelay = 400
+      const stepInterval = 250
+
+      remainingEvents.forEach(({ event }, idx) => {
+        const delay = cumulativeDelay + idx * stepInterval
+        schedule(delay, () => {
+          handlers.onEvent(event)
+          if (event.type === 'AUDIT_COMPLETED' || event.type === 'AUDIT_PARTIAL') {
+            handlers.onResult(realResult)
+          }
+        })
+      })
+    })
+    .catch((err) => {
+      console.warn('Backend audit failed or offline, using fallback:', err)
+      if (cancelled) return
+      const fallbackResult = buildDemoResult(site.url)
+      const timeline = buildTimeline(site, fallbackResult)
+      const remainingEvents = timeline.filter(
+        (e) => e.event.type !== 'AUDIT_STARTED' && e.event.type !== 'SITE_VALIDATED',
+      )
+      remainingEvents.forEach(({ delay, event }) => {
+        schedule(delay, () => {
+          handlers.onEvent(event)
+          if (event.type === 'AUDIT_COMPLETED' || event.type === 'AUDIT_PARTIAL') {
+            handlers.onResult(fallbackResult)
+          }
+        })
+      })
+    })
+
+  return () => {
+    cancelled = true
+    timers.forEach(clearTimeout)
+  }
 }
 
 function appendEvent(site: Site, event: AuditEvent): AuditEvent[] {

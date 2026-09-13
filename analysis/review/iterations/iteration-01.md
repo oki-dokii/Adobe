@@ -24,4 +24,4 @@ Less parallelism; H FN on unlinked sources.
 Coverage, redundancy, FP zoo, runtime cost model.
 
 ## vs previous
-Same 10 skills; stronger contracts.
+Same 11 marketplace skills; stronger contracts.

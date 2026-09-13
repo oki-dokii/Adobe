@@ -1,15 +1,24 @@
 ---
 name: citation-extractability-audit
-description: Check whether factual claims are self-contained, qualifier-safe, table-headered, and that JSON-LD matches visible text. Use after extractability_flags exist. Do not treat missing schema as Critical.
+description: Evaluate whether extracted factual claims are self-contained, qualifier-safe, table-readable, and consistent with visible structured data.
 license: MIT
 ---
-# citation-extractability-audit
 
 ## When to use
-Gate 3: cited wrong or unquotable.
+Use after render-extract-audit has set extractability flags. It evaluates quote safety, not crawl access or semantic answer completeness.
+
+## Inputs
+Shared `CrawlSnapshot`, including rendered/raw extraction flags. Standalone use accepts `--url` and creates one independent bounded crawl plus required render preparation; orchestrated use accepts `--snapshot` and does not recrawl.
 
 ## Procedure
-Factual templates only. Skip JS-locked pages (parent D). qualifier_split, table_no_th, schema_visible_mismatch, comparison_self_win (first-party vs pages, Low disclosure). Mission-page voice is not a defect.
+1. Run `scripts/run.py --snapshot <trusted-snapshot.pickle>`.
+2. `scripts/lib/skill_cit.py` performs deterministic DOM/text and JSON-LD checks; no LLM judgment is used in this release.
 
-## Deterministic vs hybrid
-v1: deterministic only (protect-list).
+## Output
+`SkillResult` JSON with `findings`: `{ id, finding_type, finding_key, title, severity, businessExposureSeverity: null, evidence, suggested_action, confidence }`.
+
+## Confidence & failure handling
+Unavailable pages, missing structured data, ambiguous evidence, robots disallow, or bot challenges produce LOW confidence or omission; missing schema alone is not fabricated into a defect.
+
+## Declared tool needs
+Read-only snapshot/Python execution only. All target fetching is upstream, read-only GET/HEAD and robots-respecting.

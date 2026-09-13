@@ -17,12 +17,11 @@ export const metadata: Metadata = {
   title: 'Brand AI Readiness — What does AI see when it sees your brand?',
   description:
     'A read-only website auditing engine that analyzes how discoverable, understandable, trustworthy and engaging your brand is to automated systems and AI.',
-  keywords: ['AI readiness', 'brand audit', 'AI visibility', 'SEO', 'LLM optimization'],
 }
 
 export const viewport: Viewport = {
   colorScheme: 'dark',
-  themeColor: '#0c0b10',
+  themeColor: '#0b0d12',
   userScalable: true,
 }
 

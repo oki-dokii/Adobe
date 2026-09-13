@@ -81,7 +81,7 @@ Live-citation-probe; directory-presence; AH9 bake-off; KG completeness; heavy OC
 
 | Requirement | Status |
 |-------------|--------|
-| marketplace.json, 10 skills, one entrypoint | Tested |
+| marketplace.json, 11 skills, one entrypoint | Tested |
 | SKILL.md name+description | Tested |
 | Read-only GET/HEAD | Tested |
 | robots.txt | Tested |

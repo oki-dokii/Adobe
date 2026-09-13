@@ -116,7 +116,12 @@ def run(snapshot: CrawlSnapshot, allow_llm: bool = False) -> SkillResult:
                 skill_id="citation-extractability-audit",
                 finding_type="qualifier_split",
                 title="Price amount is separated from its qualifying condition",
-                severity="critical" if p.page_type in ("pricing", "product") else "high",
+                # A split is an extractability risk, not proof of a business-critical
+                # defect.  Pricing pages commonly contain legitimate regional,
+                # billing, tax, fee, and introductory qualifiers.  Critical is
+                # reserved for corroborated decision failures after admission;
+                # this detector alone cannot establish that.
+                severity="high",
                 evidence=f"Isolated '{m.group()}' vs later qualifier in {window[:120]}… / later span on {p.url}",
                 action=SuggestedAction(
                     summary="Put the amount and its condition in one self-contained sentence.",
@@ -129,6 +134,8 @@ def run(snapshot: CrawlSnapshot, allow_llm: bool = False) -> SkillResult:
                 category="citation",
             )
             f.materiality = "pass"
+            f.metrics["price_semantic_class"] = "purchasable_offer"
+            f.metrics["severity_cap_reason"] = "qualifier_split_is_heuristic_extractability_evidence"
             attach_confidence(f, deterministic=True, reproduced=False)
             findings.append(f)
         for tbl in parsed["tables"]:
@@ -139,7 +146,14 @@ def run(snapshot: CrawlSnapshot, allow_llm: bool = False) -> SkillResult:
                     title="Data table lacks header cells",
                     severity="medium",
                     evidence=f"table has_th=false on {p.url}",
-                    action=SuggestedAction(summary="Add <th> or scope attributes so cells keep units/labels."),
+                    action=SuggestedAction(
+                        summary="Add <th> or scope attributes so cells keep units/labels.",
+                        what="Semantic <th> elements with scope attributes",
+                        where=p.url,
+                        how="Replace the first <tr> row with: <thead><tr><th scope='col'>Header1</th><th scope='col'>Header2</th></tr></thead> to preserve column-to-value association for LLM extractors.",
+                        why="LLMs parse tables row-by-row; without explicit headers, numerical facts and plan features lose their semantic labels in retrieval chunks.",
+                        cost_tier="markup",
+                    ),
                     urls=[p.url],
                     template_id=p.template_id,
                     category="citation",

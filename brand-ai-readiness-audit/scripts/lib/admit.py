@@ -5,7 +5,18 @@ from __future__ import annotations
 from lib.models import Finding, SiteType
 
 
-def admit(finding: Finding, site_type: SiteType, pages_verified: int = 1, coverage_pct: float | None = None) -> Finding:
+TEMPLATE_LEVEL_FINDINGS = {"canonical_dup", "date_divergence", "scent_break", "orphan"}
+
+
+def admit(
+    finding: Finding,
+    site_type: SiteType,
+    pages_verified: int = 1,
+    coverage_pct: float | None = None,
+    *,
+    sampled_pages: int | None = None,
+    template_ids: set[str] | None = None,
+) -> Finding:
     """Return finding with admission emitted|suppressed. Never silent drop."""
     if finding.status == "insufficient_evidence" or not (finding.evidence or "").strip():
         finding.status = "insufficient_evidence"
@@ -20,6 +31,30 @@ def admit(finding: Finding, site_type: SiteType, pages_verified: int = 1, covera
 
     if finding.materiality == "fail" and finding.severity in ("critical", "high"):
         finding.severity = "low"
+
+    # A template-level claim is allowed above MEDIUM only when the sample is
+    # broad enough to support generalization: three distinct templates or at
+    # least 30% of sampled pages affected. Smaller samples remain actionable,
+    # but are explicitly capped to avoid presenting local evidence as a
+    # site-wide conclusion.
+    if ft in TEMPLATE_LEVEL_FINDINGS and finding.severity in ("critical", "high"):
+        distinct_templates = len(template_ids or set())
+        affected_ratio = (
+            finding.affected_pages_count / sampled_pages
+            if sampled_pages and finding.affected_pages_count
+            else 0.0
+        )
+        if distinct_templates < 3 and affected_ratio < 0.30:
+            raw = finding.severity
+            finding.severity = "medium"
+            finding.evidence = (
+                f"{finding.evidence} Coverage gate capped raw {raw.upper()} to MEDIUM: "
+                f"{distinct_templates} distinct template(s), "
+                f"{finding.affected_pages_count}/{sampled_pages or 0} sampled pages affected; "
+                "threshold is 3 templates or >=30% of the sample."
+            )
+            finding.confidence = "medium"
+            finding.confidence_basis = "coverage-gated template-level claim"
 
     # U1 missing schema is never this finding_type; schema_visible_mismatch is OK
     if ft == "schema_visible_mismatch" and "good prose" in (finding.evidence or "").lower() and "mismatch" not in finding.evidence.lower():
@@ -98,11 +133,6 @@ def admit(finding: Finding, site_type: SiteType, pages_verified: int = 1, covera
         finding.suppress_reason = "U10"
         finding.admission = {"emitted": "suppressed", "rule": "U10"}
         return finding
-
-    # Wikipedia absence
-    if ft == "uncorroborated" and "wikipedia" in finding.title.lower() and "contradict" not in finding.title.lower():
-        if finding.severity in ("high", "critical"):
-            finding.severity = "low"
 
     # Unknown cluster: do not suppress pricing
     if cluster == "unknown" and finding.suppress_reason.startswith("V-F"):

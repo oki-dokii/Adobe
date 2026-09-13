@@ -44,6 +44,7 @@ def make_finding(
     evidence_tier: str = "OBS",
     parent_id: Optional[str] = None,
     causal_role: str = "root",
+    contributing_skills: Optional[list[str]] = None,
 ) -> Finding:
     url0 = urls[0] if urls else ""
     key_src = template_id or url0
@@ -67,5 +68,5 @@ def make_finding(
         template_id=template_id,
         parent_id=parent_id,
         causal_role=causal_role,
-        contributing_skills=[skill_id],
+        contributing_skills=contributing_skills if contributing_skills is not None else [skill_id],
     )

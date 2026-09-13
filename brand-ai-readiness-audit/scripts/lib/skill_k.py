@@ -39,13 +39,17 @@ K3_IDENTITY = [
     re.compile(r"\b(?:build|deploy|create|scale|manage|run)\s+[a-z\s,-]{3,30}\s+(?:with|on|for)\b", re.I),
     re.compile(r"\bthe (?:all-in-one|unified|enterprise|developer|modern)\s+[a-z]{3,}", re.I),
     re.compile(r"\b(?:financial|developer|agentic|cloud)\s+infrastructure\b", re.I),
+    re.compile(r"\b(?:software|tools?|suite|engine|app|editor|system)\s+(?:for|to|that)\s+[a-z]{3,}", re.I),
+    re.compile(r"\b(?:designed|built|crafted|made)\s+for\s+[a-z]{3,}", re.I),
+    re.compile(r"\beverything you need to\s+[a-z]{3,}", re.I),
+    re.compile(r"\b[a-z]{3,}\s+tools?\s+for\s+[a-z]{3,}", re.I),
 ]
 
 # Clusters where "what does it cost?" is usually the wrong question.
-_K6_GAP_CLUSTERS = frozenset({"A", "C", "D", "E", "unknown"})
+_K6_GAP_CLUSTERS = frozenset({"A", "B", "C", "D", "E", "unknown"})
 
 
-def k3_span(text: str) -> str | None:
+def k3_span(text: str, meta_desc: str = "") -> str | None:
     blob = text or ""
     hit = _find_span(blob, [K3_OFFERING.pattern])
     if hit:
@@ -55,33 +59,57 @@ def k3_span(text: str) -> str | None:
         if m:
             i = max(0, m.start() - 40)
             return blob[i : m.end() + 40]
+    if meta_desc:
+        m_hit = _find_span(meta_desc, [K3_OFFERING.pattern])
+        if m_hit:
+            return m_hit
+        for pat in K3_IDENTITY:
+            m = pat.search(meta_desc)
+            if m:
+                i = max(0, m.start() - 40)
+                return meta_desc[i : m.end() + 40]
     return None
 
 
 def k6_is_expected_gap(site_type) -> bool:
     cluster = getattr(site_type, "cluster", "") or "unknown"
     secondary = set(getattr(site_type, "secondary", None) or [])
-    # News / docs / gov / YMYL advice: cost is the wrong closed-book question.
-    if cluster in ("A", "C", "D", "E"):
+    # News / docs / gov / charity / YMYL advice: cost is the wrong closed-book question.
+    if cluster in ("A", "B", "C", "D", "E"):
         return True
     if getattr(site_type, "saas", False) or getattr(site_type, "ecommerce", False):
         return False
     if cluster == "F" or "F" in secondary:
         return False
-    return cluster in _K6_GAP_CLUSTERS or bool(secondary & {"A", "C", "D", "E"})
+    return cluster in _K6_GAP_CLUSTERS or bool(secondary & {"A", "B", "C", "D", "E"})
 
 
 QUESTIONS = [
     {"id": "K3", "q": "What does this organization offer or do?", "pats": [K3_OFFERING.pattern], "home_pref": True},
-    {"id": "K6", "q": "What does it cost / how is it priced?", "pats": [r"contact .+ quote", r"request a quote", r"talk to sales"], "home_pref": False},
+    {
+        "id": "K6",
+        "q": "What does it cost / how is it priced?",
+        # price_pats: actual visible price figures (full answer = 1.0)
+        "pats": [r"\$\d", r"\b\d+(?:\.\d+)?\s*(?:USD|EUR|GBP|per month|/mo|/year|/yr)\b", r"\bfree plan\b", r"\bfree tier\b"],
+        # quote_pats: contact-for-quote CTAs (partial answer = 0.5)
+        "quote_pats": [r"contact .{0,30}?quote", r"\brequest a quote\b", r"\btalk to sales\b", r"\bcontact(?:\s+us)? for (?:a )?(?:quote|pricing)\b"],
+        "home_pref": False,
+    },
     {"id": "K13", "q": "How can a human contact the organization?", "pats": [r"@\w+\.\w+", r"\bcontact\b", r"\bemail\b", r"\bphone\b"], "home_pref": False},
     {
         "id": "K4",
         "q": "Who is the intended audience?",
         "pats": [
-            r"\bfor (teams|developers|enterprises|small businesses|clinicians|customers|users|organizations|businesses|students)\b",
-            r"\bbuilt for\b",
-            r"\bdesigned for\b",
+            r"\bfor (teams|developers|enterprises|small businesses|clinicians|customers|users|organizations|businesses|students|kids|children|educators|teachers|families|volunteers|homeowners|taxpayers|citizens|individuals|researchers|creators|professionals|consumers)\b",
+            r"\b(?:built|designed|created|tailored|crafted)\s+for\b",
+            r"\bserving (?:families|communities|children|students|individuals|taxpayers|citizens)\b",
+            # Research K4: implicit audience signals via social-proof and use-case framing
+            r"\btrusted by\b",
+            r"\bused by\b",
+            r"\bideal for\b",
+            r"\bperfect for\b",
+            r"\bdesigned to help\b",
+            r"\bcustomers include\b",
         ],
         "home_pref": False,
         "gap_clusters": ("B",),
@@ -95,9 +123,28 @@ QUESTIONS = [
             r"\boffices? in\b",
             r"\blocated in\b",
             r"\bwe are a .{3,50} in [A-Z][a-z]{2,}",
+            r"\b(?:organization|agency|service|company|entity)\s+(?:in|of)\s+the\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3})",
+            r"\b(?:serving|serves|operating in|across)\s+(?:the\s+)?(?:United States|U\.S\.|Europe|nationwide|worldwide|globally)\b",
+            r"\bUnited States (?:government|agency|department|organization)\b",
         ],
         "home_pref": False,
         "gap_clusters": ("B", "D", "E"),
+    },
+    {
+        "id": "K7",
+        "q": "What makes this organization different from alternatives?",
+        "pats": [
+            # Research K7: differentiator signals (K7 is NOT an expected_gap for commercial sites)
+            r"\bunlike (?:other|most|typical|traditional|competing)\b",
+            r"\bthe only (?:\w+ )?(?:platform|tool|service|solution|company|software)\b",
+            r"\bonly (?:\w+ )?(?:platform|tool|service|solution|software) that\b",
+            r"\bthe first (?:\w+ )?(?:platform|tool|service|company|solution)\b",
+            r"\bno other\b",
+            r"\bwhat sets us apart\b",
+            r"\bwhy (?:choose|us|we)\b",
+            r"\bunique(?:ly)?\b.{0,40}\b(?:approach|feature|advantage|capability|model)\b",
+        ],
+        "home_pref": False,
     },
     {"id": "K10", "q": "Who are the competitors?", "pats": [r"\bvs\.?\b", r"alternative"], "expected_gap": True},
     {"id": "K9", "q": "Awards and rankings", "pats": [r"\baward\b", r"\b#1\b"], "expected_gap": True},
@@ -199,7 +246,12 @@ def run(snapshot: CrawlSnapshot, question_ids: list[str] | None = None) -> Skill
             elif spec["id"] == "K3":
                 if p.page_type == "legal":
                     continue
-                span = k3_span(blob)
+                meta_desc = ""
+                if p.raw_html:
+                    for tag in re.findall(r'<meta[^>]+(?:name=["\']description["\']|property=["\']og:description["\'])[^>]+content=["\']([^"\']+)', p.raw_html, re.I):
+                        meta_desc = tag.strip()
+                        break
+                span = k3_span(blob, meta_desc=meta_desc)
             else:
                 span = _find_span(blob, spec["pats"])
             if span:
@@ -223,31 +275,65 @@ def run(snapshot: CrawlSnapshot, question_ids: list[str] | None = None) -> Skill
             continue
 
         if not hits:
-            # SaaS quote CTA: still "answered" partial if contact-for-quote
             blob = snapshot.corpus_text().lower()
-            if spec["id"] == "K6" and snapshot.site_type.saas and re.search(r"quote|talk to sales|contact .* pric", blob):
-                per_q[spec["id"]] = "partial"
-                answered_scores.append(0.5)
-                continue
+            # K6: check for SaaS quote CTA (partial = 0.5) before marking unanswerable
+            if spec["id"] == "K6":
+                quote_pats = spec.get("quote_pats") or []
+                quote_span = _find_span(blob, quote_pats) if quote_pats else None
+                if quote_span and snapshot.site_type.saas:
+                    per_q[spec["id"]] = "partial"
+                    answered_scores.append(0.5)
+                    # Gap 1: emit coverage_statement so the report is not silent about the partial answer
+                    f_partial = make_finding(
+                        skill_id="ai-answerability-audit",
+                        finding_type="coverage_statement",
+                        title="K6 pricing: contact-for-quote CTA found (partial answer — no public price)",
+                        severity="low",
+                        evidence="SaaS quote CTA detected ('contact us', 'talk to sales'). No public price in crawled corpus. "
+                        "This is a structural norm for enterprise SaaS, not a defect.",
+                        action=SuggestedAction(
+                            summary="If public pricing is desired for AI discoverability, consider adding a visible price tier or starting-price statement.",
+                            priority="low",
+                            why="Contact-for-quote is noted as a partial answer; disclosed limitation beats silent omission.",
+                        ),
+                        urls=[home.url] if home else [snapshot.seed_url],
+                        category="answerability",
+                    )
+                    f_partial.confidence = "high"
+                    f_partial.confidence_basis = "Deterministic: SaaS quote CTA pattern matched in corpus."
+                    findings.append(f_partial)
+                    continue
             per_q[spec["id"]] = "unanswerable"
             answered_scores.append(0.0)
             sev = "high" if spec["id"] == "K3" else "medium"
+            cov_summary = (
+                f"pages_fetched={snapshot.coverage.get('pages_fetched', len(snapshot.pages))}, pages_rendered={snapshot.coverage.get('pages_rendered', 0)}"
+                if isinstance(snapshot.coverage, dict)
+                else str(snapshot.coverage)[:60]
+            )
             f = make_finding(
                 skill_id="ai-answerability-audit",
                 finding_type="unanswerable",
                 title=f"Closed-book: site does not answer {spec['id']} ({spec['q']})",
                 severity=sev,
-                evidence=f"No supporting span in crawled corpus for {spec['id']}. Coverage={snapshot.coverage}. "
+                evidence=f"No supporting span in crawled corpus for {spec['id']}. Coverage: {cov_summary}. "
                 + ("K6" if spec["id"] == "K6" else ""),
                 action=SuggestedAction(
-                    summary="Add a visible, extractable sentence that answers this question on the intent-matched page.",
-                    what=spec["q"],
-                    why="Completeness gap, not a quotation-window issue.",
+                    summary=f"Add a clear, visible statement answering '{spec['q']}' on the primary landing page.",
+                    what=f"Explicit answer to: {spec['q']}",
+                    where=home.url if home else (snapshot.seed_url if snapshot else ""),
+                    how=f"Add an extractable paragraph or FAQ entry directly addressing {spec['q'].lower()}.",
+                    why="Completeness gap: AI assistants cannot synthesize an answer without a direct factual span.",
                 ),
                 urls=[home.url] if home else [snapshot.seed_url],
                 category="answerability",
             )
             attach_confidence(f, deterministic=True, reproduced=False)
+            f.confidence_basis = (
+                "Detected via deterministic keyword/pattern matching; may not recognize an answer "
+                "phrased in unexpected language. Treat 'insufficient' as 'not found via automated pattern match,' "
+                "not as definitive proof the information is absent."
+            )
             f.metrics["question_id"] = spec["id"]
             findings.append(f)
             continue
@@ -273,6 +359,11 @@ def run(snapshot: CrawlSnapshot, question_ids: list[str] | None = None) -> Skill
                 category="answerability",
             )
             attach_confidence(f, deterministic=True, reproduced=False)
+            f.confidence_basis = (
+                "Detected via deterministic keyword/pattern matching; may not recognize an answer "
+                "phrased in unexpected language. Treat 'insufficient' as 'not found via automated pattern match,' "
+                "not as definitive proof the information is absent."
+            )
             f.metrics["question_id"] = spec["id"]
             findings.append(f)
         else:

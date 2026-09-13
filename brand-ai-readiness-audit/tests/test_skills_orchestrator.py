@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "tests"))
 from fake_http import make_opener, public_resolve
 from lib.clock import Clock
 from lib.crawl import crawl
-from lib.http import HttpClient
+from lib.http_client import HttpClient
 from lib.orchestrator import run_audit
 from lib.skill_cit import run as run_cit
 from lib.skill_d import run as run_d
@@ -254,7 +254,8 @@ def test_one_entrypoint_manifest():
     assert len(eps) == 1
     assert eps[0]["id"] == "audit-orchestrator"
     ids = [s["id"] for s in man["skills"]]
-    assert len(ids) == 10
+    assert len(ids) == 11
+    assert "business-impact-layer" in ids
 
 
 def test_no_hardcoded_eval_hosts_in_lib():

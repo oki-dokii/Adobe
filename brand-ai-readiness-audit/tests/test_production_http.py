@@ -13,7 +13,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from lib.http import (
+from lib.http_client import (
     HttpClient,
     HttpError,
     build_production_opener,

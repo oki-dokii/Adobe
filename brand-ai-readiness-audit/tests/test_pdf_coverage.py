@@ -1,4 +1,4 @@
-"""PDF architecture coverage mapped into the existing 10 skills. Generic fixtures only."""
+"""PDF architecture coverage mapped into the 11 marketplace skills. Generic fixtures only."""
 
 from __future__ import annotations
 
@@ -151,3 +151,22 @@ def test_cart_orphan_u8():
     )
     y = admit(f, SiteType(cluster="F"), coverage_pct=1.0)
     assert y.suppressed and y.suppress_reason == "U8"
+
+
+def test_shopify_locale_canonical_suppression():
+    """Verify that Shopify-style /about vs /au/about vs /by/about are not flagged as canonical_dup."""
+    from lib.models import Page
+    from lib.skill_c import run as run_c
+    snap = crawl(BASE + "/", C(routes_for({"/": HOME})), Clock.start_run(30), page_cap=1)
+    
+    # Create 4 pages simulating Shopify's about cluster with identical simhash
+    sim = 123456789
+    p1 = Page(id="p1", url="https://site.test/about", final_url="https://site.test/about", status=200, content_simhash=sim, canonical="https://site.test/about")
+    p2 = Page(id="p2", url="https://site.test/au/about", final_url="https://site.test/au/about", status=200, content_simhash=sim, canonical="https://site.test/au/about")
+    p3 = Page(id="p3", url="https://site.test/by/about", final_url="https://site.test/by/about", status=200, content_simhash=sim, canonical="https://site.test/by/about")
+    p4 = Page(id="p4", url="https://site.test/eg/about", final_url="https://site.test/eg/about", status=200, content_simhash=sim, canonical="https://site.test/eg/about")
+    snap.pages = [p1, p2, p3, p4]
+    
+    res = run_c(snap)
+    dup_findings = [f for f in res.findings if f.finding_type == "canonical_dup"]
+    assert len(dup_findings) == 0, f"Expected 0 canonical_dup findings for localized cluster, got: {dup_findings}"

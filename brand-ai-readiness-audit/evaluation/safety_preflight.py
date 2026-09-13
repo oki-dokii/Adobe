@@ -6,7 +6,7 @@ from urllib.request import HTTPRedirectHandler
 
 from lib.clock import PROTECT_LIST
 from lib.crawl import PAGE_CAP
-from lib.http import (
+from lib.http_client import (
     DEFAULT_MAX_BYTES,
     DEFAULT_TIMEOUT,
     METHODS,
@@ -71,7 +71,7 @@ def assert_production_safety() -> dict:
     if PAGE_CAP > 80:
         raise SafetyError(f"page cap looks unbounded: {PAGE_CAP}")
 
-    http_src = (__import__("lib.http", fromlist=["http"]).__file__)
+    http_src = (__import__("lib.http_client", fromlist=["http_client"]).__file__)
     text = open(http_src, encoding="utf-8").read()
     if "CookieJar" in text or "http.cookiejar" in text:
         raise SafetyError("cookie jar present")

@@ -8,7 +8,7 @@ from lib.confidence import attach_confidence
 from lib.extract import parse_html
 from lib.facts import compare_claim_against_source, extract_facts, material
 from lib.findings import make_finding
-from lib.http import HttpClient, HttpError
+from lib.http_client import HttpClient, HttpError
 from lib.models import CrawlSnapshot, SkillResult, SuggestedAction
 from lib.robots import fetch_robots
 from lib.sanitize import wrap_as_data
@@ -17,13 +17,11 @@ from lib.url import same_registrable
 
 def _source_kind(url: str) -> str:
     u = url.lower()
-    if "wikipedia.org" in u:
-        return "wikipedia_infobox"
     if any(x in u for x in ("linkedin", "twitter", "facebook", "instagram")):
         return "company_profile"
-    if "wikidata.org" in u:
-        return "wikidata"
-    return "other"
+    # Linked sameAs sources are deliberately treated as one generic public
+    # profile channel. No specific knowledge-base domain is required.
+    return "linked_public_profile"
 
 
 def run(snapshot: CrawlSnapshot, client: HttpClient | None = None, max_gets: int = 5) -> SkillResult:

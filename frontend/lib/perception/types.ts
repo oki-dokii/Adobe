@@ -15,12 +15,23 @@ export interface PerceptionSpan {
   grounding: 'supported' | 'unsupported' | 'inferred'
 }
 
+export interface EngineCitation {
+  name: string
+  grounded: boolean
+  confidence: number
+  citations: string[]
+  failureMode?: string
+  answerSnippet?: string
+}
+
 export interface PerceptionResult {
   questionId: PerceptionQuestionId
   status: PerceptionStatus
   confidence: Confidence
+  confidenceScore?: number
   answer: string
   spans: PerceptionSpan[]
+  engines?: EngineCitation[]
   disclaimer: 'simulated_extract_grounded'
   stale: boolean
   usedFallback: boolean
@@ -36,10 +47,14 @@ export interface MemoryCell {
   skillIds: SkillId[]
   findingIds: string[]
   source: 'evidence' | 'inferred' | 'empty'
+  tier?: 'permanent' | 'stable' | 'volatile' | 'critical'
+  halfLifeDays?: number
 }
 
 export interface BrandMemory {
   cells: MemoryCell[]
+  halfLifeDays?: number
+  missingFacts?: string[]
 }
 
 export interface SubstitutionResult {
@@ -47,6 +62,13 @@ export interface SubstitutionResult {
   disclaimer: 'simulated_from_audit_gaps'
   firstParty: 'strong' | 'adequate' | 'weak'
   likelyCite: string
+  targetBrandShare?: number
+  rivalBrandShare?: number
+  rivalName?: string
+  breakPointReason?: string
+  winningAttributes?: string[]
+  remediationCode?: string
+  liftDelta?: number
   causeChain: { id: string; label: string }[]
   skillIds: SkillId[]
   findingIds: string[]
@@ -54,11 +76,34 @@ export interface SubstitutionResult {
 
 export type GravityClass = 'named' | 'generic' | 'displaced'
 
+export interface GravityAnchor {
+  label: string
+  weight: number
+  detail: string
+}
+
+export interface GravityRival {
+  name: string
+  score: number
+  zone: 'high' | 'disputed' | 'attrition'
+}
+
 export interface GravityResult {
   class: GravityClass
   label: string
+  score?: number
   detail: string
   skillIds: SkillId[]
+  anchors?: GravityAnchor[]
+  rivals?: GravityRival[]
+}
+
+export interface MriVitals {
+  retrievalFidelity: number
+  groundingIntegrity: number
+  memoryHalfLifeDays: number
+  hallucinationRisk: number
+  revenueDragMonthly: number
 }
 
 export interface PerceptionBundle {
@@ -66,6 +111,7 @@ export interface PerceptionBundle {
   memory: BrandMemory
   substitution: SubstitutionResult | null
   gravity: GravityResult
+  vitals?: MriVitals
 }
 
 export interface PerceptionContext {

@@ -1,20 +1,22 @@
 {
   "name": "brand-ai-readiness-audit",
   "version": "1.0.0",
+  "description": "Read-only, robots-respecting audit of a public site's AI discoverability, understanding, trust, and engagement readiness.",
   "skills": [
     {
       "id": "audit-orchestrator",
       "path": "skills/audit-orchestrator",
       "entrypoint": true
     },
-    { "id": "site-type-classifier", "path": "skills/site-type-classifier" },
-    { "id": "crawl-access-audit", "path": "skills/crawl-access-audit" },
-    { "id": "render-extract-audit", "path": "skills/render-extract-audit" },
-    { "id": "citation-extractability-audit", "path": "skills/citation-extractability-audit" },
-    { "id": "entity-identity-audit", "path": "skills/entity-identity-audit" },
-    { "id": "ai-answerability-audit", "path": "skills/ai-answerability-audit" },
-    { "id": "freshness-audit", "path": "skills/freshness-audit" },
-    { "id": "corroboration-consistency-audit", "path": "skills/corroboration-consistency-audit" },
-    { "id": "engagement-handoff-audit", "path": "skills/engagement-handoff-audit" }
+    { "id": "site-type-classifier", "path": "skills/site-type-classifier", "entrypoint": false },
+    { "id": "crawl-access-audit", "path": "skills/crawl-access-audit", "entrypoint": false },
+    { "id": "render-extract-audit", "path": "skills/render-extract-audit", "entrypoint": false },
+    { "id": "citation-extractability-audit", "path": "skills/citation-extractability-audit", "entrypoint": false },
+    { "id": "entity-identity-audit", "path": "skills/entity-identity-audit", "entrypoint": false },
+    { "id": "ai-answerability-audit", "path": "skills/ai-answerability-audit", "entrypoint": false },
+    { "id": "freshness-audit", "path": "skills/freshness-audit", "entrypoint": false },
+    { "id": "corroboration-consistency-audit", "path": "skills/corroboration-consistency-audit", "entrypoint": false },
+    { "id": "engagement-handoff-audit", "path": "skills/engagement-handoff-audit", "entrypoint": false },
+    { "id": "business-impact-layer", "path": "skills/business-impact-layer", "entrypoint": false, "callable": true, "entrypoint_fn": "run" }
   ]
 }

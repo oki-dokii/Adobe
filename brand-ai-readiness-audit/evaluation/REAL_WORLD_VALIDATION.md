@@ -192,7 +192,7 @@ Skip-ladder did **not** drop H (remaining ≫ 45s). Page cap, not T_h, stopped w
 ## 19. What is working well
 
 - Live GET path with hop SSRF and robots did not explode or hang past 280s.
-- All 10 skills ran; isolation was untested by live exceptions (none occurred).
+- All 11 marketplace skills ran; isolation was untested by live exceptions (none occurred).
 - No sameAs-absence spam; no missing-schema/sitemap/canonical spam.
 - Warm runs show crawl is the only lever that matters.
 - Instrumentation (`http_requests`, `pages_rendered`, `robots_status`, `timeout_count`, `redirect_hops_total`) came from the run, not a post-hoc guess.
