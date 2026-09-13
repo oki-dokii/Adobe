@@ -42,95 +42,86 @@ The findings clustered into eight structural failure categories, each of which m
 
 8. **Engagement and wayfinding failures** — Absence of brand identity in the first viewport, broken Scroll-to-Text-Fragment deep links that cause AI-generated citations to land on unrelated page sections, and navigation gaps between the AI-cited landing page and the commercial conversion surface.
 
-### Architectural constraints respected throughout
+### Architectural constraints
 
-The following constraints were treated as invariants, not preferences:
+The following constraints were treated as invariants throughout implementation:
 
-- **Read-only operation.** The system issues only `GET` and `HEAD` requests. No POST, PUT, PATCH, or DELETE is issued anywhere in the codebase. `frozenset({"GET", "HEAD"})` is enforced at the HTTP client layer.
-- **`robots.txt` compliance.** The RFC 9309 crawl policy is fetched and evaluated before any page request. A 4xx response is treated as fail-open; a 5xx response is treated as fail-closed. The skill itself reports observed policy as a finding rather than bypassing it.
-- **No host allowlists.** All detection rules are structural (path shape, grammar patterns, DOM structure, byte signatures). No site-specific logic exists. A site that genuinely improves its markup will score better without a code change.
-- **No external model weights or APIs.** Detection is implemented as deterministic heuristics over parsed HTML, JSON-LD, and HTTP metadata. No embedding models, no paid search APIs, no live AI probe queries.
-- **Deterministic completion within budget.** A 280-second hard deadline is enforced through a skip-ladder that degrades gracefully: rendering is reduced, then corroboration is skipped, then rendering is omitted entirely, while the protected core (crawl-access and answerability) always runs.
+- **Read-only operation.** The system issues only `GET` and `HEAD` requests. `frozenset({"GET", "HEAD"})` is enforced at the HTTP client layer.
+- **`robots.txt` compliance.** The RFC 9309 crawl policy is fetched and evaluated before any page request. A 4xx response is treated as fail-open; a 5xx response is treated as fail-closed.
+- **No host allowlists.** All detection rules are structural — path shape, grammar patterns, DOM structure, byte signatures. No site-specific logic exists anywhere in the codebase.
+- **No external model weights or APIs.** Detection is implemented as deterministic heuristics over parsed HTML, JSON-LD, and HTTP metadata.
+- **Deterministic completion within budget.** A 280-second hard deadline is enforced through a skip-ladder that degrades gracefully: rendering is reduced, then corroboration is skipped, then rendering is omitted entirely, while the protected core always runs.
 
 ---
 
 ## Skill Architecture
 
-The system decomposes into 11 marketplace skills registered in `marketplace.json`. One skill is the orchestration entrypoint; nine are stateless detection units operating on a shared `CrawlSnapshot`; one is a post-detection annotation layer that scores and ranks without fabricating evidence.
+The system decomposes into 11 marketplace skills registered in `brand-ai-readiness-audit/marketplace.json`. One skill is the orchestration entrypoint; nine are stateless detection units operating on a shared `CrawlSnapshot`; one is a post-detection annotation layer that scores and ranks without fabricating evidence.
 
 ### Orchestrator
 
 `audit-orchestrator` is the sole public entrypoint. It validates the seed URL (scheme check, credential stripping, SSRF guard), performs a single shared crawl up to the configured page cap, constructs a `CrawlSnapshot`, routes it through the skill DAG, runs the admission and merge layers, invokes the business-impact annotation, and assembles the final report in JSON and optionally Markdown.
 
-The DAG encodes two dependency constraints: `render-extract-audit` must complete before `citation-extractability-audit`, `ai-answerability-audit`, and `engagement-handoff-audit`, because those skills operate on the rendered page representation. All other skills are independent after the crawl.
+The DAG encodes one hard dependency: `render-extract-audit` must complete before `citation-extractability-audit`, `ai-answerability-audit`, and `engagement-handoff-audit`, because those skills operate on the rendered page representation. All other skills are independent after the crawl.
 
 ### Detection Skills
 
-**`crawl-access-audit`** examines the observed crawl policy, transport, and coverage. It emits findings for AI-specific user-agent disallow directives, noindex/robots conflicts, soft-404 responses (HTTP 200 with not-found language and thin body), canonical duplicates across non-locale URL clusters, and uniform sitemap lastmod stamps that indicate a CMS is publishing stale freshness signals.
+**`crawl-access-audit`** examines the observed crawl policy, transport, and coverage. It emits findings for AI-specific user-agent disallow directives, noindex/robots conflicts, soft-404 responses (HTTP 200 with not-found language and thin body), canonical duplicates across non-locale URL clusters, and uniform sitemap `lastmod` stamps that indicate a CMS is publishing stale freshness signals.
 
 **`render-extract-audit`** compares the static HTML representation against the expanded representation after unwrapping `<noscript>` blocks, `<template>` elements, and Next.js `__NEXT_DATA__` payloads. Facts that exist only in the expanded representation are flagged as render-gap extractions. The dual-fetch approach avoids any dependency on a headless browser binary, keeping the package within the submission size constraint.
 
 **`site-type-classifier`** assigns each site to one of six clusters (SaaS platform, e-commerce, news or media, developer documentation, government or institutional, personal or portfolio) using a combination of keyword-frequency voting and JSON-LD schema.org type extraction. When a schema.org type is present (`SoftwareApplication`, `Product`, `NewsArticle`, `MedicalWebPage`, `GovernmentOrganization`), classification confidence is elevated deterministically. The site type gates downstream question selection in the answerability skill and expected-gap rules in the freshness skill.
 
-**`citation-extractability-audit`** identifies two classes of LLM citation failures: qualifier splits (pricing amounts where the condition clause — "plus VAT", "per seat", "for annual plans" — appears in a sibling DOM element rather than the same text node) and headerless tables (where `<th>` or `thead` are absent, preventing a language model from associating cell values with their column intent). It also checks for schema-visible price mismatches, comparing JSON-LD `Product.offers.price` values against visible offer strings and flagging contradictions, not mere absences.
+**`citation-extractability-audit`** identifies two classes of LLM citation failures: qualifier splits, where a pricing amount and its condition clause appear in sibling DOM elements rather than the same text node; and headerless tables, where absence of `<th>` or `<thead>` prevents a language model from associating cell values with their column intent. It also checks for schema-visible price mismatches, comparing JSON-LD `Product.offers.price` values against visible offer strings and flagging contradictions, not mere absences.
 
-**`ai-answerability-audit`** evaluates the site's crawled corpus against 13 canonical buyer questions (K1 through K13), each defined by a grammar pattern rather than a keyword list. The 13 questions span: brand identity, core offering, pricing, target audience, geography, integrations, support availability, founding story, comparison differentiation, certifications, and regulatory compliance. Questions are gated by site type — "what does it cost?" is not an expected answer on a government domain — and by crawl budget, with a time-remaining ladder that reduces the question set rather than truncating mid-check.
+**`ai-answerability-audit`** evaluates the site's crawled corpus against 13 canonical buyer questions (K1 through K13), each defined by a grammar pattern rather than a keyword list. Questions span: brand identity, core offering, pricing, target audience, geography, integrations, support availability, founding story, comparison differentiation, certifications, and regulatory compliance. Questions are gated by site type and by crawl budget, with a time-remaining ladder that reduces the active question set rather than truncating mid-check.
 
-**`entity-identity-audit`** identifies brand name collision risk (names that share tokens with more-prominent entities in general knowledge bases) and dead `sameAs` link targets. Collision risk is assessed against a closed list of generic tokens; all-caps acronyms and unique compound names are excluded from collision scoring. Structured JSON-LD disambiguators (`addressCountry`, `disambiguatingDescription`) suppress false-positive collision warnings when present.
+**`entity-identity-audit`** identifies brand name collision risk — names that share tokens with more-prominent entities in general knowledge bases — and dead `sameAs` link targets. Collision risk is assessed against a closed list of generic tokens; all-caps acronyms and unique compound names are excluded. Structured JSON-LD disambiguators (`addressCountry`, `disambiguatingDescription`) suppress false-positive warnings when present.
 
 **`freshness-audit`** compares copyright footer years, schema `dateModified` values, and visible date claims across the crawled page set. It skips date spans of four or more years that indicate a documented history rather than a stale claim, and ignores intra-site price comparisons across locale-prefixed URL variants, which represent the same catalog in different markets rather than conflicting claims.
 
-**`corroboration-consistency-audit`** fetches explicitly linked, robots-permitted public sources from `sameAs` targets and linked partner or press pages. It compares material factual claims — company founding year, headcount figures, product version numbers — against the corresponding claims on the audited site. Only sites the audited page explicitly names and links are checked; no web search is performed.
+**`corroboration-consistency-audit`** fetches explicitly linked, robots-permitted public sources from `sameAs` targets and linked partner or press pages. It compares material factual claims against the corresponding claims on the audited site. Only sources the audited page explicitly names and links are checked; no web search is performed.
 
-**`engagement-handoff-audit`** examines the post-referral experience. It checks for brand identity signals in the first viewport (above the fold), evaluates Scroll-to-Text-Fragment anchors on pages that AI assistants commonly cite, and detects wayfinding scent breaks where a landing page lacks navigational signals toward the commercial conversion surface that corresponds to the buyer question that generated the citation.
+**`engagement-handoff-audit`** examines the post-referral experience. It checks for brand identity signals in the first viewport, evaluates Scroll-to-Text-Fragment anchors on pages that AI assistants commonly cite, and detects wayfinding scent breaks where a landing page lacks navigational signals toward the commercial conversion surface that corresponds to the buyer question that generated the citation.
 
 ### Annotation Layer
 
-**`business-impact-layer`** receives the merged canonical finding set and computes four normalized dimension scores (Discoverability, Understanding, Trust, Engagement) and a composite overall-readiness index. It sorts findings by a priority function derived from severity and dimension weight and selects the top three actions for the report summary. It does not perform any detection, emit any new findings, or modify evidence fields.
+**`business-impact-layer`** receives the merged canonical finding set and computes four normalized dimension scores (Discoverability, Understanding, Trust, Engagement) and a composite overall-readiness index. It sorts findings by a priority function derived from severity and dimension weight, and selects the top priority actions for the report summary. It performs no detection, emits no new findings, and does not modify evidence fields.
 
 ---
 
 ## Output Schema
 
-The JSON report produced by the orchestrator contains:
-
-```
+```json
 {
-  "url": string,
-  "audited_at": ISO-8601 timestamp,
-  "overall_index": integer 0–100,
+  "url": "string",
+  "audited_at": "ISO-8601 timestamp",
+  "overall_index": "integer 0-100",
   "dimension_scores": {
-    "discoverability": integer,
-    "understanding": integer,
-    "trust": integer,
-    "engagement": integer
+    "discoverability": "integer",
+    "understanding": "integer",
+    "trust": "integer",
+    "engagement": "integer"
   },
   "summary": {
-    "total": integer,
-    "critical": integer,
-    "high": integer,
-    "medium": integer,
-    "low": integer
+    "total": "integer",
+    "critical": "integer",
+    "high": "integer",
+    "medium": "integer",
+    "low": "integer"
   },
-  "top3PriorityActions": [ SuggestedAction, ... ],
-  "findings": [ Finding, ... ]
+  "top3PriorityActions": ["SuggestedAction"],
+  "findings": ["Finding"]
 }
 ```
 
-Each `Finding` carries:
+Each `Finding` carries: `id`, `title`, `severity`, `evidence`, `evidence_summary` (120-character preview), `finding_type`, `finding_key`, and `suggested_action` with fields `summary`, `priority`, `what`, `where`, `how`, `why`, `cost_tier`, and `proactive`.
 
-```
-id, title, severity, evidence, evidence_summary (120-character preview),
-finding_type, finding_key, suggested_action {
-  summary, priority, what, where, how, why, cost_tier, proactive
-}
-```
-
-The `how` field contains a copy-pasteable markup or configuration snippet for every finding type that has a deterministic fix, removing the intermediate interpretation step for the operator acting on the report.
+The `how` field contains a copy-pasteable markup or configuration snippet for every finding type that has a deterministic fix.
 
 ---
 
-## Running the Audit
+## Usage
 
 ```sh
 # From the brand-ai-readiness-audit/ directory
@@ -139,9 +130,9 @@ PYTHONPATH=scripts python3 skills/audit-orchestrator/scripts/run.py \
   --json-out report.json
 ```
 
-Bare domain inputs (`example.com`) are automatically normalized to `https://example.com`. The `--page-cap` and `--render-max` arguments reduce the crawl scope for slow origins. The default page cap is 40; the default render budget is 10 pages.
+Bare domain inputs such as `example.com` are automatically normalized to `https://example.com`. Use `--page-cap` and `--render-max` to reduce the crawl scope on slow origins. The default page cap is 40 and the default render budget is 10 pages.
 
-### Running Tests
+**Run tests:**
 
 ```sh
 PYTHONPATH=scripts pytest tests/ -q
@@ -166,30 +157,12 @@ brand-ai-readiness-audit/
 │   ├── corroboration-consistency-audit/
 │   ├── engagement-handoff-audit/
 │   └── business-impact-layer/
-├── scripts/
-│   └── lib/
-│       ├── orchestrator.py
-│       ├── models.py
-│       ├── render.py
-│       ├── admit.py
-│       ├── money.py
-│       ├── skill_c.py
-│       ├── skill_d.py
-│       ├── skill_v.py
-│       ├── skill_cit.py
-│       ├── skill_k.py
-│       ├── skill_ent.py
-│       ├── skill_i.py
-│       ├── skill_h.py
-│       ├── skill_x.py
-│       └── business_impact.py
+├── scripts/lib/
 ├── tests/
-├── decisions.md
-└── docs/
-    └── assets/
+└── decisions.md
 ```
 
-`decisions.md` contains the full engineering diary: every false positive encountered during live testing, the structural rule used to resolve it, and the regression test that prevents recurrence.
+`decisions.md` contains the engineering diary: every false positive encountered during live testing, the structural rule used to resolve it, and the regression test that prevents recurrence.
 
 ---
 
