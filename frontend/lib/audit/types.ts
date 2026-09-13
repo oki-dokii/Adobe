@@ -18,6 +18,9 @@ export type SkillId =
   | 'corroboration-consistency-audit'
   | 'engagement-handoff-audit'
 
+/** All 11 marketplace entries, including the post-processing layer. */
+export type MarketplaceSkillId = SkillId | 'business-impact-layer'
+
 /** The four high-level readiness dimensions a brand is measured against. */
 export type Dimension = 'discoverability' | 'understanding' | 'trust' | 'engagement'
 

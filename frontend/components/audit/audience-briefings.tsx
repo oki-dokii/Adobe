@@ -256,7 +256,7 @@ export function AudienceBriefings({
                   <span>
                     <strong>Referral & Action Path:</strong> {handoffDefects.length === 0
                       ? 'Machine-legible next action paths found for assistant handoffs.'
-                      : 'Handoff paths lack semantic deep-links; AI assistants cannot complete direct referrals.'}
+                      : 'Handoff paths lack semantic deep-links; an automated handoff may require qualification or manual completion.'}
                   </span>
                 </li>
               </ul>

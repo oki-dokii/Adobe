@@ -18,6 +18,7 @@ Shared `CrawlSnapshot` with parsed DOM/landmark information and page types. Stan
 `SkillResult` JSON with `findings`: `{ id, finding_type, finding_key, title, severity, businessExposureSeverity: null, evidence, suggested_action, confidence }`.
 
 ## Confidence & failure handling
+Template-level `scent_break` findings are capped at MEDIUM under partial coverage unless observed across at least 3 distinct templates or at least 30% of sampled pages. Missing landmarks on a one-page site are not treated as defects.
 Personalization or unavailable DOM evidence is disclosed as a limitation or LOW confidence; robots restrictions, 403s, and bot challenges are never bypassed or replaced with placeholders.
 
 ## Declared tool needs

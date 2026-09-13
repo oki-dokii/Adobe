@@ -7,7 +7,7 @@ LIB = (ROOT / "scripts" / "lib").read_text if False else ROOT / "scripts" / "lib
 
 
 def test_no_write_methods_in_http_client():
-    text = (LIB / "http.py").read_text()
+    text = (LIB / "http_client.py").read_text()
     assert "POST" not in text or "not allowed" in text
     assert "PUT" not in text
     assert "DELETE" not in text

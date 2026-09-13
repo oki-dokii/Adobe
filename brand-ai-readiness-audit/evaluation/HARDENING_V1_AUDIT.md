@@ -82,7 +82,7 @@ Evidence order: scale/role/large amount → metric; rate/frame/lead-in → offer
 
 ## 11. Architecture
 
-Unchanged: 10 skills, one orchestrator entrypoint, locked finding types, skip-ladder, protect-list **skills**, P-order compare, dual report. No new marketplace skill for WAF or pricing.
+Unchanged: 11 marketplace skills, one orchestrator entrypoint, locked finding types, skip-ladder, protect-list **skills**, P-order compare, dual report. No new marketplace skill for WAF or pricing.
 
 ## 12. Demo gate
 

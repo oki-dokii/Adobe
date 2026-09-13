@@ -28,6 +28,7 @@ _METRIC_ROLE = re.compile(
     r"market\s+(?:size|cap|opportunity)|"
     r"gmv|gross\s+merchandise|"
     r"processed|processing\s+volume|payment\s+volume|"
+    r"credit|credits|reward|rewards|"
     r"investment|invested|"
     r"salary|compensation|payroll"
     r")\b",

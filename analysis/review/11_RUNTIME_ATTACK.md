@@ -1,6 +1,6 @@
 # Phase 11 — Runtime Attack
 
-Hard cap: **< 300s** wall clock for the whole marketplace. v0 10 skills + LLM K/CIT/V + render + H fetches **will overrun** on a JS-heavy huge site if unbounded.
+Hard cap: **< 300s** wall clock for the whole marketplace. The 11-skill marketplace plus LLM K/CIT/V + render + H fetches **will overrun** on a JS-heavy huge site if unbounded.
 
 ## Cost model (order-of-magnitude, unvalidated)
 

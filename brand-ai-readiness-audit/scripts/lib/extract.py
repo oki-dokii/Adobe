@@ -56,6 +56,8 @@ class _Parser(HTMLParser):
         self.closed_details_text: list[str] = []
         self.nav_texts: list[str] = []
         self.in_nav = False
+        self.in_footer = False
+        self.footer_text_parts: list[str] = []
         self.in_noscript = False
         self.noscript_text: list[str] = []
 
@@ -76,6 +78,8 @@ class _Parser(HTMLParser):
                 self.breadcrumb = True
         if tag == "nav":
             self.in_nav = True
+        if tag == "footer":
+            self.in_footer = True
         if tag == "main":
             self.in_main = True
             self.landmarks["main"] = True
@@ -142,6 +146,8 @@ class _Parser(HTMLParser):
             self.in_closed_details = any(self.details_stack)
         if tag == "nav":
             self.in_nav = False
+        if tag == "footer":
+            self.in_footer = False
         if tag == "main":
             self.in_main = False
         if tag in ("div", "span", "p", "section") and self.skip_hidden:
@@ -167,6 +173,8 @@ class _Parser(HTMLParser):
         text = data.strip()
         if not text:
             return
+        if self.in_footer:
+            self.footer_text_parts.append(text)
         if self.skip_hidden:
             self.hidden_text.append(text)
             return
@@ -215,6 +223,7 @@ def parse_html(html: str, base_url: str = "") -> dict[str, Any]:
         "closed_details_text": p.closed_details_text,
         "noscript_text": p.noscript_text,
         "nav_texts": p.nav_texts,
+        "footer_text": " ".join(p.footer_text_parts),
         "simhash": simhash64((html or "")[:8000]),
     }
 
@@ -291,6 +300,7 @@ def fill_page_from_html(page: Page) -> None:
     page.page_type = classify_page_type(page.url, page.title, page.main_text)
     page.dates = {
         "visible": re.findall(r"\b(?:19|20)\d{2}\b", page.main_text)[:8],
+        "footer": re.findall(r"\b(?:19|20)\d{2}\b", parsed.get("footer_text", ""))[:8],
         "schema": parsed["date_meta"],
         "http_last_modified": page.headers.get("last-modified"),
         "sitemap_lastmod": None,

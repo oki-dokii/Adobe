@@ -9,6 +9,9 @@ from typing import Any, Optional
 FINDING_TYPES = frozenset(
     {
         "robots_fail_closed",
+        "transport_unreachable",
+        "access_blocked",
+        "robots_disallow",
         "ai_token_disallow",
         "orphan",
         "trap_facet",
@@ -114,7 +117,7 @@ class Finding:
     metrics: dict[str, Any] = field(default_factory=dict)
     status: str = "found"
 
-    def to_handout(self) -> dict[str, Any]:
+    def to_handout(self, *, coverage_basis: str | None = None) -> dict[str, Any]:
         sa = self.suggested_action
         action: Any
         if isinstance(sa, SuggestedAction):
@@ -140,9 +143,7 @@ class Finding:
                 "summary": str(sa),
                 "priority": "medium",
             }
-        ev = self.evidence or ""
-        ev_summary = ev[:120].rstrip() + ("…" if len(ev) > 120 else "")
-        return {
+        output = {
             "id": self.id,
             "title": self.title,
             "severity": self.severity,
@@ -152,9 +153,14 @@ class Finding:
             "finding_key": self.finding_key,
             "suggested_action": action,
         }
+        if coverage_basis is not None:
+            output["coverage_basis"] = coverage_basis
+        return output
 
-    def to_internal(self) -> dict[str, Any]:
+    def to_internal(self, *, coverage_basis: str | None = None) -> dict[str, Any]:
         d = asdict(self)
+        if coverage_basis is not None:
+            d["coverage_basis"] = coverage_basis
         return d
 
 

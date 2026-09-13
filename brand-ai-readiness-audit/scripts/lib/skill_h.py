@@ -8,7 +8,7 @@ from lib.confidence import attach_confidence
 from lib.extract import parse_html
 from lib.facts import compare_claim_against_source, extract_facts, material
 from lib.findings import make_finding
-from lib.http import HttpClient, HttpError
+from lib.http_client import HttpClient, HttpError
 from lib.models import CrawlSnapshot, SkillResult, SuggestedAction
 from lib.robots import fetch_robots
 from lib.sanitize import wrap_as_data

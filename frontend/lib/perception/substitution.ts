@@ -53,16 +53,18 @@ export function buildSubstitution(
 
   // Honest competitor reference: never invent specific rival names for unverified domains.
   const rivalName = 'Third-Party Aggregators & Structured Competitors'
-  const targetBrandShare = fp === 'strong' ? 72 : fp === 'adequate' ? 52 : 32
-  const rivalBrandShare = 100 - targetBrandShare
+  // No live assistant or search-share measurement is performed. Do not emit
+  // fabricated percentages or a named competitor counterfactual.
+  const targetBrandShare = undefined
+  const rivalBrandShare = undefined
 
   // Build dynamic break-point reason from actual audit findings
   let breakPointReason = 'Third-party sources provide machine-readable metadata and direct declarative facts, whereas this domain relies on unstructured content.'
   if (weakFindings.length > 0) {
     const topGap = weakFindings[0]
-    breakPointReason = `AI systems prioritize secondary sources because first-party content exhibits extraction failures: "${topGap.title}". Third-party directories and competitors supply structured alternatives.`
+    breakPointReason = `The first-party content exhibits an extraction barrier: "${topGap.title}". A downstream retrieval system may need another source; that behavior was not measured.`
   } else if (subCause) {
-    breakPointReason = `AI citation drift is driven by ${subCause.label.toLowerCase()} across audited pages, causing assistants to fall back to encyclopedic or competitor sources.`
+    breakPointReason = `The audited pages show ${subCause.label.toLowerCase()}. This may reduce the completeness of first-party grounding; citation drift was not measured.`
   }
 
   // Build dynamic winning attributes from actual failure points
@@ -88,7 +90,7 @@ export function buildSubstitution(
   } else {
     winningAttributes.push('Unambiguous factual question-and-answer pairs formatted for direct RAG ingestion')
   }
-  winningAttributes.push('Comprehensive entity disambiguation identifiers (Wikidata / sameAs mapping)')
+  winningAttributes.push('Consistent first-party entity identifiers and explicit organization context')
 
   // Dynamic remediation code tailored to the audited domain
   const brandName = domain.replace(/^www\./, '').split('.')[0]
@@ -99,11 +101,7 @@ export function buildSubstitution(
   "@type": "Organization",
   "name": "${capitalizedBrand}",
   "url": "${url}",
-  "description": "Authoritative entity specifications and verified organizational profile for ${domain}.",
-  "sameAs": [
-    "https://en.wikipedia.org/wiki/${capitalizedBrand}",
-    "https://www.wikidata.org/wiki/${capitalizedBrand}"
-  ]
+  "description": "Add a concise, verified organizational description for ${domain}."
 }
 </script>`
 
@@ -119,7 +117,7 @@ export function buildSubstitution(
     breakPointReason,
     winningAttributes,
     remediationCode,
-    liftDelta: fp === 'weak' ? 40 : fp === 'adequate' ? 24 : 12,
+    liftDelta: undefined,
     causeChain: ordered.slice(0, 5).map((c) => ({ id: c.id, label: c.label })),
     skillIds,
     findingIds,

@@ -16,7 +16,7 @@ export interface PerceptionSpan {
 }
 
 export interface EngineCitation {
-  name: 'GPT-4o' | 'Claude 3.5 Sonnet' | 'Perplexity Online' | 'Gemini 1.5 Pro'
+  name: string
   grounded: boolean
   confidence: number
   citations: string[]

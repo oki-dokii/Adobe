@@ -107,12 +107,12 @@ export function RootCauseChain({
                           </div>
                           <p className="text-[11px] leading-relaxed text-critical/90">
                             {cause.detail.toLowerCase().includes('crawl') || cause.detail.toLowerCase().includes('access')
-                              ? 'LLM indexing spiders fail to ingest core assets, causing conversational assistants to omit the brand or report it as defunct.'
+                              ? 'A compliant retrieval crawler may be unable to ingest the affected assets; downstream assistant behavior was not measured.'
                               : cause.detail.toLowerCase().includes('entity') || cause.detail.toLowerCase().includes('identity')
-                              ? 'AI models conflate the brand with ambiguous competitor entities, misattributing canonical features in search summaries.'
+                              ? 'Ambiguous identity evidence may make entity resolution less reliable; misattribution was not measured.'
                               : cause.detail.toLowerCase().includes('render') || cause.detail.toLowerCase().includes('script')
-                              ? 'Dual-fetch disparity leaves headless LLMs with empty content, forcing retrieval pipelines to rely on unverified third-party scrapers.'
-                              : 'AI answer engines drop citation confidence below threshold, paraphrasing claims inaccurately or substituting direct competitor URLs.'}
+                              ? 'Dual-fetch disparity leaves some crawlers with less extractable content; reliance on third-party sources was not measured.'
+                              : 'The structural condition may reduce the completeness of evidence available to an answer system; downstream output was not measured.'}
                           </p>
                         </div>
 

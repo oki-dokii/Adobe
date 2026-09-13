@@ -18,7 +18,7 @@ from lib.clock import PROTECT_LIST
 from lib.crawl import crawl
 from lib.clock import Clock
 from lib.findings import make_finding, reset_ids
-from lib.http import HttpClient, HttpError
+from lib.http_client import HttpClient, HttpError
 from lib.merge import merge_findings, rank_user_facing
 from lib.models import SiteType, SuggestedAction
 from lib.orchestrator import run_audit
@@ -32,7 +32,7 @@ from test_skills_orchestrator import C, HOME, routes_for, BASE
 
 def test_production_opener_still_includes_redirect_handler():
     """Fixed: production opener must not auto-follow redirects."""
-    from lib.http import build_production_opener, production_opener_has_redirect_handler
+    from lib.http_client import build_production_opener, production_opener_has_redirect_handler
 
     assert production_opener_has_redirect_handler() is False
     opener = build_production_opener()

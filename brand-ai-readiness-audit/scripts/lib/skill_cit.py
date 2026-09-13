@@ -116,7 +116,12 @@ def run(snapshot: CrawlSnapshot, allow_llm: bool = False) -> SkillResult:
                 skill_id="citation-extractability-audit",
                 finding_type="qualifier_split",
                 title="Price amount is separated from its qualifying condition",
-                severity="critical" if p.page_type in ("pricing", "product") else "high",
+                # A split is an extractability risk, not proof of a business-critical
+                # defect.  Pricing pages commonly contain legitimate regional,
+                # billing, tax, fee, and introductory qualifiers.  Critical is
+                # reserved for corroborated decision failures after admission;
+                # this detector alone cannot establish that.
+                severity="high",
                 evidence=f"Isolated '{m.group()}' vs later qualifier in {window[:120]}… / later span on {p.url}",
                 action=SuggestedAction(
                     summary="Put the amount and its condition in one self-contained sentence.",
@@ -129,6 +134,8 @@ def run(snapshot: CrawlSnapshot, allow_llm: bool = False) -> SkillResult:
                 category="citation",
             )
             f.materiality = "pass"
+            f.metrics["price_semantic_class"] = "purchasable_offer"
+            f.metrics["severity_cap_reason"] = "qualifier_split_is_heuristic_extractability_evidence"
             attach_confidence(f, deterministic=True, reproduced=False)
             findings.append(f)
         for tbl in parsed["tables"]:

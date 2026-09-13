@@ -12,6 +12,7 @@ from lib.confidence import attach_confidence
 from lib.facts import extract_facts, material
 from lib.findings import make_finding
 from lib.models import CrawlSnapshot, SkillResult, SuggestedAction
+from lib.url import is_locale_path_segment
 
 
 def _canonical_price_path(url: str) -> str:
@@ -34,19 +35,33 @@ def _year_ints(values: list[str]) -> list[int]:
     return out
 
 
-def date_signals_diverge(visible: list[str], schema: list[str], *, page_type: str = "", now_year: int | None = None) -> bool:
+def date_signals_diverge(
+    visible: list[str],
+    schema: list[str],
+    *,
+    page_type: str = "",
+    footer: list[str] | None = None,
+    localized: bool = False,
+    now_year: int | None = None,
+) -> bool:
     """True only for stale metadata vs current claims — not history pages or newer CMS stamps."""
-    if page_type in ("article", "docs"):
+    if page_type in ("article", "docs") or localized:
         return False
     vis = _year_ints(visible)
     sch = _year_ints(schema)
     if not vis or not sch:
         return False
+    # Copyright/footer years are presentation chrome, not evidence that the
+    # page's substantive content is stale. Require a non-footer visible year.
+    footer_years = _year_ints(footer or [])
+    substantive = [y for y in vis if y not in footer_years]
+    if not substantive:
+        return False
     # Many years on one page → historical / CMS corpus, not a freshness defect.
     if max(vis) - min(vis) >= 4:
         return False
     schema_year = max(sch)
-    vis_max = max(vis)
+    vis_max = max(substantive)
     year = now_year if now_year is not None else datetime.now(timezone.utc).year
     if schema_year >= vis_max:
         return False
@@ -104,7 +119,15 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
     for p in snapshot.fetched_pages():
         vis = p.dates.get("visible") or []
         schema = p.dates.get("schema") or []
-        if schema and vis and not docs and date_signals_diverge(vis, schema, page_type=p.page_type):
+        path_parts = [part for part in (urlparse(p.final_url or p.url).path or "/").split("/") if part]
+        localized = bool(path_parts and is_locale_path_segment(path_parts[0]))
+        if schema and vis and not docs and date_signals_diverge(
+            vis,
+            schema,
+            page_type=p.page_type,
+            footer=p.dates.get("footer") or [],
+            localized=localized,
+        ):
             f = make_finding(
                 skill_id="freshness-audit",
                 finding_type="date_divergence",

@@ -26,11 +26,11 @@ import { RUN_ORDER, SKILL_MAP } from './skills'
 export const IS_DEMO = false
 
 export const SAMPLE_URLS = [
-  'https://stripe.com',
-  'https://shopify.com',
-  'https://etsy.com',
-  'https://linear.app',
-  'https://vercel.com',
+  'https://demo-saas.invalid',
+  'https://demo-commerce.invalid',
+  'https://demo-marketplace.invalid',
+  'https://demo-product.invalid',
+  'https://demo-docs.invalid',
 ]
 
 /** Deterministic tiny PRNG so a given host always audits the same way. */
@@ -157,7 +157,7 @@ export function buildDemoResult(url: string): AuditResult {
       id: 'rc-substitution',
       label: 'Potential source substitution',
       detail:
-        'The assistant falls back to third-party sources, so a competitor or aggregator answers for the brand.',
+        'A retrieval system may need another source when first-party evidence is incomplete; no live assistant substitution was measured.',
       parentId: 'rc-answerability',
       severity: 'critical',
       findingIds: ['f-answer', 'f-entity'],
@@ -178,7 +178,7 @@ export function buildDemoResult(url: string): AuditResult {
         'Many AI crawlers and answer engines do not fully render JavaScript. If the substance only exists after hydration, it is invisible to them.',
       businessImpact: {
         technicalFinding: 'Primary pricing and feature matrices are rendered exclusively via client-side JavaScript hydration without static server-rendered fallback.',
-        businessInterpretation: 'Enterprise procurement bots and AI search engines (ChatGPT Search, Perplexity, Claude) indexing the site receive empty DOM shells, causing the brand to be silently excluded from automated vendor evaluations.',
+        businessInterpretation: 'A crawler that does not execute the required client code may receive an incomplete document, reducing the evidence available for automated evaluation; downstream vendor decisions were not measured.',
         whyAiSystemsCare: 'AI crawlers operate with strict sub-second execution budgets and bypass JavaScript evaluation to minimize compute costs. If content is absent in raw HTML, it does not enter retrieval context.',
         whoIsAffected: 'Enterprise Sales, Demand Generation, and Prospective B2B Software Buyers.',
         potentialConsequence: 'Disqualification from RFP shortlists before sales reps are contacted; high-intent category pipeline bleeds to competitors with pre-rendered pricing matrices.',
@@ -261,17 +261,17 @@ export function buildDemoResult(url: string): AuditResult {
       whyItMatters:
         'If machines cannot confidently resolve the brand as a distinct entity, answers get attributed to the wrong organization.',
       businessImpact: {
-        technicalFinding: 'Organization schema lacks authoritative sameAs cross-references (Wikidata, Crunchbase) resulting in elevated entity ambiguity.',
-        businessInterpretation: 'AI assistants confuse the company with similarly named firms, occasionally blending product capabilities or attributing negative press from unrelated organizations.',
-        whyAiSystemsCare: 'LLM knowledge graphs rely on linked open data (Wikidata URIs) to anchor entity nodes and resolve homonyms during retrieval.',
+        technicalFinding: 'Organization schema lacks authoritative linked identity references, resulting in elevated entity ambiguity.',
+        businessInterpretation: 'Incomplete entity context may make it harder for a retrieval system to distinguish similarly named organizations; misattribution was not measured.',
+        whyAiSystemsCare: 'Retrieval systems need consistent first-party identifiers and context to distinguish similarly named entities.',
         whoIsAffected: 'Corporate Communications, Brand Marketing, Investor Relations.',
         potentialConsequence: 'Dilution of brand reputation and inaccurate product capability summaries served to executive decision-makers.',
         categories: ['brand_trust', 'discoverability'],
-        quantifiedImpact: '4 named-entity collisions detected in major LLM knowledge graphs across 14 inspected pages.',
+        quantifiedImpact: '4 possible name collisions detected from the inspected page corpus; external knowledge-graph behavior was not measured.',
         assumptions: [
-          'Wikidata and Schema.org sameAs linkage establishes deterministic entity disambiguation across GPT-4 and Gemini base models.',
+          'Additional linked identity evidence may improve disambiguation, but no external model behavior was measured.',
         ],
-        expectedOutcomeAfterFix: 'Unambiguous entity resolution across all major AI search providers; elimination of competitor attribute blending.',
+        expectedOutcomeAfterFix: 'Clearer first-party entity context; external entity-resolution behavior remains unmeasured.',
       },
       evidence: [
         { id: 'e-ent-1', label: 'Organization structured data', detail: 'Partial — missing sameAs links' },
@@ -468,7 +468,7 @@ export function buildDemoResult(url: string): AuditResult {
         categories: ['discoverability', 'support_cost'],
         quantifiedImpact: 'Diagnostic limitation observed on 2 subpaths due to Bot Management rules.',
         assumptions: [
-          'Confirmed via simulated GPTBot and ClaudeBot user-agent requests.',
+          'Confirmed via bounded user-agent access checks; no assistant or search-index behavior was measured.',
         ],
         expectedOutcomeAfterFix: 'Verified AI bot allowlist in robots.txt and WAF rules; full documentation discoverability restored.',
       },

@@ -1,6 +1,10 @@
 # Brand AI Readiness Audit
 
+<<<<<<< HEAD
 Adobe University Hackathon 2026 — Round 3: Agent Skill Marketplace
+=======
+`audit-orchestrator` is the sole entrypoint for this 11-skill marketplace. It validates one public URL, performs one shared robots-respecting crawl, routes that snapshot through the nine detection skills, applies the existing admission and finding-type/finding-key merge logic, then invokes the `business-impact-layer` post-processing skill to emit the final JSON report.
+>>>>>>> bd60699 (fixes)
 
 ---
 

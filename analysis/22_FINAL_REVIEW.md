@@ -2,7 +2,7 @@
 
 | # | Problem | Sev | Why | Correction |
 |---|---------|-----|-----|------------|
-| 1 | 10 skills still heavy for 5 min | H | LLM K+CIT+V + render + H fetches | Budget: K subset; H last; render top-N |
+| 1 | 11 marketplace skills still heavy for 5 min | H | LLM K+CIT+V + render + H fetches | Budget: K subset; H last; render top-N |
 | 2 | SK-H off-site is fragile | H | robots, rate, Wikipedia bias | Strict materiality; skip if time; never High on missing wiki |
 | 3 | Collision “search” may need a search API | M | Z38 no paid APIs | Use on-site only + linked sameAs first; optional DuckDuckGo HTML GET if robots allow; else degrade to on-page disambiguation only with lower confidence |
 | 4 | Dual-fetch without real browser | M | Under-detect SPA | Document RENDER_TIMEOUT; try lightweight JS runtime if present else raw-only honesty |

@@ -69,10 +69,10 @@ export function SubstitutionPanel({
 
       <div className="space-y-1">
         <p className="font-mono text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Observed AI Behavioral Vulnerability
+            Simulated Mechanism Scenario
         </p>
         <p className="text-[11px] leading-relaxed text-foreground/90">
-          When requested for pricing, SLAs, or technical specs, AI assistants cannot find extractable facts in first-party HTML and are forced to substitute third-party aggregators or direct competitors.
+          The audited structure may leave pricing, SLAs, or technical specifications less extractable to a retrieval system. No live assistant query or competitor substitution was measured.
         </p>
       </div>
 

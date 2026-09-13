@@ -13,7 +13,7 @@ from fake_http import make_opener, public_resolve
 from lib.clock import Clock
 from lib.crawl import crawl
 from lib.findings import make_finding
-from lib.http import HttpClient
+from lib.http_client import HttpClient
 from lib.models import SuggestedAction
 from lib.orchestrator import run_audit
 from lib.skill_h import run as run_h

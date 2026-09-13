@@ -23,7 +23,7 @@ Try to break the design.
 | Zip bombs in PDF | OCR | skip/cap |
 | Third-party wiki prompt injection | H LLM | Sanitize third-party text too |
 | Eval sites hardcoded | Contest | none |
-| Resource: 10 skills × recrawl | 5 min | snapshot |
+| Resource: 11 skills × recrawl | 5 min | snapshot |
 
 Read-only recommend-only. No site changes.
 

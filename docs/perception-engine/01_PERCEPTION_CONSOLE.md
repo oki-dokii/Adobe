@@ -10,7 +10,7 @@
 - `frontend/components/audit/perception-console.tsx`  
 - `frontend/hooks/use-perception.ts`
 
-**Does not replace:** `AuditExperience`, `AuditTree`, `ResultsView`, orchestrator, or the 10 skills.
+**Does not replace:** `AuditExperience`, `AuditTree`, `ResultsView`, orchestrator, or the 11 marketplace skills.
 
 ---
 
@@ -384,7 +384,7 @@ ready + question change (no ASK) → idle_question (answer still visible, dimmed
 | System | How |
 |---|---|
 | Orchestrator | Perception runs **after** `AUDIT_COMPLETED`. No new skill in `RUN_ORDER`. |
-| 10 skills | Context filter by `skippedSkillIds`; span `skillIds` ⊆ `SkillId`. |
+| 11 skills | Context filter by `skippedSkillIds`; span `skillIds` ⊆ `SkillId`. |
 | Findings | `findingIds` on spans; clicking span selects those findings in list (optional: `highlightedIds`). |
 | Tree | Module 03 consumes `skillIds` from active span. |
 | Evidence | `evidenceIds` must exist on the finding. |

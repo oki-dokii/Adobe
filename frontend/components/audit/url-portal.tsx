@@ -161,7 +161,7 @@ export function UrlPortal({
             autoComplete="off"
             autoCapitalize="off"
             spellCheck={false}
-            placeholder={urls.length ? 'queue another domain...' : 'example.com'}
+            placeholder={urls.length ? 'queue another domain...' : 'your-domain.test'}
             aria-label="Website domain to inspect"
             aria-invalid={!!error}
             className="min-w-[14ch] flex-1 bg-transparent py-0.5 font-mono text-sm font-medium tracking-tight text-foreground outline-none placeholder:text-muted-foreground/45 placeholder:font-sans"

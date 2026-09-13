@@ -28,7 +28,8 @@ export const DIMENSIONS: Record<
 
 /**
  * The production audit architecture. The orchestrator is the entrypoint / root
- * coordinator; the ten detection skills are composed branches of one system.
+ * coordinator and nine detection skills are the executable audit branches;
+ * the eleventh marketplace entry is the post-processing layer below.
  *
  * Each skill includes a `consequenceChain` — a 3-step cascade from structural
  * observation to downstream AI behavior outcome. This is rendered in the finding
@@ -88,11 +89,11 @@ export const SKILLS: SkillDef[] = [
     checks: ['robots.txt', 'HTTP/access status', 'Bot challenges', 'Sitemap coverage'],
     consequenceChain: [
       'AI crawlers blocked at the robots.txt or network layer',
-      'Brand content excluded from AI discovery index entirely',
-      'Brand invisible to AI-mediated search — competitor content fills the vacuum',
+      'A compliant crawler cannot retrieve the affected content',
+      'Downstream discovery or citation impact is not measured by this audit',
     ],
     businessSignals: {
-      revenue: 'Unblocks direct top-of-funnel traffic originating from AI-mediated search engines (ChatGPT, Claude, Perplexity).',
+      revenue: 'Improves crawl availability for retrieval systems; traffic impact is not measured.',
       conversion: 'Eliminates 403/429 bounce points that prevent AI agent referral handoffs.',
       recommendation: 'Prerequisite for any inclusion in generative search result sets.',
       trust: 'Demonstrates transparent machine-access governance without compromising enterprise security.',
@@ -143,9 +144,9 @@ export const SKILLS: SkillDef[] = [
       'Runs deterministic claim, table, qualifier, and visible-schema checks after render extraction.',
     checks: ['Qualifier context', 'Table headers', 'Visible/schema match', 'Comparison claims'],
     consequenceChain: [
-      'Brand claims are not self-contained — AI cannot quote them verbatim or attribute them',
-      'AI paraphrases inaccurately or substitutes third-party descriptions of the brand',
-      'Brand misrepresented in AI-generated answers — competitor cited in brand\'s place',
+      'Brand claims are not self-contained for a narrow extraction window',
+      'A retrieval system may need to qualify or seek another source',
+      'Downstream assistant wording and source selection are not measured',
     ],
     businessSignals: {
       revenue: 'Protects margin clarity by preventing outdated third-party aggregators from quoting incorrect historical prices.',
@@ -171,19 +172,19 @@ export const SKILLS: SkillDef[] = [
       'Uses on-page evidence only; it does not search the web or assign a completeness score to external knowledge graphs.',
     checks: ['Name collision heuristic', 'Category/geo context', 'sameAs links', 'Linked URL status'],
     consequenceChain: [
-      'Brand name is ambiguous — AI conflates the brand with similarly-named competitors or entities',
-      'AI retrieval systems select the wrong entity when answering brand queries',
-      'Wrong brand recommended to users — brand loses AI-referred traffic to an unrelated entity',
+      'Brand name is ambiguous against similarly-named entities',
+      'A retrieval system may have weaker entity-resolution evidence',
+      'Downstream attribution and recommendation behavior are not measured',
     ],
     businessSignals: {
       revenue: 'Prevents misallocated buyer interest from bleeding into similarly named entities or foreign competitors.',
       conversion: 'Ensures executive inquiries consistently connect with the verified organization entity.',
-      recommendation: 'Anchors brand knowledge graph nodes in Wikidata and linked open data ontologies.',
+      recommendation: 'Expose consistent first-party entity identifiers and organization context.',
       trust: 'Eliminates entity collision risks that dilute corporate equity and brand safety.',
     },
     contract: {
-      author: 'Wikidata & W3C Linked Open Data Project',
-      standardRef: 'RDF / OWL Entity Ontologies',
+      author: 'Schema.org and linked-data conventions',
+      standardRef: 'Schema.org Organization and sameAs vocabulary',
       input: 'Brand names, domain aliases, OpenGraph & schema sameAs tags',
       transform: 'Knowledge graph node matching & alias disambiguation',
       output: 'Disambiguated Brand Entity Identification',
@@ -200,8 +201,8 @@ export const SKILLS: SkillDef[] = [
     checks: ['Buyer-question spans', 'Wrong-page detection', 'Expected-gap gating', 'Answerability metrics'],
     consequenceChain: [
       'Common brand questions have no grounded answer in the site\'s own content',
-      'AI cannot construct a confident, evidence-backed response from the brand\'s site',
-      'AI substitutes competitor content — user is never referred to the brand via AI',
+      'A retrieval system lacks a directly extractable first-party answer',
+      'Downstream source selection and referral behavior are not measured',
     ],
     businessSignals: {
       revenue: 'Captures mid-funnel comparison searches when prospects evaluate product alternatives.',
@@ -220,9 +221,9 @@ export const SKILLS: SkillDef[] = [
       'Compares dates and material facts already extracted from the shared crawl; age alone is not a defect.',
     checks: ['Date divergence', 'Typed fact conflicts', 'Historical-page guards', 'Locale path guards'],
     consequenceChain: [
-      'Content lacks recency signals — AI systems rank the brand as a stale, lower-priority source',
-      'AI prefers fresher competitors when constructing answers about this product category',
-      'Brand deprioritised in AI-generated results — competitor with updated content cited instead',
+      'Content contains inconsistent or weak recency signals',
+      'A freshness-sensitive retrieval system may need to qualify the evidence',
+      'Downstream ranking and competitor selection are not measured',
     ],
     businessSignals: {
       revenue: 'Prevents enterprise deal friction caused by legacy feature constraints reported from obsolete data.',
@@ -241,9 +242,9 @@ export const SKILLS: SkillDef[] = [
       'Uses bounded, robots-respecting linked-source reads only; it does not search the web.',
     checks: ['Linked-source selection', 'Source robots policy', 'Claim comparison', 'Usability outcome'],
     consequenceChain: [
-      'Contradictory claims or unverified asset provenance detected — AI trust score reduced',
-      'Brand flagged as an uncorroborated source and excluded from high-confidence citations',
-      'Competitor with verified provenance and corroborated claims is cited in brand\'s place',
+      'Contradictory claims or unverified provenance were detected in the inspected evidence',
+      'A retrieval system may require corroboration before relying on the claim',
+      'Downstream citation and competitor selection are not measured',
     ],
     businessSignals: {
       revenue: 'Eliminates billing disputes and quote mismatches arising from conflicting public pricing tiers.',
@@ -269,9 +270,9 @@ export const SKILLS: SkillDef[] = [
       'Evaluates in-DOM handoff signals and keeps missing-from-DOM extraction issues in render-extract-audit.',
     checks: ['Viewport identity', 'Information scent', 'Contact/pricing wayfinding', 'In-DOM handoff'],
     consequenceChain: [
-      'Primary actions are not machine-legible — AI cannot identify the correct next step for the user',
-      'AI assistant fails to complete the referral handoff to the brand\'s conversion flow',
-      'User journey breaks at the AI→brand boundary — brand loses the AI-referred conversion',
+      'Primary actions are not machine-legible to the inspected extractor',
+      'An automated handoff may require qualification or manual completion',
+      'Downstream referral conversion is not measured',
     ],
     businessSignals: {
       revenue: 'Directly bridges the gap between conversational AI discovery and self-serve/sales pipeline generation.',

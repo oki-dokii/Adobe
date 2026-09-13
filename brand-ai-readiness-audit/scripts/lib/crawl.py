@@ -11,7 +11,7 @@ from typing import Optional
 from lib.access import classify_http_access, content_usable
 from lib.clock import Clock, is_protected_fact_url
 from lib.extract import fill_page_from_html
-from lib.http import HttpClient, HttpError, USER_AGENT
+from lib.http_client import HttpClient, HttpError, USER_AGENT
 from lib.models import CrawlSnapshot, Page
 from lib.money import has_offer_price
 from lib.render import apply_render
@@ -167,7 +167,7 @@ def crawl(
                 access_kind="empty",
             )
             pages.append(p)
-            if e.code in ("DNS_FAILURE", "TLS_FAILURE") and n == 0:
+            if e.code in ("DNS_FAILURE", "TLS_FAILURE", "FETCH_TIMEOUT") and n == 0:
                 snap.coverage = {
                     "pages_fetched": 0,
                     "pages_rendered": 0,
@@ -187,7 +187,7 @@ def crawl(
                 snap.timing.crawl_ms = (time.time() - t0) * 1000
                 snap.pages = pages
                 snap.limitations.append(
-                    f"Temporary network/transport failure ({e.code}); origin is not scored as a content-quality gap."
+                    f"Transport failure ({e.code}); no target page was fetched, so content quality was not assessed."
                 )
                 return snap
             continue
@@ -286,8 +286,25 @@ def crawl(
     snap.pages = pages
     snap.graph = {"nodes": len(pages), "orphans_suspected": orphans, "edges": len(graph_edges)}
     usable_n = sum(1 for p in pages if p.content_usable and not p.unfetched)
+    pages_fetched_final = sum(1 for p in pages if not p.unfetched)
+    robots_disallow_only = bool(pages) and pages_fetched_final == 0 and all(
+        p.fetch_error == "ROBOTS_DISALLOWED" for p in pages
+    )
+    access_only = bool(pages) and pages_fetched_final > 0 and usable_n == 0 and bool(access_counts)
+    if robots_disallow_only:
+        stopped_reason = "robots_disallow"
+    elif access_only:
+        stopped_reason = "access_blocked"
+    elif pages_fetched_final >= page_cap:
+        stopped_reason = "page_cap"
+    elif not clock.honor(0):
+        stopped_reason = "time_budget"
+    elif not heap:
+        stopped_reason = "frontier_exhausted"
+    else:
+        stopped_reason = "early_stop"
     snap.coverage = {
-        "pages_fetched": sum(1 for p in pages if not p.unfetched),
+        "pages_fetched": pages_fetched_final,
         "pages_content_usable": usable_n,
         "sitemap_lastmod_n": len(lastmods),
         "sitemap_lastmod_unique": len(set(lastmods)),
@@ -296,7 +313,7 @@ def crawl(
         "estimated_pages": max(len(sitemap_urls), len(pages)) or None,
         "templates": len(clusterer.centroids),
         "k_categories_hit": sorted(k_hit),
-        "stopped_reason": "budget" if not heap else "early_stop",
+        "stopped_reason": stopped_reason,
         "pages_verified_per_template": {t: len(m) for t, m in clusterer.members.items()},
         "render_max": render_max,
         "renders_requested": renders_requested,

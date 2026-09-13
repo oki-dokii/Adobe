@@ -173,7 +173,15 @@ export function getReachTier(affectedPages: number, sampledPages: number, findin
 export function deriveBusinessExposureSeverity(
   priority: FunnelPriority,
   reach: ReachTier,
+  findingType?: string,
 ): { severity: Severity; rankScore: number } {
+  // A qualifier split is heuristic extractability evidence. It must not become
+  // Critical solely because a pricing template appears on several pages.
+  if ((findingType ?? '').trim().toLowerCase() === 'qualifier_split') {
+    return reach === 'Isolated'
+      ? { severity: 'high', rankScore: 70 }
+      : { severity: 'high', rankScore: 60 }
+  }
   // Decision (High)
   if (priority === 'High') {
     if (reach === 'Broad') return { severity: 'critical', rankScore: 90 }
@@ -224,23 +232,23 @@ export function formatBlastRadius(
  */
 export const BUSINESS_TRANSLATIONS: Record<string, (f: Finding) => string> = {
   qualifier_split: () =>
-    `AI assistants will quote your headline price while stripping out mandatory qualifications and conditions, creating misinformed buyer expectations and high-friction sales discussions.`,
+    `A narrow extraction window may preserve a headline price without its qualification, creating a risk of incomplete buyer interpretation. This audit did not query an assistant.`,
   on_site_fact_conflict: () =>
-    `Internal factual contradictions across your pages destroy citation confidence, causing AI assistants to flag your numbers as unreliable and recommend competitors or third-party aggregators instead.`,
+    `Internal factual contradictions make the first-party evidence less consistent for retrieval systems and may require qualification or manual review. No competitor recommendation was measured.`,
   interaction_insert: () =>
-    `Commercial specifications and pricing tiers locked behind JavaScript click/modal events remain invisible to headless AI search crawlers, presenting an incomplete product offering.`,
+    `Commercial specifications and pricing tiers locked behind interaction events may be unavailable to a non-rendering extractor, producing an incomplete evidence view.`,
   js_fact_lock: () =>
-    `Lightweight AI search spiders parse only static HTML — essential product specifications that require client JavaScript render as blank containers during machine ingestion.`,
+    `The initial HTML omits essential product specifications that appear after client rendering; a non-rendering extractor may therefore receive an incomplete document.`,
   table_no_th: () =>
-    `Missing header associations in data tables scramble row and column semantics, leading AI assistants to misattribute features and pricing numbers to the wrong subscription tiers.`,
+    `Missing header associations make row and column relationships ambiguous for text extraction and may cause a retrieval system to misattribute values.`,
   robots_fail_closed: () =>
-    `Your robots.txt or edge configuration blocks AI crawler user-agents entirely, making your brand invisible to AI-mediated search and gifting 100% of query share to competitors.`,
+    `Your robots.txt or edge configuration blocks compliant crawlers from retrieving the site. This audit cannot determine how any assistant or index responds to that barrier.`,
   ai_token_disallow: () =>
-    `Disallowing AI search tokens (GPTBot, ClaudeBot, PerplexityBot) purges your domain from live retrieval-augmented generation (RAG) indexes, eliminating first-party citation.`,
+    `Disallowing named crawler tokens prevents those compliant crawlers from retrieving the affected paths. Whether a downstream index uses another source was not measured.`,
   canonical_dup: () =>
-    `Competing duplicate URL variants split authority signals across mirror pages, diluting AI citation confidence and confusing assistant source attribution.`,
+    `Competing URL variants create duplicate evidence paths and may make source attribution less clear for retrieval systems.`,
   soft_404: () =>
-    `Returning HTTP 200 on missing content causes AI crawlers to index error messages as legitimate brand facts, risking inaccurate conversational answers.`,
+    `Returning HTTP 200 on missing content makes the error body look like a valid page to a crawler and may pollute extracted evidence.`,
   noindex_robots_conflict: () =>
     `Contradictory crawl and indexing directives create ghost index records, leading AI search engines to exclude ambiguous URLs from reliable citation pools.`,
   d41_hidden: () =>
@@ -250,17 +258,17 @@ export const BUSINESS_TRANSLATIONS: Record<string, (f: Finding) => string> = {
   image_locked_fact: () =>
     `Pricing tables or architecture diagrams rendered as raster images without semantic text alternatives cannot be ingested by text-first AI search crawlers.`,
   date_divergence: () =>
-    `Conflicting or stale publication timestamps cause AI freshness algorithms to demote your documentation in favor of fresher competitor content.`,
+    `Conflicting or stale publication timestamps make freshness interpretation less reliable for retrieval systems; competitor preference was not measured.`,
   linked_contradiction: () =>
     `Linked third-party profiles contradict statements on your primary domain, triggering assistant hedging and trust penalties in comparative vendor evaluations.`,
   comparison_self_win: () =>
-    `Uncorroborated competitive comparison tables are flagged for non-neutral bias, causing AI assistants to prefer third-party review sites for head-to-head recommendations.`,
+    `Uncorroborated comparison tables provide weak evidence for a neutral evaluation and may require a retrieval system to qualify the claim.`,
   flagship_gap: () =>
     `Your primary offering lacks a clear declarative summary on the homepage, causing AI assistants to produce vague category descriptions instead of naming your core innovation.`,
   expected_gap: () =>
     `Standard commercial procurement details are absent from public markup, preventing enterprise AI research agents from completing vendor qualification checklists.`,
   collision_risk: () =>
-    `Ambiguous entity naming without schema disambiguation causes AI models to conflate your brand with similarly named organizations or legacy subsidiaries.`,
+    `Ambiguous entity naming without disambiguating evidence increases the risk that a retrieval system cannot confidently distinguish similarly named organizations.`,
   sameas_404: () =>
     `Broken authority links (404) in schema markup undermine corporate entity verification in major commercial knowledge graphs.`,
   scent_break: () =>
@@ -286,15 +294,15 @@ export function getBusinessTranslation(f: Finding): string {
   if (qId && CORE_BUYER_QUESTIONS[qId]) {
     const spec = CORE_BUYER_QUESTIONS[qId]
     if (spec.funnelStage === 'decision') {
-      return `Anyone using an AI assistant to research ${spec.intentDescription.toLowerCase()} before buying will not get an answer sourced from your own site — they will either abandon the inquiry or accept an unverified third-party claim.`
+      return `The audited site does not provide a directly extractable answer for ${spec.intentDescription.toLowerCase()}; an assistant relying on this site may need to qualify the response or use another source.`
     }
     if (spec.funnelStage === 'consideration') {
-      return `Prospective buyers evaluating vendor suitability will find that AI assistants cannot confirm your ${spec.intentDescription.toLowerCase()}, risking exclusion from shortlists.`
+      return `The audited site does not provide a directly extractable answer for ${spec.intentDescription.toLowerCase()}, which may reduce confidence during automated evaluation.`
     }
-    return `AI assistants cannot extract a declarative statement of your ${spec.intentDescription.toLowerCase()}, causing discovery queries to surface better-structured competitors.`
+    return `The audited site does not provide a directly extractable statement of your ${spec.intentDescription.toLowerCase()}; competitor visibility was not measured.`
   }
 
-  return `This structural defect prevents AI search engines from extracting authoritative first-party data, increasing the likelihood that assistants cite third-party sources or omit the brand.`
+  return `This structural defect makes authoritative first-party extraction less reliable; downstream citation or omission behavior was not measured.`
 }
 
 /**
@@ -312,11 +320,8 @@ export function getAiAlternativeSourceLine(f: Finding, result?: AuditResult): st
   if (!candidateUrl) return null
 
   const lower = candidateUrl.toLowerCase()
-  let sourceKind = 'third-party profile'
-  if (lower.includes('wikipedia')) sourceKind = 'Wikipedia infobox'
-  else if (lower.includes('linkedin')) sourceKind = 'LinkedIn corporate profile'
-  else if (lower.includes('twitter') || lower.includes('x.com')) sourceKind = 'social platform registry'
-  else if (lower.includes('wikidata')) sourceKind = 'Wikidata entity entry'
+  let sourceKind = 'linked public profile'
+  if (lower.includes('linkedin') || lower.includes('twitter') || lower.includes('x.com')) sourceKind = 'professional or social profile'
   else if (lower.includes('g2') || lower.includes('capterra') || lower.includes('trustpilot')) sourceKind = 'software review aggregator'
 
   return `This fact currently only has third-party corroboration from ${sourceKind} (\`${candidateUrl}\`), not the brand's own site.`

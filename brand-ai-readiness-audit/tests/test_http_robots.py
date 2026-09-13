@@ -16,7 +16,7 @@ from lib.admit import admit
 from lib.clock import Clock
 from lib.crawl import crawl
 from lib.findings import make_finding, reset_ids
-from lib.http import HttpClient, HttpError
+from lib.http_client import HttpClient, HttpError
 from lib.merge import merge_findings
 from lib.models import SiteType, SuggestedAction
 from lib.orchestrator import run_audit, validate_seed

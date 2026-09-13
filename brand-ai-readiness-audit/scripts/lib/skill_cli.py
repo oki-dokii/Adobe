@@ -13,7 +13,7 @@ from pathlib import Path
 
 from lib.clock import Clock
 from lib.crawl import crawl
-from lib.http import HttpClient
+from lib.http_client import HttpClient
 from lib.skill_c import run as run_c
 from lib.skill_cit import run as run_cit
 from lib.skill_d import run as run_d

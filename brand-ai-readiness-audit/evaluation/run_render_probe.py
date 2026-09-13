@@ -12,7 +12,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "evaluation"))
 
 from lib.extract import PRICE_RE, parse_html  # noqa: E402
-from lib.http import HttpClient  # noqa: E402
+from lib.http_client import HttpClient  # noqa: E402
 from lib.render import expand_noscript  # noqa: E402
 from lib.robots import fetch_robots  # noqa: E402
 from safety_preflight import assert_production_safety  # noqa: E402

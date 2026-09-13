@@ -18,7 +18,7 @@ An audit-orchestrator-created `CrawlSnapshot` containing robots, HTTP, sitemap, 
 `SkillResult` JSON with `findings`: `{ id, finding_type, finding_key, title, severity, businessExposureSeverity: null, evidence, suggested_action, confidence }`; no finding is emitted where the evidence rule does not pass.
 
 ## Confidence & failure handling
-Robots disallow is reported with observed policy; 403/challenges and missing data are retained as limitations or LOW-confidence/omitted findings. This skill never bypasses robots or fabricates coverage.
+Robots disallow is reported with observed policy; 403/challenges and missing data are retained as limitations or LOW-confidence/omitted findings. Template-level findings (`canonical_dup`, `scent_break`, `orphan`) are capped at MEDIUM under partial coverage unless observed across at least 3 distinct templates or at least 30% of sampled pages. This skill never bypasses robots or fabricates coverage.
 
 ## Declared tool needs
 Read-only local snapshot access and Python execution. Upstream crawl may use rate-limited GET/HEAD to the target domain only and must respect robots.txt.

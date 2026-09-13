@@ -12,8 +12,8 @@ One `url`/domain. Optional `max_seconds` (default 280), `page_cap` (default 40),
 
 ## Procedure
 1. Run `scripts/run.py --url <https-url> --json-out <report.json>`; it validates the public HTTP(S) seed and starts one rate-limited, robots-respecting crawl in `scripts/lib/crawl.py`.
-2. Share that single in-memory `CrawlSnapshot` with site-type, access, render, citation, entity, freshness, answerability, corroboration, and handoff implementations. Detection skills do not independently recrawl; only the bounded, explicit linked-source checks may use the orchestrator HTTP client.
-3. Invoke the existing skill implementations, apply existing `admit()` and `merge_findings()` finding-type/finding-key logic, then use existing report code and the business-impact presentation layer for dimensions and overall index.
+2. Share that single in-memory `CrawlSnapshot` with the nine detection skills: site-type, access, render, citation, entity, freshness, answerability, corroboration, and handoff. Detection skills do not independently recrawl; only the bounded, explicit linked-source checks may use the orchestrator HTTP client.
+3. Invoke the nine detection skills, apply existing `admit()` and `merge_findings()` finding-type/finding-key logic, then invoke the eleventh marketplace skill, `business-impact-layer`, for dimensions and overall index.
 4. Emit the final report. All objective HTTP, robots, parsing, and matching checks are implemented in scripts; this release uses no LLM judgment.
 
 ## Output

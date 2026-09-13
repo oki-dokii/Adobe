@@ -228,7 +228,7 @@ Single vantage (geo TLS FN); partial crawl; no click-all; no OCR-all; no unlinke
 
 ## 20. Why this is better than the initial architecture
 
-v0 picked the right **folders** and the wrong **wiring**. v3-locked keeps 10 skills (independent discovery agrees) but: sequences gates so symptoms do not all fire Critical; makes W/G/D41/U-flow/AC12-typed visible; splits I (on-site) vs H (linked off-site); forbids search fantasy; puts a protect-list on the 5-minute budget so the zip cannot degrade into a sitemap checker.
+v0 picked the right **folders** and the wrong **wiring**. The marketplace now has 11 skills: nine detection skills, one orchestrator entrypoint, and one post-processing layer. It sequences gates so symptoms do not all fire Critical; makes W/G/D41/U-flow/AC12-typed visible; splits I (on-site) vs H (linked off-site); forbids search fantasy; puts a protect-list on the 5-minute budget so the zip cannot degrade into a sitemap checker.
 
 ---
 

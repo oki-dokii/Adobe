@@ -18,7 +18,7 @@ Shared `CrawlSnapshot` with extracted dates, facts, URLs, and site type. Standal
 `SkillResult` JSON with `findings`: `{ id, finding_type, finding_key, title, severity, businessExposureSeverity: null, evidence, suggested_action, confidence }`.
 
 ## Confidence & failure handling
-Missing dates, inaccessible pages, robots disallow, or ambiguous historical material is omitted or LOW confidence; age alone is not made into a finding.
+Missing dates, inaccessible pages, robots disallow, or ambiguous historical material is omitted or LOW confidence; age alone is not made into a finding. Copyright/footer-only years are ignored, and explicitly localized URL variants are not compared as freshness defects. Template-level findings (`date_divergence`, `canonical_dup`, `scent_break`, `orphan`) are capped at MEDIUM under partial coverage unless observed across at least 3 distinct templates or at least 30% of sampled pages.
 
 ## Declared tool needs
 Read-only snapshot/Python execution only; upstream target fetching is read-only GET/HEAD and robots-respecting.

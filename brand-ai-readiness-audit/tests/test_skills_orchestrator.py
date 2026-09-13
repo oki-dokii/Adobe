@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "tests"))
 from fake_http import make_opener, public_resolve
 from lib.clock import Clock
 from lib.crawl import crawl
-from lib.http import HttpClient
+from lib.http_client import HttpClient
 from lib.orchestrator import run_audit
 from lib.skill_cit import run as run_cit
 from lib.skill_d import run as run_d

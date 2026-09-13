@@ -9,168 +9,183 @@
 
 export const FINDING_TYPE_CAUSAL_CHAINS: Record<string, [string, string, string]> = {
   // ── Crawl Access & Discovery ──────────────────────────────────────────────
+  transport_unreachable: [
+    'The seed connection failed before a target page could be fetched',
+    'No site content was available for the downstream extraction checks',
+    'The audit remains incomplete until the connection is restored and rerun',
+  ],
+  robots_disallow: [
+    'robots.txt disallows the audit crawler on the requested path',
+    'The compliant crawler cannot retrieve the disallowed page for inspection',
+    'The report identifies the access policy without inferring content defects',
+  ],
+  access_blocked: [
+    'The origin returned challenge, forbidden, or error responses for the sampled pages',
+    'No usable page content was available for downstream extraction checks in this run',
+    'The audit remains incomplete; content and business conclusions require a crawlable response',
+  ],
   robots_fail_closed: [
     'AI crawlers are completely blocked at the robots.txt or network edge layer',
-    'Brand domain is omitted from search index ingestion and multimodal training sets',
-    'Brand is invisible to AI-mediated search — assistants recommend accessible alternatives',
+    'This prevents compliant AI crawlers from retrieving the domain for their indexes or retrieval systems',
+    'The resulting access gap may lower the likelihood that AI-generated answers can cite first-party content',
   ],
   ai_token_disallow: [
     'Robots.txt contains selective User-Agent disallow directives targeted at AI crawler tokens (GPTBot, ClaudeBot, PerplexityBot)',
-    'AI search engines respect the disallow headers and purge the domain from live RAG retrieval indexes',
-    'Assistants refuse to query or cite first-party content when answering product queries',
+    'A crawler that honors the directive cannot retrieve the disallowed content for its index or retrieval corpus',
+    'Assistants relying on that corpus may have less first-party material available to cite for product queries',
   ],
   orphan: [
     'Discovered URL has zero internal inbound crawl links and is absent from XML sitemaps',
-    'AI discovery spiders fail to traverse or assign authority weight to the orphaned page',
-    'High-value content remains unindexed and undiscoverable in AI answer generation',
+    'A discovery crawler may not reach or associate the orphaned page with the rest of the site',
+    'The page may therefore be absent from retrieval contexts used to ground AI answers',
   ],
   trap_facet: [
     'Infinite facet parameters or calendar URL traps consume crawler request limits without yielding unique content',
-    'AI ingestion engines exhaust fetch budgets on redundant parameter permutations',
-    'Core product and documentation pages are prematurely skipped during index refresh cycles',
+    'A bounded crawler can spend its fetch budget on redundant parameter permutations',
+    'Core product and documentation pages may then be skipped during a crawl or refresh',
   ],
   canonical_dup: [
     'Duplicate URL variants with conflicting or missing canonical targets split ranking signals across mirror pages',
-    'AI crawlers index multiple competing versions of identical content, diluting extractability confidence',
-    'Assistants encounter conflicting URL signals and fail to select a definitive authoritative canonical source',
+    'A crawler may retain multiple competing versions of identical content, weakening canonical-source evidence',
+    'Retrieval systems may then have less reliable URL evidence for selecting an authoritative source',
   ],
   soft_404: [
     'Server returns HTTP 200 OK with missing/error page content instead of proper HTTP 404 or 410 status codes',
-    'AI crawlers ingest error placeholders and generic notices as substantive brand content',
-    'AI models hallucinate or quote error notices as official brand facts in conversational responses',
+    'A crawler may treat the returned error placeholder as page content if the response is otherwise parseable',
+    'A system grounding on that placeholder could produce incomplete or incorrect source-backed answers',
   ],
   noindex_robots_conflict: [
     'Page blocked by robots.txt contains a meta noindex tag that crawlers are forbidden from reading',
-    'Crawlers retain ambiguous ghost index entries for disallowed URLs while unable to verify page directives',
-    'AI retrieval pipelines encounter conflicting access directives and drop the page from citation pools',
+    'Crawlers cannot reliably reconcile the inaccessible robots rule with the page-level noindex directive',
+    'Retrieval systems may treat the conflicting directives as insufficient evidence for citing the page',
   ],
 
   // ── Render & Static Extractability ─────────────────────────────────────────
   js_fact_lock: [
     'Critical brand facts, specifications, and pricing require client-side JavaScript execution to render',
-    'Lightweight AI scrapers and real-time RAG fetchers parse only the raw static HTML, receiving empty DOM containers',
-    'AI assistants report product specs as unknown or hallucinate outdated specifications from secondary sources',
+    'A lightweight extractor that reads only raw HTML receives empty containers instead of the rendered facts',
+    'An assistant relying on that representation would lack first-party grounding for the affected specifications',
   ],
   interaction_insert: [
     'Key facts and disclosures are injected into the DOM only after user interaction (clicks, tabs, accordions)',
-    'Headless AI extraction pipelines parse static DOM without triggering interactive browser events',
-    'Core value propositions and critical terms remain invisible to automated knowledge ingestion',
+    'A static extractor that does not trigger the interaction receives no copy for the inserted facts',
+    'The affected value propositions and terms may therefore be absent from automated extraction results',
   ],
   d41_hidden: [
     'Critical entity facts reside inside hidden or collapsed DOM structures (display:none, visibility:hidden, aria-hidden)',
-    'AI scrapers filter out hidden elements to avoid prompt clutter and spam injection',
-    'Essential brand specifications are ignored during knowledge graph construction',
+    'Extractors may omit hidden elements when constructing a visible-content representation',
+    'Essential specifications may therefore be absent from downstream entity or retrieval representations',
   ],
   pdf_only_fact: [
     'Vital specifications, SLA terms, or disclosures are locked inside unindexed binary PDF documents',
-    'Fast text-only AI retrieval pipelines bypass non-HTML binary payloads',
-    'AI answers omit the locked facts or rely on third-party aggregators that previously scraped the documents',
+    'A fast text-only retrieval pipeline may bypass the non-HTML binary payload',
+    'Answers grounded only in that pipeline may omit the locked facts or require another accessible source',
   ],
   image_locked_fact: [
     'Key pricing tables or technical diagrams are rendered as raster images without semantic text alternatives',
-    'Non-multimodal AI crawlers fail to extract text from images, leaving factual gaps in the knowledge graph',
-    'Assistants answer user inquiries with generic estimates rather than precise specifications',
+    'A text-only crawler may not extract the text embedded in the image, leaving a factual gap in its corpus',
+    'An assistant without that extracted evidence may be unable to provide the precise specification',
   ],
   qualifier_split: [
     'Crucial condition terms, asterisks, or disclaimers are physically separated from their associated numbers in the DOM',
-    'AI chunking and embedding algorithms split conditions from values across separate context windows',
-    'AI models state base prices or capabilities without essential constraints, creating compliance risk',
+    'A chunker may separate the condition from the value across context windows',
+    'A system retrieving only the value could present an incomplete price or capability statement',
   ],
   table_no_th: [
     'Data tables lack semantic header cells (<th>) and proper row/column scope associations',
-    'AI table parsers flatten tabular data into disordered text strings, destroying relational semantics',
-    'Assistant misassociates table rows and misquotes pricing tiers or feature comparisons',
+    'A table parser may flatten the rows and columns into text without reliable relational semantics',
+    'A system using that representation may be unable to associate a value with the correct row or tier',
   ],
   schema_visible_mismatch: [
     'Schema.org structured JSON-LD data contradicts the human-visible HTML copy on the page',
-    'AI entity extractors flag semantic conflict between structured metadata and rendered text',
-    'AI models degrade grounding trust and demote the domain as an unreliable knowledge source',
+    'An entity extractor may observe conflicting values between structured metadata and visible text',
+    'A retrieval system may consequently assign lower confidence to the conflicting first-party evidence',
   ],
 
   // ── AI Answerability & Entity Identity ─────────────────────────────────────
   comparison_self_win: [
     'Competitor comparison tables lack objective third-party corroboration and self-declare wins without proof',
-    'AI assistants detect non-neutral self-preferencing claims and apply bias penalty filters',
-    'Comparative AI prompts cite third-party benchmark sites rather than first-party comparisons',
+    'A reviewer or retrieval system may treat unsupported self-preferencing as weaker comparative evidence',
+    'A response generator may therefore prefer independently supported comparison sources when available',
   ],
   unanswerable: [
     'Core buyer and customer intent questions have no extractable answer across crawled pages',
-    'AI question-answering systems experience complete knowledge retrieval failure on direct brand queries',
-    'Assistants substitute competitor answers or explicitly state information is unavailable',
+    'An assistant relying on this site as a source would have no extractable answer to ground a response',
+    'The assistant may need to abstain or use another source rather than cite this site for the question',
   ],
   wrong_page: [
     'Crucial query answers are buried in tangential subpages instead of expected canonical landing pages',
-    'AI search query matchers fail to connect user intent with the buried content',
-    'Low citation relevance score causes assistant to surface secondary aggregators',
+    'A query matcher may have weaker evidence connecting the user intent to the buried content',
+    'A response system may consequently prefer a more directly aligned source when one is available',
   ],
   expected_gap: [
     'Standard industry domain attributes (pricing, security, support) are absent from public markup',
-    'AI agents building brand profiles encounter null attribute slots in working memory',
-    'Assistants mark the brand as incomplete for enterprise procurement evaluations',
+    'An automated brand-profile extractor may leave the corresponding attribute unpopulated',
+    'A procurement-oriented answer may therefore require qualification or another source for that attribute',
   ],
   flagship_gap: [
     'Primary core product capability is missing direct declarative explanation on the homepage or flagship landing page',
-    'AI high-level summarizers fail to extract the primary value proposition during brief scans',
-    'Assistants produce generic category descriptions rather than naming the brand\'s flagship innovation',
+    'A brief extractor may not capture the primary value proposition from the sampled landing page',
+    'A summary grounded in that sample may describe the category without the flagship differentiator',
   ],
   collision_risk: [
     'Ambiguous brand naming or overlapping entity identifiers create collision with similarly named organizations',
-    'AI entity resolution algorithms confuse the brand with homonymous entities or subsidiaries',
-    'Assistant attributes competitor features or unrelated controversies to this brand',
+    'An entity-resolution system may have insufficient evidence to distinguish the name from homonymous entities',
+    'A response grounded on the wrong entity could attribute unrelated features or claims to this brand',
   ],
   sameas_404: [
     'Schema.org sameAs links point to broken 404 social profiles or deprecated corporate URLs',
-    'Knowledge graph ingestors fail entity verification when authority links return 404 errors',
-    'Domain loses verified corporate entity status in neural search indexes',
+    'A knowledge-graph importer cannot verify the authority link while it returns a 404 response',
+    'Downstream entity representations may consequently retain weaker verification evidence for the domain',
   ],
 
   // ── Freshness & Corroboration ──────────────────────────────────────────────
   date_divergence: [
     'Publication dates, schema dateModified, and HTTP Last-Modified headers diverge or indicate stale content',
-    'AI freshness scoring models flag information as potentially obsolete (>30d unverified)',
-    'Assistants prioritize fresher competitor documentation with verified recent timestamps',
+    'A freshness-aware retriever may treat the unverified timestamp as weaker recency evidence',
+    'A response system may prefer a more recently verified source when competing evidence is available',
   ],
   on_site_fact_conflict: [
     'Direct factual contradiction detected between internal pages (e.g. pricing or SLA tiers differ across pages)',
-    'AI consistency checkers detect irreconcilable claims from the same authoritative domain',
-    'AI trust score collapses and assistant refuses to cite conflicting facts with certainty',
+    'A consistency checker may detect irreconcilable claims from the same domain',
+    'A response system may reduce confidence or qualify its answer rather than cite either claim without context',
   ],
   linked_contradiction: [
     'Outbound documentation links or citations contradict claims made on the primary marketing page',
-    'AI cross-referencing algorithms detect inconsistency between summary and referenced source',
-    'Assistant annotates brand claims with cautionary hedges or prefers secondary analytical sources',
+    'A cross-reference process may detect inconsistency between the summary and its linked source',
+    'A response system may qualify the claim or seek another source instead of treating the summary as settled evidence',
   ],
   uncorroborated: [
     'Extraordinary performance or market share claims lack external corroboration or verifiable citations',
-    'AI factual verification pipelines flag uncorroborated assertions as marketing hyperbole',
-    'Assistants omit uncorroborated superlatives when generating objective vendor comparisons',
+    'A factual-verification process may treat an uncorroborated assertion as weaker evidence',
+    'A response system may omit or qualify the superlative when generating an objective comparison',
   ],
 
   // ── Engagement Handoff & Presentation ──────────────────────────────────────
   viewport_identity: [
     'Target content is not visually prioritized in the primary viewport or fails responsive rendering',
-    'AI visual retrieval models misidentify page purpose due to obscured primary heading hierarchy',
-    'Assistant generates low-confidence summaries that miss above-the-fold product positioning',
+    'A visual extractor may have weaker evidence for page purpose when the primary heading hierarchy is obscured',
+    'A summary grounded on that viewport may miss the above-the-fold product positioning',
   ],
   sttf_fail: [
     'Scroll-to-Text Fragment (#:~:text=) targets fail to resolve to unique text spans on the landing page',
-    'AI deep-linking agents fail to transport referred users directly to the referenced fact',
+    'An AI-referred user may not be transported directly to the referenced fact',
     'Referred users land on broad generic pages, experiencing conversion drop-off',
   ],
   scent_break: [
     'Site lacks persistent wayfinding signals (breadcrumbs, nav landmark, or visible links to commercial/contact pages) on hierarchical page templates',
-    'AI-referred users who land on any page other than the exact cited page cannot self-navigate to the relevant content — recovery paths are absent from the DOM',
-    'Bounce rate rises as referred users abandon rather than drill down; AI citation converts to zero engagement because the destination architecture does not close the referral loop',
+    'An AI-referred visitor who lands away from the exact cited page may lack a DOM-based path to the relevant content',
+    'The referral may therefore lose information scent and require extra navigation before the visitor can act',
   ],
   ymy_disclosure: [
     'High-stakes YMYL (finance/health/legal) advice pages lack verified author credentials or regulatory disclosures',
-    'AI safety and compliance filters apply strict suppression to uncredited advisory content',
-    'Assistants refuse to synthesize guidance from the domain to avoid safety policy violations',
+    'A safety-aware system may have insufficient author and disclosure evidence for the advisory content',
+    'A response system may qualify, limit, or decline to synthesize guidance from that content',
   ],
   coverage_statement: [
     'Sitemap lastmod dates or crawl coverage statements are uniform timestamps masking actual content freshness',
-    'AI incremental scrapers cannot prioritize modified pages, delaying ingestion of critical updates',
-    'Assistants continue serving cached legacy answers weeks after brand updates are published',
+    'An incremental scraper may have weaker evidence for prioritizing the modified pages',
+    'A downstream retrieval system may continue using older material until the update is discovered and ingested',
   ],
 }
 
@@ -246,7 +261,7 @@ export function getCausalChainForFinding(finding: {
   // Generic fallback if no specific rule matched
   return [
     `Structural extraction barrier identified: "${finding.title || 'Data accessibility defect'}"`,
-    'AI ingestion algorithms degrade confidence score when extracting first-party brand specifications',
-    'Assistant falls back to generalized category descriptions or third-party secondary sources',
+    'A retrieval process may have weaker evidence when extracting first-party brand specifications',
+    'A response system may require qualification or another source instead of relying on the affected content',
   ]
 }

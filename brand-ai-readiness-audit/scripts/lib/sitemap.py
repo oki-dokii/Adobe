@@ -5,7 +5,7 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 from urllib.parse import urlparse
 
-from lib.http import HttpClient, HttpError
+from lib.http_client import HttpClient, HttpError
 
 SITEMAP_CAP = 200
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}

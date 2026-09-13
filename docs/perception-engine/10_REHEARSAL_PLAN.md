@@ -71,7 +71,7 @@ Rehearsal uses the **same UI as judges**. No extra debug panel.
 |---|---|
 | Did you scrape ChatGPT? | No. Extract-grounded simulation. Kicker on screen. |
 | Is the UI mocked? | The tree is driven by a real evaluation report / live orchestrator (pick the true one). |
-| Why 10 skills? | Adobe marketplace units; orchestrator composes them. |
+| Why 11 skills? | Adobe marketplace units; orchestrator composes nine detection skills and one post-processing layer. |
 | Why not 100 skills? | Composition > inventory. Perception is the 11th composing skill. |
 | Why is Stripe critical in your paper? | Heuristic overfire — we don’t demo that origin; eval is in the report. |
 | Can I add a skill? | SKILL.md contract + RUN_ORDER; skip shows composition today. |

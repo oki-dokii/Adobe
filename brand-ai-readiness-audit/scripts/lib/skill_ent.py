@@ -9,7 +9,7 @@ import time
 from lib.confidence import attach_confidence
 from lib.extract import parse_html
 from lib.findings import make_finding
-from lib.http import HttpClient, HttpError
+from lib.http_client import HttpClient, HttpError
 from lib.models import CrawlSnapshot, Entity, SkillResult, SuggestedAction
 
 COMMON = {

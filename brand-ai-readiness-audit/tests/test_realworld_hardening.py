@@ -20,7 +20,7 @@ from lib.orchestrator import run_audit
 from lib.skill_cit import run as run_cit
 from lib.skill_d import run as run_d
 from lib.skill_k import run as run_k
-from test_skills_orchestrator import BASE, C, HOME, routes_for
+from test_skills_orchestrator import BASE, C, HOME, PRICING_SPLIT, routes_for
 
 
 def _kind(text: str) -> str:
@@ -37,6 +37,8 @@ def test_price_arr_revenue_funding_not_offers():
         "company valuation: $5B",
         "serves a $20B market",
         "customers processed $10M in payments",
+        "annual credits of $250,000",
+        "up to $200,000 in rewards",
         "Series B funding of $80 million",
         "salary of $180,000",
     ]
@@ -107,6 +109,48 @@ def test_qualifier_split_ignores_arr_keeps_listed_amount():
     assert any("$49" in f.evidence for f in splits)
 
 
+def test_qualifier_split_business_exposure_is_not_promoted_to_critical():
+    from lib.business_impact import annotate
+
+    snap = crawl(BASE + "/", C(routes_for({"/": HOME, "/pricing": PRICING_SPLIT})), Clock.start_run(30), page_cap=5)
+    run_d(snap)
+    cit = run_cit(snap)
+    splits = [f for f in cit.findings if f.finding_type == "qualifier_split"]
+    assert splits
+    enriched = annotate(splits, sampled_pages=5)["findings"]
+    assert all(item["businessExposureSeverity"] != "critical" for item in enriched)
+
+
+def test_stripe_style_business_metrics_never_become_critical_qualifier_splits():
+    html = """<!doctype html><html><head><title>Pricing</title></head><body><main>
+    <h1>Pricing</h1>
+    <p>Businesses on the platform process $500 million in annual recurring revenue.</p>
+    <p>We support $250,000 in annual credits and $200,000 in rewards.</p>
+    <p>Plans start at $29 per month, billed annually.</p>
+    </main></body></html>"""
+    snap = crawl(BASE + "/", C(routes_for({"/pricing": html})), Clock.start_run(30), page_cap=4)
+    run_d(snap)
+    cit = run_cit(snap)
+    splits = [f for f in cit.findings if f.finding_type == "qualifier_split"]
+    assert not any(f.severity == "critical" for f in splits)
+    assert not any("500" in f.evidence or "250,000" in f.evidence or "200,000" in f.evidence for f in splits)
+
+
+def test_shopify_style_credits_rewards_are_not_product_price_confidence():
+    html = """<!doctype html><html><head><title>Pricing</title></head><body><main>
+    <h1>Commerce platform</h1>
+    <p>Merchants can earn up to $200,000 in rewards.</p>
+    <p>Annual credit eligibility reaches $250,000 for qualifying businesses.</p>
+    <p>Plans start at $39 per month for the online store.</p>
+    </main></body></html>"""
+    snap = crawl(BASE + "/", C(routes_for({"/pricing": html})), Clock.start_run(30), page_cap=4)
+    run_d(snap)
+    cit = run_cit(snap)
+    splits = [f for f in cit.findings if f.finding_type == "qualifier_split"]
+    assert not any(f.severity == "critical" for f in splits)
+    assert not any("200,000" in f.evidence or "250,000" in f.evidence for f in splits)
+
+
 def test_host_stripe_is_not_pricing_page_type():
     assert classify_page_type("https://stripe.com/", "Stripe", "payments") == "home"
     assert classify_page_type("https://stripe.com/pricing", "Pricing", "") == "pricing"
@@ -148,6 +192,20 @@ def test_classify_http_status_matrix():
     ok = classify_http_access(status=200, headers={"content-type": "text/html"}, body="<html><body>ok</body></html>")
     assert ok == "ok"
     assert content_usable(ok, 200)
+
+
+def test_all_challenge_pages_produce_incomplete_access_report_not_content_findings():
+    routes = routes_for({
+        "/": "<html><body><h1>Just a moment...</h1><p>Checking your browser</p></body></html>",
+    })
+    routes[f"{BASE}/"] = (403, {"content-type": "text/html", "cf-mitigated": "challenge"}, routes[f"{BASE}/"][2])
+    report = run_audit(BASE + "/", client=C(routes), max_seconds=30, page_cap=3)
+    assert report["audit_status"] == "incomplete"
+    assert report["readiness_index"] is None
+    assert report["buyer_question_scorecard"] is None
+    assert report["top3PriorityActions"] is None
+    assert [f["finding_type"] for f in report["findings"]] == ["access_blocked"]
+    assert not any(f["finding_type"] in {"unanswerable", "qualifier_split", "date_divergence"} for f in report["findings"])
 
 
 def _status_routes(status: int, body: str, headers: dict | None = None):

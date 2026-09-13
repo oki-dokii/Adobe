@@ -14,6 +14,7 @@ import {
   getFunnelStageForFinding,
   getReachTier,
 } from './business-impact'
+import { deductionForSeverity, overallIndex } from './scoring'
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
@@ -71,9 +72,7 @@ export function generateAuditMarkdown(
     }
   }
 
-  const avgScore = Math.round(
-    result.dimensionScores.reduce((acc, d) => acc + d.score, 0) / (result.dimensionScores.length || 1),
-  )
+  const avgScore = overallIndex(result.dimensionScores)
 
   const letterGrade =
     avgScore >= 90 ? 'A' : avgScore >= 80 ? 'A−' : avgScore >= 75 ? 'B+' :
@@ -175,7 +174,7 @@ export function generateAuditMarkdown(
   for (const f of directFindings) {
     const funnelInfo = getFunnelStageForFinding(f)
     const reachTier = getReachTier(f.affectedPages, f.sampledPages, f.findingType)
-    const sevInfo = deriveBusinessExposureSeverity(funnelInfo.priority, reachTier)
+    const sevInfo = deriveBusinessExposureSeverity(funnelInfo.priority, reachTier, f.findingType)
     const reachPct = Math.round((f.affectedPages / Math.max(f.sampledPages, 1)) * 100)
     candidates.push({
       title: f.title,
@@ -243,7 +242,7 @@ export function generateAuditMarkdown(
   } else {
     lines.push(`| Severity | Deduction | Finding | Dimension |`, `|---|---|---|---|`)
     for (const f of nonLimitations) {
-      const deduction = f.severity === 'critical' ? 12 : f.severity === 'high' ? 8 : f.severity === 'medium' ? 4 : 2
+      const deduction = deductionForSeverity(f.severity)
       lines.push(`| ${severityIcon(f.severity)} ${f.severity.toUpperCase()} | −${deduction} pts | ${f.title} | ${DIMENSIONS[f.dimension]?.label} |`)
     }
     lines.push('')
@@ -312,15 +311,15 @@ export function generateAuditMarkdown(
       '',
       '**❓ Why This Matters for AI Systems:**',
       '',
-      `> When an AI assistant attempts to answer direct user questions regarding these attributes, retrieval-augmented generation (RAG) pipelines fail closed or hallucinate answers from secondary third-party sources.`,
+      `> A retrieval system using only this site's extractable evidence would lack a direct answer; downstream assistant behavior and secondary-source selection were not measured.`,
       '',
       '**💼 Business Impact:**',
       '',
-      `> Anyone using an AI assistant to evaluate your product or research pricing before buying cannot get answers sourced from your own site — they will either abandon the inquiry or receive outdated third-party numbers.`,
+      `> A user relying on an assistant may receive a qualified or incomplete answer because the audited site does not expose a direct first-party span for these questions.`,
       '',
       '**💥 Blast Radius:**',
       '',
-      `> Confirmed site-wide completeness barrier across ${scorecard.unansweredCount} core buyer questions; impacts 100% of conversational search queries touching these funnel stages.`,
+      `> Confirmed across the sampled corpus for ${scorecard.unansweredCount} core buyer questions; site-wide and conversational-query impact were not measured.`,
       '',
       '**✅ Recommended Action:**',
       '',
@@ -334,8 +333,8 @@ export function generateAuditMarkdown(
       '**⛓ Causal Consequence Chain:**',
       '',
       '1. High-intent prospective buyers query AI assistants for pricing, audience suitability, or procurement specifications.',
-      '2. AI knowledge retrieval pipelines scan crawled pages and encounter complete factual voids across core buyer questions.',
-      '3. Assistants recommend accessible competitors with clear specifications or advise prospects that information is unavailable.',
+      '2. A retrieval process using the crawled pages would encounter no extractable first-party answer for the affected questions.',
+      '3. An answer system may need to qualify the response or use another source; competitor recommendation was not measured.',
       '',
       '<details>',
       `<summary>📋 JIRA Ticket</summary>`,
@@ -346,7 +345,7 @@ export function generateAuditMarkdown(
       `Priority: ${kScorecardSev === 'critical' ? 'High' : 'Medium'}`,
       '',
       `Problem: Site fails to answer ${scorecard.unansweredCount} core buyer questions in public extractable HTML.`,
-      `Why It Matters: AI assistants fail closed or substitute competitors on high-intent commercial queries.`,
+      `Why It Matters: The site does not provide extractable first-party evidence for these high-intent questions; downstream assistant behavior was not measured.`,
       `Acceptance Criteria: Add visible declarative answers for ${scorecard.items.filter((i) => i.status === 'unanswered').map((i) => i.id).join(', ')} on canonical pages.`,
       `Skill: AI Answerability Audit | Dimension: AI Understanding | Finding ID: F-BUYER-SCORECARD`,
       '```',
@@ -473,7 +472,7 @@ export function generateAuditMarkdown(
   }
 
   lines.push(
-    '> ℹ️ **How Severity is Calculated:** Business-Exposure Severity uses **Funnel Priority** (High = Decision, Medium = Consideration, Low = Awareness) and **Reach Tier**. Reach is **Broad** when the finding is a global access directive (`robots_fail_closed` or `ai_token_disallow`) or `affectedPages / max(sampledPages, 1) >= 0.5`; otherwise it is **Cluster** when that ratio is `>= 0.1` or `affectedPages > 1`; otherwise it is **Isolated**. The exact matrix is: Decision → Broad **CRITICAL (90)**, Cluster **CRITICAL (80)**, Isolated **HIGH (70)**; Consideration → Broad **HIGH (60)**, Cluster **HIGH (50)**, Isolated **MEDIUM (40)**; Awareness → Broad **MEDIUM (30)**, Cluster **LOW (20)**, Isolated **LOW (10)**.',
+    '> ℹ️ **How Severity is Calculated:** Business-Exposure Severity uses **Funnel Priority** (High = Decision, Medium = Consideration, Low = Awareness) and **Reach Tier**. Reach is **Broad** when the finding is a global access directive (`robots_fail_closed` or `ai_token_disallow`) or `affectedPages / max(sampledPages, 1) >= 0.5`; otherwise it is **Cluster** when that ratio is `>= 0.1` **or `affectedPages > 1`**; otherwise it is **Isolated**. For ordinary findings, the exact matrix is: Decision → Broad **CRITICAL (90)**, Cluster **CRITICAL (80)**, Isolated **HIGH (70)**; Consideration → Broad **HIGH (60)**, Cluster **HIGH (50)**, Isolated **MEDIUM (40)**; Awareness → Broad **MEDIUM (30)**, Cluster **LOW (20)**, Isolated **LOW (10)**. Exception: `qualifier_split` is heuristic extractability evidence and is capped at **HIGH**: Isolated **HIGH (70)**, Cluster **HIGH (60)**, Broad **HIGH (60)**, regardless of funnel priority.**',
     '',
   )
 
@@ -548,7 +547,7 @@ export function generateAuditMarkdown(
       lines.push(
         hrule(),
         subsection('⚔️ Substitution Counterfactual Analysis'),
-        '> When your first-party content is weak, AI systems substitute competitor mentions. This shows who benefits and why.',
+        '> This is a simulated mechanism view based on audited evidence gaps. No live assistant query, competitor attribution, or market-share measurement was performed.',
         '',
         `| Signal | Value |`,
         `|---|---|`,

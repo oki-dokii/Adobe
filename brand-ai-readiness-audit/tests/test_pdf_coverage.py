@@ -1,4 +1,4 @@
-"""PDF architecture coverage mapped into the existing 10 skills. Generic fixtures only."""
+"""PDF architecture coverage mapped into the 11 marketplace skills. Generic fixtures only."""
 
 from __future__ import annotations
 
@@ -170,4 +170,3 @@ def test_shopify_locale_canonical_suppression():
     res = run_c(snap)
     dup_findings = [f for f in res.findings if f.finding_type == "canonical_dup"]
     assert len(dup_findings) == 0, f"Expected 0 canonical_dup findings for localized cluster, got: {dup_findings}"
-

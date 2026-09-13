@@ -29,6 +29,7 @@ import {
   getFunnelStageForFinding,
   getReachTier,
 } from './business-impact'
+import { overallIndex, scoreDimension } from './scoring'
 
 const SKILL_IDS = new Set<string>(Object.keys(SKILL_MAP))
 
@@ -75,6 +76,11 @@ export interface BackendFinding {
   template_id?: string
   metrics?: Record<string, any>
   businessExposureSeverity?: string
+  businessImpact?: Finding['businessImpact']
+  consequenceChain?: string[]
+  funnelStage?: Finding['funnelStage']
+  blast_radius?: Record<string, unknown>
+  buyerQuestionScorecard?: Record<string, unknown>
 }
 
 export interface BackendAuditPayload {
@@ -278,15 +284,7 @@ function labelForScore(score: number): NonNullable<BackendAuditPayload['dimensio
  */
 function deriveDimensionScores(findings: Finding[]): AuditResult['dimensionScores'] {
   return (Object.keys(DIMENSIONS) as Dimension[]).map((dimension) => {
-    let score = 90
-    for (const f of findings) {
-      if (f.isLimitation || f.dimension !== dimension) continue
-      if (f.severity === 'critical') score -= 14
-      else if (f.severity === 'high') score -= 9
-      else if (f.severity === 'medium') score -= 5
-      else score -= 2
-    }
-    score = Math.max(15, Math.min(96, score))
+    const score = scoreDimension(findings, dimension)
     return { dimension, score, label: labelForScore(score)! }
   })
 }
@@ -357,14 +355,15 @@ export function adaptBackendResult(payload: BackendAuditPayload): AuditResult {
 
     const affectedPages = f.affected_pages_count ?? f.affected_urls?.length ?? 0
     const sampledPages = f.sampled_pages ?? Math.max(affectedPages, payload.coverage?.pages_fetched ?? 1)
-    const { stage, priority } = getFunnelStageForFinding({
+    const derivedFunnel = getFunnelStageForFinding({
       findingType: f.finding_type,
       title: f.title,
       dimension: dimensionOf(skillId),
       metrics: f.metrics,
     })
+    const { stage: derivedStage, priority } = derivedFunnel
     const reachTier = getReachTier(affectedPages, sampledPages, f.finding_type)
-    const { severity: businessSeverity } = deriveBusinessExposureSeverity(priority, reachTier)
+    const { severity: businessSeverity } = deriveBusinessExposureSeverity(priority, reachTier, f.finding_type)
     const severity = limitation ? 'low' : businessSeverity
     const businessExposureSeverity = asSeverity(
       f.businessExposureSeverity ?? f.metrics?.businessExposureSeverity,
@@ -388,12 +387,17 @@ export function adaptBackendResult(payload: BackendAuditPayload): AuditResult {
       rootCauseId: f.parent_id || undefined,
       isLimitation: limitation,
       limitationReason: limitation ? cleanEvidence(String(f.limitation_reason || f.evidence || '')) : undefined,
-      consequenceChain: limitation ? undefined : getCausalChainForFinding(f),
+      consequenceChain: limitation ? undefined : (f.consequenceChain ?? getCausalChainForFinding(f)),
       templateId: f.template_id,
       findingKey: f.finding_key,
       costTier: typeof f.suggested_action === 'object' ? f.suggested_action.cost_tier : undefined,
-      funnelStage: stage,
-      metrics: f.metrics,
+      funnelStage: f.funnelStage ?? derivedStage,
+      businessImpact: f.businessImpact,
+      metrics: {
+        ...f.metrics,
+        ...(f.blast_radius ? { blast_radius: f.blast_radius } : {}),
+        ...(f.buyerQuestionScorecard ? { buyerQuestionScorecard: f.buyerQuestionScorecard } : {}),
+      },
       businessExposureSeverity,
     }
   })
@@ -508,7 +512,7 @@ export function adaptBackendResult(payload: BackendAuditPayload): AuditResult {
     overallIndex:
       typeof payload.overall_index === 'number'
         ? payload.overall_index
-        : Math.round(dimensionScores.reduce((sum, score) => sum + score.score, 0) / Math.max(dimensionScores.length, 1)),
+      : overallIndex(dimensionScores),
     top3PriorityActions: (payload.top3PriorityActions ?? []).map((action, index) => ({
       findingId: action.finding_id ?? `priority-${index + 1}`,
       summary: action.summary ?? 'Review priority action',

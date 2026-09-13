@@ -45,7 +45,7 @@ Independent hostile audit of `brand-ai-readiness-audit/` against `analysis/revie
 
 ## A. Correctly implemented
 
-- Marketplace identity: 10 skills, one entrypoint, SKILL.md name/description.
+- Marketplace identity: 11 skills, one entrypoint, SKILL.md name/description.
 - Read-only intent: GET/HEAD only; no cookie jar; no form POST.
 - DAG order D → CIT/ENT/I → K → X (H optional).
 - Robots 5xx fail-closed stops crawl.

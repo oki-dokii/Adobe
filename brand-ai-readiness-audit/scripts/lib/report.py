@@ -20,6 +20,21 @@ def build_report(
     timing: TimingLog,
     metrics: dict[str, Any],
 ) -> dict[str, Any]:
+    fetched = coverage.get("pages_fetched")
+    estimated = coverage.get("estimated_pages")
+    if estimated:
+        pct = round((float(fetched or 0) / float(estimated)) * 100)
+        coverage_basis = f"{fetched} of ~{estimated} estimated pages sampled ({pct}% coverage)"
+        coverage_summary = (
+            f"This audit sampled {fetched} of an estimated {estimated} pages ({pct}% coverage). "
+            "Findings reflect the sampled pages; issues may exist elsewhere on the site that were not reviewed."
+        )
+    else:
+        coverage_basis = f"{fetched or 0} pages sampled; total site size unknown"
+        coverage_summary = (
+            f"This audit sampled {fetched or 0} pages; total site size is unknown. "
+            "Findings reflect the sampled pages; issues may exist elsewhere on the site that were not reviewed."
+        )
     user = [f for f in findings if not f.suppressed]
     counts = {
         "total_findings": len(user),
@@ -28,7 +43,7 @@ def build_report(
         "medium": sum(1 for f in user if f.severity == "medium"),
         "low": sum(1 for f in user if f.severity == "low"),
     }
-    handout = [f.to_handout() for f in user]
+    handout = [f.to_handout(coverage_basis=coverage_basis) for f in user]
     proactive_recs = []
     for f in user:
         sa = f.suggested_action
@@ -44,12 +59,14 @@ def build_report(
         "audited_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "summary": counts,
         "coverage": coverage,
+        "coverage_basis": coverage_basis,
+        "coverage_summary": coverage_summary,
         "site_type": site_type,
         "limitations": limitations,
         "findings": handout,
-        "findings_internal": [f.to_internal() for f in user],
-        "appendix_overflow": [f.to_handout() for f in overflow],
-        "suppressed": [f.to_handout() | {"reason": f.suppress_reason} for f in findings if f.suppressed],
+        "findings_internal": [f.to_internal(coverage_basis=coverage_basis) for f in user],
+        "appendix_overflow": [f.to_handout(coverage_basis=coverage_basis) for f in overflow],
+        "suppressed": [f.to_handout(coverage_basis=coverage_basis) | {"reason": f.suppress_reason} for f in findings if f.suppressed],
         "proactive_recommendations": proactive_recs,
         "metrics": metrics,
         "timing": {
@@ -85,6 +102,8 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"# Brand AI readiness audit — {report['site']}",
         "",
         bluf,
+        "",
+        report.get("coverage_summary", ""),
         "",
         "## Coverage",
         f"- Pages fetched: {report.get('coverage', {}).get('pages_fetched')}",

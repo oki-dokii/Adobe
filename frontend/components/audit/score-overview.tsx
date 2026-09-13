@@ -5,6 +5,7 @@ import type { AuditResult, DimensionScore } from '@/lib/audit/types'
 import { DIMENSIONS } from '@/lib/audit/skills'
 import { WhyHint } from './why-hint'
 import { AudienceBriefings } from './audience-briefings'
+import { benchmarkPercentile, deductionForSeverity, overallIndex } from '@/lib/audit/scoring'
 
 const LABEL_COLOR: Record<DimensionScore['label'], string> = {
   strong: 'var(--success)',
@@ -14,9 +15,7 @@ const LABEL_COLOR: Record<DimensionScore['label'], string> = {
 }
 
 export function ScoreOverview({ result, host }: { result: AuditResult; host: string }) {
-  const avgScore = result.overallIndex ?? Math.round(
-    result.dimensionScores.reduce((acc, d) => acc + d.score, 0) / (result.dimensionScores.length || 1),
-  )
+  const avgScore = result.overallIndex ?? overallIndex(result.dimensionScores)
 
   const scoreColor =
     avgScore >= 75 ? 'var(--success)' : avgScore >= 50 ? 'var(--signal)' : 'var(--warning)'
@@ -29,13 +28,7 @@ export function ScoreOverview({ result, host }: { result: AuditResult; host: str
     avgScore >= 60 ? 'C+' :
     avgScore >= 50 ? 'C' : 'D'
 
-  // Empirical reference percentile against benchmark corpus (median=67, top quartile=82, best=91)
-  const percentile =
-    avgScore >= 91 ? 95 :
-    avgScore >= 82 ? Math.round(75 + ((avgScore - 82) / 9) * 20) :
-    avgScore >= 67 ? Math.round(50 + ((avgScore - 67) / 15) * 25) :
-    avgScore >= 50 ? Math.round(25 + ((avgScore - 50) / 17) * 25) :
-    Math.max(10, Math.round((avgScore / 50) * 25))
+  const percentile = benchmarkPercentile(avgScore)
 
   return (
     <section aria-labelledby="overview-heading" className="space-y-6">
@@ -145,6 +138,9 @@ export function ScoreOverview({ result, host }: { result: AuditResult; host: str
               ? 'Ranked in the top quartile of evaluated brand origins.'
               : `Gap to top quartile: ${Math.max(0, 82 - avgScore)} points to achieve citation leadership.`}
           </p>
+          <p className="text-[9px] font-mono text-muted-foreground/50 leading-relaxed">
+            Percentile is a deterministic interpolation from the displayed 67 median, 82 top-quartile, and 91 best-in-class anchors; it is not a live rank.
+          </p>
         </div>
 
         {/* Severity Count Tally */}
@@ -241,8 +237,7 @@ export function ScoreOverview({ result, host }: { result: AuditResult; host: str
             .filter((f) => !f.isLimitation)
             .slice(0, 4)
             .map((f) => {
-              const deduction =
-                f.severity === 'critical' ? 12 : f.severity === 'high' ? 8 : f.severity === 'medium' ? 4 : 2
+              const deduction = deductionForSeverity(f.severity)
               return (
                 <div
                   key={f.id}

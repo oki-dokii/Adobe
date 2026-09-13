@@ -54,9 +54,9 @@ export function runVerification() {
   console.log('======================================================================\n')
 
   // 1. Load 3 structurally different sites
-  const site1 = loadFixtureSite('stripe-saas', 'https://stripe.com/', 'stripe.com', 'stripe-saas_warm.json')
-  const site2 = loadFixtureSite('shopify-ecom', 'https://shopify.com/', 'shopify.com', 'shopify-ecommerce_warm.json')
-  const site3 = loadFixtureSite('python-docs', 'https://docs.python.org/3/', 'docs.python.org', 'python-docs_warm.json')
+  const site1 = loadFixtureSite('commercial-a', 'https://commercial-a.invalid/', 'commercial-a.invalid', 'commercial-a_warm.json')
+  const site2 = loadFixtureSite('commerce-b', 'https://commerce-b.invalid/', 'commerce-b.invalid', 'commerce-b_warm.json')
+  const site3 = loadFixtureSite('documentation-c', 'https://documentation-c.invalid/', 'documentation-c.invalid', 'documentation-c_warm.json')
 
   // 2. Generate markdown reports
   const report1 = generateAuditMarkdown(site1)
@@ -65,9 +65,9 @@ export function runVerification() {
 
   const outputDir = path.resolve(__dirname, '../../analysis/verified_reports')
   fs.mkdirSync(outputDir, { recursive: true })
-  fs.writeFileSync(path.join(outputDir, 'stripe-saas-report.md'), report1)
-  fs.writeFileSync(path.join(outputDir, 'shopify-ecom-report.md'), report2)
-  fs.writeFileSync(path.join(outputDir, 'python-docs-report.md'), report3)
+  fs.writeFileSync(path.join(outputDir, 'commercial-a-report.md'), report1)
+  fs.writeFileSync(path.join(outputDir, 'commerce-b-report.md'), report2)
+  fs.writeFileSync(path.join(outputDir, 'documentation-c-report.md'), report3)
 
   console.log(`✓ Reports generated and saved to ${outputDir}\n`)
 
@@ -147,8 +147,8 @@ export function runVerification() {
   console.log(`   - Site 3 (${site3.host}) Readiness Index: ${report3.match(/AI Readiness Index.*?\*\*(\d+ \/ 100)\*\*/)?.[1]}`)
   
   // Diff analysis
-  const diff12 = lineDiff(report1, report2, 'stripe.com', 'shopify.com')
-  const diff23 = lineDiff(report2, report3, 'shopify.com', 'docs.python.org')
+  const diff12 = lineDiff(report1, report2, 'commercial-a.invalid', 'commerce-b.invalid')
+  const diff23 = lineDiff(report2, report3, 'commerce-b.invalid', 'documentation-c.invalid')
   fs.writeFileSync(path.join(outputDir, 'diff_stripe_vs_shopify.patch'), diff12)
   fs.writeFileSync(path.join(outputDir, 'diff_shopify_vs_python_docs.patch'), diff23)
   console.log(`   ✓ Unified diffs generated and saved to ${outputDir}.\n`)

@@ -5,6 +5,7 @@ from __future__ import annotations
 import http.client
 import socket
 import ssl
+import sys
 import time
 from dataclasses import dataclass, field
 from typing import Callable, Optional
@@ -187,6 +188,11 @@ class HttpClient:
         timeout = timeout_s if timeout_s is not None else self.timeout_s
         max_b = max_bytes if max_bytes is not None else self.max_bytes
         current = strip_userinfo(url)
+        print(
+            f"[HTTP_DEBUG] about_to_request url={current} ts={time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} epoch={time.time()}",
+            flush=True,
+            file=sys.stderr,
+        )
         hops: list[str] = []
         pinned: list[str] = []
         redirects = 0
