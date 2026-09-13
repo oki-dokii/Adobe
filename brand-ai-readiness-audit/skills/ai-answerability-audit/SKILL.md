@@ -18,7 +18,7 @@ Shared `CrawlSnapshot` with extraction flags and site type. Standalone use accep
 `SkillResult` JSON with `findings`: `{ id, finding_type, finding_key, title, severity, businessExposureSeverity: null, evidence, suggested_action, confidence }` and question metrics.
 
 ## Confidence & failure handling
-Missing pages or ambiguous spans result in LOW confidence or omission according to the existing check; 403/challenges/robots restrictions are upstream limitations, never invented answers.
+Missing pages or ambiguous spans result in LOW confidence or omission according to the existing check; 403/challenges/robots restrictions are upstream limitations, never invented answers. Detected via deterministic keyword/pattern matching; may not recognize an answer phrased in unexpected language. Treat 'insufficient' or 'unanswerable' as 'not found via automated pattern match,' not as definitive proof the information is absent. This method boundary is intentionally disclosed to preserve zero-LLM determinism without overclaiming negative omniscience.
 
 ## Declared tool needs
 Read-only snapshot/Python execution only; upstream network access is target-domain GET/HEAD only, robots-respecting.

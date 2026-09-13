@@ -46,7 +46,7 @@ K3_IDENTITY = [
 ]
 
 # Clusters where "what does it cost?" is usually the wrong question.
-_K6_GAP_CLUSTERS = frozenset({"A", "C", "D", "E", "unknown"})
+_K6_GAP_CLUSTERS = frozenset({"A", "B", "C", "D", "E", "unknown"})
 
 
 def k3_span(text: str, meta_desc: str = "") -> str | None:
@@ -74,14 +74,14 @@ def k3_span(text: str, meta_desc: str = "") -> str | None:
 def k6_is_expected_gap(site_type) -> bool:
     cluster = getattr(site_type, "cluster", "") or "unknown"
     secondary = set(getattr(site_type, "secondary", None) or [])
-    # News / docs / gov / YMYL advice: cost is the wrong closed-book question.
-    if cluster in ("A", "C", "D", "E"):
+    # News / docs / gov / charity / YMYL advice: cost is the wrong closed-book question.
+    if cluster in ("A", "B", "C", "D", "E"):
         return True
     if getattr(site_type, "saas", False) or getattr(site_type, "ecommerce", False):
         return False
     if cluster == "F" or "F" in secondary:
         return False
-    return cluster in _K6_GAP_CLUSTERS or bool(secondary & {"A", "C", "D", "E"})
+    return cluster in _K6_GAP_CLUSTERS or bool(secondary & {"A", "B", "C", "D", "E"})
 
 
 QUESTIONS = [
@@ -92,9 +92,9 @@ QUESTIONS = [
         "id": "K4",
         "q": "Who is the intended audience?",
         "pats": [
-            r"\bfor (teams|developers|enterprises|small businesses|clinicians|customers|users|organizations|businesses|students)\b",
-            r"\bbuilt for\b",
-            r"\bdesigned for\b",
+            r"\bfor (teams|developers|enterprises|small businesses|clinicians|customers|users|organizations|businesses|students|kids|children|educators|teachers|families|volunteers|homeowners|taxpayers|citizens|individuals|researchers|creators|professionals|consumers)\b",
+            r"\b(?:built|designed|created|tailored|crafted)\s+for\b",
+            r"\bserving (?:families|communities|children|students|individuals|taxpayers|citizens)\b",
         ],
         "home_pref": False,
         "gap_clusters": ("B",),
@@ -108,6 +108,9 @@ QUESTIONS = [
             r"\boffices? in\b",
             r"\blocated in\b",
             r"\bwe are a .{3,50} in [A-Z][a-z]{2,}",
+            r"\b(?:organization|agency|service|company|entity)\s+(?:in|of)\s+the\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3})",
+            r"\b(?:serving|serves|operating in|across)\s+(?:the\s+)?(?:United States|U\.S\.|Europe|nationwide|worldwide|globally)\b",
+            r"\bUnited States (?:government|agency|department|organization)\b",
         ],
         "home_pref": False,
         "gap_clusters": ("B", "D", "E"),
@@ -273,6 +276,11 @@ def run(snapshot: CrawlSnapshot, question_ids: list[str] | None = None) -> Skill
                 category="answerability",
             )
             attach_confidence(f, deterministic=True, reproduced=False)
+            f.confidence_basis = (
+                "Detected via deterministic keyword/pattern matching; may not recognize an answer "
+                "phrased in unexpected language. Treat 'insufficient' as 'not found via automated pattern match,' "
+                "not as definitive proof the information is absent."
+            )
             f.metrics["question_id"] = spec["id"]
             findings.append(f)
             continue
@@ -298,6 +306,11 @@ def run(snapshot: CrawlSnapshot, question_ids: list[str] | None = None) -> Skill
                 category="answerability",
             )
             attach_confidence(f, deterministic=True, reproduced=False)
+            f.confidence_basis = (
+                "Detected via deterministic keyword/pattern matching; may not recognize an answer "
+                "phrased in unexpected language. Treat 'insufficient' as 'not found via automated pattern match,' "
+                "not as definitive proof the information is absent."
+            )
             f.metrics["question_id"] = spec["id"]
             findings.append(f)
         else:

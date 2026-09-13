@@ -275,3 +275,55 @@ def test_markdown_opening_bluf_coverage_basis_and_top_finding():
     assert "**Primary Finding**:" in md
 
 
+def test_k_answerability_pattern_coverage_and_disclosure():
+    from lib.skill_k import _find_span, QUESTIONS, k6_is_expected_gap, run as run_k
+    from lib.models import SiteType, CrawlSnapshot, Page
+    # 1. K4 pattern matches expanded audience terms
+    k4_pats = next(q["pats"] for q in QUESTIONS if q["id"] == "K4")
+    assert _find_span("We have activities designed for kids and families.", k4_pats) is not None
+    assert _find_span("Educational resources for educators across the district.", k4_pats) is not None
+    assert _find_span("Tax preparation assistance for taxpayers and individuals.", k4_pats) is not None
+
+    # 2. K5 pattern matches geographic jurisdiction terms
+    k5_pats = next(q["pats"] for q in QUESTIONS if q["id"] == "K5")
+    assert _find_span("Official government organization in the United States.", k5_pats) is not None
+    assert _find_span("Nonprofit serving the United States and Canada.", k5_pats) is not None
+
+    # 3. K6 is expected gap for Cluster B (charities/directories)
+    st_b = SiteType(cluster="B")
+    assert k6_is_expected_gap(st_b) is True
+
+    # 4. Confidence basis disclosure on unanswerable findings
+    snap = CrawlSnapshot(run_id="run-k", seed_url="https://example.com/", origins=["https://example.com"])
+    snap.pages.append(Page(
+        id="p1",
+        url="https://example.com/",
+        final_url="https://example.com/",
+        status=200,
+        raw_html="<html><body><main><p>Short text.</p></main></body></html>",
+        main_text="Short text.",
+        page_type="home",
+    ))
+    res = run_k(snap, question_ids=["K3"])
+    unans = [f for f in res.findings if f.finding_type == "unanswerable"]
+    assert len(unans) > 0
+    assert "deterministic keyword/pattern matching" in unans[0].confidence_basis
+
+
+def test_table_no_th_exposure_capped():
+    from lib.business_impact import annotate
+    f = make_finding(
+        skill_id="citation-extractability-audit",
+        finding_type="table_no_th",
+        title="Data table lacks header cells",
+        severity="medium",
+        evidence="table has_th=false",
+        action=SuggestedAction(summary="Add th", priority="medium"),
+        urls=["https://example.com/pricing", "https://example.com/features"],
+    )
+    res = annotate([f], sampled_pages=2)
+    # Business exposure should be high, never critical, for a markup defect
+    assert res["findings"][0]["businessExposureSeverity"] == "high"
+
+
+

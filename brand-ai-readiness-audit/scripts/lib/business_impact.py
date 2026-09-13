@@ -378,8 +378,12 @@ def _exposure(f: Finding, sampled: int) -> str:
     # exposure without independent corroboration of a real offer defect.
     if f.finding_type == "qualifier_split":
         return "high"
+    # Table header markup flaws are structural extraction defects;
+    # they cannot establish Critical business exposure without complete access block.
+    if f.finding_type == "table_no_th":
+        return "high" if f.affected_pages_count > 1 else "medium"
     question = str(f.metrics.get("question_id", "")).upper()
-    if question in {"K6", "K13"} or f.finding_type in _DECISION:
+    if question in {"K6", "K13"} or f.finding_type in _DECISION or f.finding_type == "ymyl_no_disclaimer":
         priority = "high"
     elif question in {"K4", "K5"} or f.finding_type in _CONSIDERATION:
         priority = "medium"
