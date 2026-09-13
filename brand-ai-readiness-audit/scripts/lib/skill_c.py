@@ -302,7 +302,7 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
 
     n_lm = snapshot.coverage.get("sitemap_lastmod_n") or 0
     u_lm = snapshot.coverage.get("sitemap_lastmod_unique") or 0
-    if n_lm >= 20 and u_lm == 1:
+    if n_lm >= 5 and u_lm == 1:
         f = make_finding(
             skill_id="crawl-access-audit",
             finding_type="coverage_statement",

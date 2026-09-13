@@ -17,6 +17,39 @@ COMMON = {
     "horizon", "gateway", "metro", "first", "standard", "general", "american",
 }
 
+# Research F17/F18: relationship-declaring language that connects a product page to its brand
+_BRAND_REL_PAT = re.compile(
+    r"\b(?:a product (?:by|of|from)|made by|manufactured by|created by|developed by|by |from )\b",
+    re.I,
+)
+
+
+def _check_product_brand_relationship(
+    brand_name: str,
+    snapshot: CrawlSnapshot,
+) -> list:
+    """F17/F18: flag product pages whose title differs from brand and lack relationship language."""
+    hits = []
+    brand_token = re.sub(r"[^a-z0-9]", "", brand_name.lower())[:20]
+    if not brand_token or len(brand_token) < 3:
+        return hits
+    for p in snapshot.fetched_pages():
+        if p.page_type in ("home", "about", "legal", "contact"):
+            continue
+        page_title = (p.title or "").split("|")[0].split("\u2013")[0].strip()
+        page_token = re.sub(r"[^a-z0-9]", "", page_title.lower())[:20]
+        # Only flag if page title is clearly distinct from brand
+        if not page_token or page_token == brand_token or brand_token in page_token:
+            continue
+        text = p.main_text or ""
+        # Check if brand name appears in the page text (implicit relationship)
+        brand_in_text = brand_name.lower() in text.lower()
+        # Check if explicit relationship language is present
+        has_rel_language = bool(_BRAND_REL_PAT.search(text))
+        if not brand_in_text and not has_rel_language:
+            hits.append(p)
+    return hits
+
 
 def run(snapshot: CrawlSnapshot, client: HttpClient | None = None, fetch_sameas: bool = False) -> SkillResult:
     t0 = time.time()
@@ -116,4 +149,37 @@ def run(snapshot: CrawlSnapshot, client: HttpClient | None = None, fetch_sameas:
                     findings.append(f)
             except HttpError:
                 pass
+
+    # Gap 4 (Research F17/F18): product/brand relationship check
+    product_pages_missing_rel = _check_product_brand_relationship(name, snapshot)
+    for pp in product_pages_missing_rel[:3]:  # cap to 3 findings
+        f = make_finding(
+            skill_id="entity-identity-audit",
+            finding_type="product_brand_gap",
+            title="Product page does not declare its brand/manufacturer in visible text",
+            severity="medium",
+            evidence=(
+                f"Page title '{pp.title}' differs from brand '{name}' and page text contains "
+                f"neither the brand name nor relationship language ('made by', 'a product of', 'by [Brand]'). "
+                f"URL: {pp.url}"
+            ),
+            action=SuggestedAction(
+                summary=f"Add a visible statement such as '{pp.title} is a product by {name}.' near the top of the page.",
+                what=f"Brand-product relationship declaration for {pp.title}",
+                where=pp.url,
+                how=f"Add prose or JSON-LD 'brand' field: '{{\"@type\":\"Product\",\"name\":\"{pp.title}\",\"brand\":\"{{\"@type\":\"Brand\",\"name\":\"{name}\"}}\"}}' "
+                    f"or add a plain-text line '{pp.title} is made by {name}.' near the page heading.",
+                why="F17/F18: AI systems resolving product queries may not connect the product to its brand without explicit relationship language; "
+                    "entity-collision risk is higher for product names than for branded domains.",
+                cost_tier="content",
+            ),
+            urls=[pp.url, home.url],
+            category="entity",
+            confidence="low",
+        )
+        attach_confidence(f, deterministic=True, reproduced=False)
+        f.confidence = "low"
+        f.confidence_basis = "on-page heuristic only; title vs brand-name mismatch with no relationship language detected"
+        findings.append(f)
+
     return SkillResult("entity-identity-audit", snapshot.run_id, findings=findings, metrics={"entity": name, "collision_risk": risk}, timing_ms=(time.time() - t0) * 1000)

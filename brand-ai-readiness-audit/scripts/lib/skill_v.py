@@ -11,7 +11,16 @@ from lib.models import CrawlSnapshot, SiteType, SkillResult, SuggestedAction
 
 YMYL_ADVICE = re.compile(
     r"\b(?:medical|clinic|diagnosis|diagnosed|physician|prescriptions?|"
-    r"legal advice|attorney|malpractice)\b",
+    r"legal advice|attorney|malpractice|"
+    r"investment advice|tax advice|financial advice|licensed attorney|"
+    r"liability claim|contract law|securities|fiduciary)\b",
+    re.I,
+)
+
+YMYL_LEGAL_FINANCE = re.compile(
+    r"\b(?:legal advice|attorney|malpractice|liability|contract law|"
+    r"investment advice|tax advice|financial advice|securities|fiduciary|"
+    r"tax return|tax planning|estate planning)\b",
     re.I,
 )
 SAAS_TERMS = ("saas", "subscription", "workspace", "platform", "api", "cloud", "login", "pricing", "sign up", "signup", "developer platform", "infrastructure")
@@ -101,10 +110,10 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
     snapshot.site_type = st
     findings = []
     if ymyl and primary == "A":
-        disclosed = bool(
+        disclosed_medical = bool(
             re.search(r"(?<!no )reviewed by|\bmedical reviewer\b|\blicensed\b|\bnpi\b", blob)
         )
-        if not disclosed:
+        if not disclosed_medical:
             f = make_finding(
                 skill_id="site-type-classifier",
                 finding_type="ymy_disclosure",
@@ -121,6 +130,40 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
                 ),
                 urls=[p.url for p in snapshot.fetched_pages()[:3]],
                 category="site_type",
+            )
+            attach_confidence(f, deterministic=True, reproduced=False)
+            findings.append(f)
+
+    # Gap 5 (Research Topic V Cluster A): legal/finance YMYL — check for jurisdiction/license disclosure
+    if bool(YMYL_LEGAL_FINANCE.search(blob)):
+        # Check for visible license/jurisdiction language
+        legal_finance_disclosed = bool(
+            re.search(
+                r"\blicensed\b|\bjurisdiction\b|\bbar license\b|\bbar number\b|"
+                r"\bregistered investment|\bsec registered|\bcpa\b|\bcertified financial|"
+                r"\badvisor license|\bregistered advisor|\bfiduciary duty\b",
+                blob,
+                re.I,
+            )
+        )
+        if not legal_finance_disclosed:
+            f = make_finding(
+                skill_id="site-type-classifier",
+                finding_type="ymyl_legal_finance_disclosure",
+                title="Legal/finance advice pages lack visible license or jurisdiction disclosure",
+                severity="high",
+                evidence="Legal/finance advice lexicon matched; sampled pages have no license, jurisdiction, or advisor-registration disclosure in visible text.",
+                action=SuggestedAction(
+                    summary="Add a visible license number, bar registration, or jurisdiction statement near legal/financial advice.",
+                    priority="high",
+                    what="Visible license/jurisdiction/advisor-registration disclosure",
+                    where="Legal or financial advice pages",
+                    how="Add 'Licensed in [State]. Bar #XXXXX.' or 'SEC-registered investment advisor' in plain text near advice content.",
+                    why="Topic V Cluster A: YMYL legal/finance advice requires mandatory disclosure; absence is a compliance/trust signal gap, not a style issue.",
+                ),
+                urls=[p.url for p in snapshot.fetched_pages()[:3]],
+                category="site_type",
+                evidence_tier="FACT",
             )
             attach_confidence(f, deterministic=True, reproduced=False)
             findings.append(f)

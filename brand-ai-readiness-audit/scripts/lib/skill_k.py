@@ -86,7 +86,15 @@ def k6_is_expected_gap(site_type) -> bool:
 
 QUESTIONS = [
     {"id": "K3", "q": "What does this organization offer or do?", "pats": [K3_OFFERING.pattern], "home_pref": True},
-    {"id": "K6", "q": "What does it cost / how is it priced?", "pats": [r"contact .+ quote", r"request a quote", r"talk to sales"], "home_pref": False},
+    {
+        "id": "K6",
+        "q": "What does it cost / how is it priced?",
+        # price_pats: actual visible price figures (full answer = 1.0)
+        "pats": [r"\$\d", r"\b\d+(?:\.\d+)?\s*(?:USD|EUR|GBP|per month|/mo|/year|/yr)\b", r"\bfree plan\b", r"\bfree tier\b"],
+        # quote_pats: contact-for-quote CTAs (partial answer = 0.5)
+        "quote_pats": [r"contact .{0,30}?quote", r"\brequest a quote\b", r"\btalk to sales\b", r"\bcontact(?:\s+us)? for (?:a )?(?:quote|pricing)\b"],
+        "home_pref": False,
+    },
     {"id": "K13", "q": "How can a human contact the organization?", "pats": [r"@\w+\.\w+", r"\bcontact\b", r"\bemail\b", r"\bphone\b"], "home_pref": False},
     {
         "id": "K4",
@@ -95,6 +103,13 @@ QUESTIONS = [
             r"\bfor (teams|developers|enterprises|small businesses|clinicians|customers|users|organizations|businesses|students|kids|children|educators|teachers|families|volunteers|homeowners|taxpayers|citizens|individuals|researchers|creators|professionals|consumers)\b",
             r"\b(?:built|designed|created|tailored|crafted)\s+for\b",
             r"\bserving (?:families|communities|children|students|individuals|taxpayers|citizens)\b",
+            # Research K4: implicit audience signals via social-proof and use-case framing
+            r"\btrusted by\b",
+            r"\bused by\b",
+            r"\bideal for\b",
+            r"\bperfect for\b",
+            r"\bdesigned to help\b",
+            r"\bcustomers include\b",
         ],
         "home_pref": False,
         "gap_clusters": ("B",),
@@ -114,6 +129,22 @@ QUESTIONS = [
         ],
         "home_pref": False,
         "gap_clusters": ("B", "D", "E"),
+    },
+    {
+        "id": "K7",
+        "q": "What makes this organization different from alternatives?",
+        "pats": [
+            # Research K7: differentiator signals (K7 is NOT an expected_gap for commercial sites)
+            r"\bunlike (?:other|most|typical|traditional|competing)\b",
+            r"\bthe only (?:\w+ )?(?:platform|tool|service|solution|company|software)\b",
+            r"\bonly (?:\w+ )?(?:platform|tool|service|solution|software) that\b",
+            r"\bthe first (?:\w+ )?(?:platform|tool|service|company|solution)\b",
+            r"\bno other\b",
+            r"\bwhat sets us apart\b",
+            r"\bwhy (?:choose|us|we)\b",
+            r"\bunique(?:ly)?\b.{0,40}\b(?:approach|feature|advantage|capability|model)\b",
+        ],
+        "home_pref": False,
     },
     {"id": "K10", "q": "Who are the competitors?", "pats": [r"\bvs\.?\b", r"alternative"], "expected_gap": True},
     {"id": "K9", "q": "Awards and rankings", "pats": [r"\baward\b", r"\b#1\b"], "expected_gap": True},
@@ -244,12 +275,34 @@ def run(snapshot: CrawlSnapshot, question_ids: list[str] | None = None) -> Skill
             continue
 
         if not hits:
-            # SaaS quote CTA: still "answered" partial if contact-for-quote
             blob = snapshot.corpus_text().lower()
-            if spec["id"] == "K6" and snapshot.site_type.saas and re.search(r"quote|talk to sales|contact .* pric", blob):
-                per_q[spec["id"]] = "partial"
-                answered_scores.append(0.5)
-                continue
+            # K6: check for SaaS quote CTA (partial = 0.5) before marking unanswerable
+            if spec["id"] == "K6":
+                quote_pats = spec.get("quote_pats") or []
+                quote_span = _find_span(blob, quote_pats) if quote_pats else None
+                if quote_span and snapshot.site_type.saas:
+                    per_q[spec["id"]] = "partial"
+                    answered_scores.append(0.5)
+                    # Gap 1: emit coverage_statement so the report is not silent about the partial answer
+                    f_partial = make_finding(
+                        skill_id="ai-answerability-audit",
+                        finding_type="coverage_statement",
+                        title="K6 pricing: contact-for-quote CTA found (partial answer — no public price)",
+                        severity="low",
+                        evidence="SaaS quote CTA detected ('contact us', 'talk to sales'). No public price in crawled corpus. "
+                        "This is a structural norm for enterprise SaaS, not a defect.",
+                        action=SuggestedAction(
+                            summary="If public pricing is desired for AI discoverability, consider adding a visible price tier or starting-price statement.",
+                            priority="low",
+                            why="Contact-for-quote is noted as a partial answer; disclosed limitation beats silent omission.",
+                        ),
+                        urls=[home.url] if home else [snapshot.seed_url],
+                        category="answerability",
+                    )
+                    f_partial.confidence = "high"
+                    f_partial.confidence_basis = "Deterministic: SaaS quote CTA pattern matched in corpus."
+                    findings.append(f_partial)
+                    continue
             per_q[spec["id"]] = "unanswerable"
             answered_scores.append(0.0)
             sev = "high" if spec["id"] == "K3" else "medium"
