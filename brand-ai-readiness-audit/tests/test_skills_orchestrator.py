@@ -254,7 +254,8 @@ def test_one_entrypoint_manifest():
     assert len(eps) == 1
     assert eps[0]["id"] == "audit-orchestrator"
     ids = [s["id"] for s in man["skills"]]
-    assert len(ids) == 10
+    assert len(ids) == 11
+    assert "business-impact-layer" in ids
 
 
 def test_no_hardcoded_eval_hosts_in_lib():

@@ -33,22 +33,19 @@ export function RecommendationGravityRow({
   const isDisplaced = gravity.class === 'displaced'
 
   return (
-    <button
-      type="button"
-      role="status"
-      onClick={handleClick}
-      aria-label={`Recommendation Gravity ${gravity.label}: ${gravity.detail}`}
+    <div
+      role="region"
+      aria-label="Recommendation Gravity"
       className={cn(
-        'group flex w-full flex-col gap-1.5 rounded-xl border p-3 text-left transition-all cursor-pointer',
-        'hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-signal/50',
-        isNamed && 'border-emerald-500/25 bg-emerald-500/[0.04] hover:bg-emerald-500/[0.08]',
-        isGeneric && 'border-sky-500/25 bg-sky-500/[0.04] hover:bg-sky-500/[0.08]',
-        isDisplaced && 'border-amber-500/25 bg-amber-500/[0.04] hover:bg-amber-500/[0.08]',
+        'space-y-2.5 rounded-xl border p-3.5 transition-all',
+        isNamed && 'border-emerald-500/25 bg-emerald-500/[0.03]',
+        isGeneric && 'border-sky-500/25 bg-sky-500/[0.03]',
+        isDisplaced && 'border-amber-500/25 bg-amber-500/[0.03]',
       )}
     >
-      <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
-          Recommendation Gravity
+      <div className="flex items-center justify-between border-b border-white/6 pb-2">
+        <span className="font-mono text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+          RECOMMENDATION GRAVITY
         </span>
         <span
           className={cn(
@@ -62,18 +59,20 @@ export function RecommendationGravityRow({
         </span>
       </div>
 
-      <p className="text-[11px] leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors">
+      <p className="text-[11px] leading-relaxed text-foreground/90">
         {gravity.detail}
       </p>
 
-      <div className="flex items-center justify-between pt-0.5">
-        <span className="font-mono text-[8px] text-muted-foreground/60 uppercase">
-          Click to inspect engagement & answerability
-        </span>
-        <span className="font-mono text-[8px] text-signal/80 opacity-0 group-hover:opacity-100 transition-opacity">
-          Trace on tree →
-        </span>
+      <div className="flex items-center justify-between pt-1 border-t border-white/6 text-[9px] font-mono text-muted-foreground">
+        <span>Derived from: Handoff & Answerability Audits</span>
+        <button
+          type="button"
+          onClick={handleClick}
+          className="cursor-pointer text-signal hover:underline font-bold"
+        >
+          Inspect Skills on Tree →
+        </button>
       </div>
-    </button>
+    </div>
   )
 }

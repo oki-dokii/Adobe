@@ -139,6 +139,23 @@ export function PerceptionConsole({
           {loading ? 'ASKING…' : 'ASK'}
         </button>
 
+        {/* Cognitive Blindspot Alert (The Lobotomy Demo Effect) */}
+        {perception?.skippedSkillIds && perception.skippedSkillIds.length > 0 && (
+          <div className="rounded-lg border border-amber-500/35 bg-amber-500/10 p-2.5 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[9px] font-bold text-amber-300 uppercase tracking-wider">
+                COGNITIVE BLINDSPOT DETECTED
+              </span>
+              <span className="font-mono text-[8px] rounded bg-amber-500/20 text-amber-200 px-1 py-0.2 uppercase font-semibold">
+                {perception.skippedSkillIds.length} DISABLED
+              </span>
+            </div>
+            <p className="text-[10px] text-amber-100/90 leading-tight">
+              Downstream AI agents cannot ground facts for: {perception.skippedSkillIds.map((s) => s.replace(/-audit$/, '')).join(', ')}. First-party evidence is redacted.
+            </p>
+          </div>
+        )}
+
         {/* Stale Evidence Warning */}
         {bundle?.perception.stale && (
           <div className="rounded-lg border border-amber-500/25 bg-amber-500/8 px-3 py-2 font-mono text-[10px] text-amber-200/90 flex items-center justify-between">
@@ -184,7 +201,7 @@ export function PerceptionConsole({
             {/* Status & Confidence Meta */}
             <div className="flex items-center justify-between border-b border-white/6 pb-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
               <span>status: <strong className="text-foreground">{perception.status}</strong></span>
-              <span>confidence: <strong className="text-foreground">{perception.confidence}</strong></span>
+              <span>grounding confidence: <strong className="text-foreground">{perception.confidence}</strong></span>
             </div>
 
             {/* Grounded Answer Chips with Sentence Tracing */}

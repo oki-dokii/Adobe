@@ -47,6 +47,14 @@ export type SitePhase =
 export type Severity = 'critical' | 'high' | 'medium' | 'low'
 export type Confidence = 'high' | 'medium' | 'low'
 
+export interface SkillContract {
+  input: string
+  transform: string
+  output: string
+  author: string
+  standardRef?: string
+}
+
 /** Static definition of a skill (independent of any run). */
 export interface SkillDef {
   id: SkillId
@@ -64,6 +72,47 @@ export interface SkillDef {
    * Rendered in the finding inspector to connect web observations to AI citation outcomes.
    */
   consequenceChain?: string[]
+  /** What this skill can influence — qualitative, not dollar estimates. */
+  businessSignals?: {
+    revenue: string
+    conversion: string
+    recommendation: string
+    trust: string
+  }
+  /** Composable marketplace runtime contract */
+  contract?: SkillContract
+}
+
+/** Business risk the finding could influence. Never a measured dollar amount. */
+export type BusinessRiskCategory =
+  | 'direct_revenue'
+  | 'pipeline'
+  | 'discoverability'
+  | 'recommendation'
+  | 'brand_trust'
+  | 'conversion'
+  | 'support_cost'
+  | 'content_maintenance'
+
+export interface BusinessImpact {
+  technicalFinding: string
+  businessInterpretation: string
+  whyAiSystemsCare: string
+  whoIsAffected: string
+  potentialConsequence: string
+  categories: BusinessRiskCategory[]
+  /** Observed counts / ranges only. Explicitly says when impact is not quantified. */
+  quantifiedImpact: string
+  assumptions: string[]
+  expectedOutcomeAfterFix: string
+}
+
+export interface AudienceSummaries {
+  executive: string
+  cmo: string
+  seoGeo: string
+  engineering: string
+  revenue: string
 }
 
 /** A single check inside a skill for a specific run. */
@@ -114,10 +163,19 @@ export interface Finding {
   title: string
   severity: Severity
   confidence: Confidence
+  findingType?: string
+  /**
+   * Stable deterministic hash from the backend (e.g. "c15e31cae61cafde").
+   * Unlike the positional `id` (F-001, F-002…), this is content-addressed:
+   * same structural defect on the same URL produces the same key across runs.
+   * Use this for JIRA cross-referencing and regression tracking.
+   */
+  findingKey?: string
   /** WHAT was observed. */
   description: string
-  /** WHY it matters. */
+  /** WHY it matters (business interpretation). */
   whyItMatters: string
+  businessImpact?: BusinessImpact
   evidence: Evidence[]
   affectedPages: number
   sampledPages: number
@@ -127,6 +185,13 @@ export interface Finding {
   /** True when this represents an audit limitation, not a site defect. */
   isLimitation?: boolean
   limitationReason?: string
+  consequenceChain?: string[]
+  templateId?: string
+  costTier?: string
+  funnelStage?: 'awareness' | 'consideration' | 'decision'
+  metrics?: Record<string, any>
+  /** Ordinal severity assigned by the backend business-impact layer. */
+  businessExposureSeverity?: Severity
 }
 
 /** A node in the root-cause chain. parentId mirrors backend `parent_id`. */
@@ -138,6 +203,7 @@ export interface RootCause {
   severity: Severity
   /** Findings that converge on this cause. */
   findingIds: string[]
+  businessInterpretation?: string
 }
 
 export interface DimensionScore {
@@ -147,13 +213,40 @@ export interface DimensionScore {
   label: 'strong' | 'adequate' | 'at-risk' | 'weak'
 }
 
+export interface AuditCoverage {
+  pagesFetched: number
+  pagesRendered: number
+  renderCount: number
+  templates: number
+  httpRequests: number
+  robotsStatus?: string
+  stoppedReason?: string
+  skippedCount?: number
+  limitedCount?: number
+  estimatedPages?: number
+}
+
+export interface AuditTiming {
+  totalMs: number
+  crawlMs?: number
+  renderMs?: number
+  skillMs?: Record<string, number>
+  httpRequests?: number
+}
+
 export interface AuditResult {
   dimensionScores: DimensionScore[]
   overallLabel: string
   overallSummary: string
+  summaries?: AudienceSummaries
   counts: { critical: number; high: number; medium: number; total: number }
   rootCauses: RootCause[]
   findings: Finding[]
+  coverage?: AuditCoverage
+  timing?: AuditTiming
+  /** Backend-computed index and prioritized actions, when supplied. */
+  overallIndex?: number
+  top3PriorityActions?: Array<{ findingId: string; summary: string; priority: Severity }>
 }
 
 export interface Site {

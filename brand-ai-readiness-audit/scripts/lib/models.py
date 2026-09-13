@@ -137,6 +137,8 @@ class Finding:
             "title": self.title,
             "severity": self.severity,
             "evidence": self.evidence,
+            "finding_type": self.finding_type,
+            "finding_key": self.finding_key,
             "suggested_action": action,
         }
 

@@ -192,14 +192,22 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
         can_keys = {canonical_key(p.canonical) for p in grp if p.canonical}
         if len(url_keys) < 2 or (can_keys and len(can_keys) < 2):
             continue
-        # Localized template copies (/in/pricing vs /en-at/pricing) are hreflang, not broken canonicals.
-        locale_n = 0
-        for p in grp:
-            segs = [s for s in urlparse(p.final_url or p.url).path.split("/") if s]
-            if segs and is_locale_path_segment(segs[0]):
-                locale_n += 1
-        if locale_n == len(grp) and locale_n >= 2:
-            continue
+        # Localized template copies (/about vs /au/about vs /by/about vs /in/pricing)
+        # are legitimate country/language variants with matching canonicals, not broken duplicate pages.
+        from lib.url import locale_stripped_path
+        stripped_url_paths = {locale_stripped_path(p.final_url or p.url) for p in grp}
+        if len(stripped_url_paths) == 1:
+            base_path = next(iter(stripped_url_paths))
+            # Verify that canonical targets are also consistent with this base path or self-referential
+            is_locale_cluster = True
+            for p in grp:
+                if p.canonical:
+                    can_stripped = locale_stripped_path(p.canonical)
+                    if can_stripped != base_path:
+                        is_locale_cluster = False
+                        break
+            if is_locale_cluster:
+                continue
         f = make_finding(
             skill_id="crawl-access-audit",
             finding_type="canonical_dup",

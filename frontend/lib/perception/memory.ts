@@ -28,6 +28,23 @@ function cell(
   return { id, filled, value, skillIds, findingIds, source }
 }
 
+function inferCategoryFromHostAndFindings(host: string, result: AuditResult): string {
+  const text = `${host} ${result.findings.map((f) => `${f.title} ${f.description}`).join(' ')}`.toLowerCase()
+  if (text.includes('shop') || text.includes('e-commerce') || text.includes('ecommerce') || text.includes('cart') || text.includes('checkout') || text.includes('store')) {
+    return 'E-Commerce & Digital Commerce Platform'
+  }
+  if (text.includes('chat') || text.includes('assistant') || text.includes('openai') || text.includes('anthropic') || text.includes('conversational')) {
+    return 'Conversational AI & Model Interface'
+  }
+  if (text.includes('docs') || text.includes('documentation') || text.includes('api reference') || text.includes('developer')) {
+    return 'Developer Infrastructure & Documentation'
+  }
+  if (text.includes('news') || text.includes('blog') || text.includes('journalism') || text.includes('media') || text.includes('publication')) {
+    return 'Publishing & Digital Media'
+  }
+  return 'Enterprise Software & Digital Platform'
+}
+
 export function buildBrandMemory(
   host: string,
   result: AuditResult,
@@ -51,14 +68,15 @@ export function buildBrandMemory(
         host,
         ['entity-identity-audit'],
         entityF.slice(0, 1).map((f) => f.id),
-        identityBad ? 'inferred' : 'inferred',
+        identityBad ? 'inferred' : 'evidence',
       )
 
   const classifySkipped = skipped('site-type-classifier', skippedSkillIds)
   const classifyCritical = statusOf(skills, 'site-type-classifier') === 'critical'
+  const inferredCategory = inferCategoryFromHostAndFindings(host, result)
   const category: MemoryCell = classifySkipped || classifyCritical
     ? cell('category', false, classifySkipped ? null : 'Unclassified', ['site-type-classifier'], [], 'empty')
-    : cell('category', true, 'Classified site type available to downstream skills', ['site-type-classifier'], [], 'inferred')
+    : cell('category', true, inferredCategory, ['site-type-classifier'], [], 'inferred')
 
   const offerSkills: SkillId[] = ['citation-extractability-audit', 'render-extract-audit']
   const offerEmpty =
@@ -67,23 +85,71 @@ export function buildBrandMemory(
     bad(renderF) ||
     bad(citF)
   const offer: MemoryCell = offerEmpty
-    ? cell('offer', false, null, offerSkills, [...renderF, ...citF].slice(0, 2).map((f) => f.id), 'empty')
-    : cell('offer', true, 'Extractable first-party offer statements present', offerSkills, [], 'evidence')
+    ? cell(
+        'offer',
+        false,
+        renderF[0]?.title || citF[0]?.title || 'Offer and specifications not extractable from raw HTML',
+        offerSkills,
+        [...renderF, ...citF].slice(0, 2).map((f) => f.id),
+        'empty',
+      )
+    : cell('offer', true, 'Extractable first-party statements verified in DOM', offerSkills, [], 'evidence')
 
   const proofEmpty = skipped('corroboration-consistency-audit', skippedSkillIds) || bad(corF)
   const proof: MemoryCell = proofEmpty
-    ? cell('proof', false, null, ['corroboration-consistency-audit'], corF.map((f) => f.id), 'empty')
+    ? cell(
+        'proof',
+        false,
+        corF[0]?.title || 'On-site claim consistency unverified',
+        ['corroboration-consistency-audit'],
+        corF.map((f) => f.id),
+        'empty',
+      )
     : cell('proof', true, 'On-site claims are internally consistent', ['corroboration-consistency-audit'], [], 'evidence')
 
   const actionEmpty = skipped('engagement-handoff-audit', skippedSkillIds) || bad(engF)
   const action: MemoryCell = actionEmpty
-    ? cell('action', false, null, ['engagement-handoff-audit'], engF.map((f) => f.id), 'empty')
-    : cell('action', true, 'Machine-legible handoff present', ['engagement-handoff-audit'], [], 'evidence')
+    ? cell(
+        'action',
+        false,
+        engF[0]?.title || 'Unspecified machine handoff path',
+        ['engagement-handoff-audit'],
+        engF.map((f) => f.id),
+        'empty',
+      )
+    : cell('action', true, 'Machine-legible handoff action present', ['engagement-handoff-audit'], [], 'evidence')
 
   const recencyEmpty = skipped('freshness-audit', skippedSkillIds) || bad(freshF)
   const recency: MemoryCell = recencyEmpty
-    ? cell('recency', false, null, ['freshness-audit'], freshF.map((f) => f.id), 'empty')
-    : cell('recency', true, 'Recency signals present', ['freshness-audit'], [], 'evidence')
+    ? cell(
+        'recency',
+        false,
+        freshF[0]?.title || 'Temporal freshness signals missing',
+        ['freshness-audit'],
+        freshF.map((f) => f.id),
+        'empty',
+      )
+    : cell('recency', true, 'Temporal recency signals verified', ['freshness-audit'], [], 'evidence')
 
-  return { cells: [identity, category, offer, proof, action, recency] }
+  // Derive unresolvable missing facts purely from actual audit gaps in answerability and extractability
+  const unresolvableFindings = result.findings.filter(
+    (f) =>
+      !f.isLimitation &&
+      (f.skillId === 'ai-answerability-audit' ||
+        f.skillId === 'citation-extractability-audit' ||
+        f.skillId === 'render-extract-audit') &&
+      (f.severity === 'high' || f.severity === 'critical'),
+  )
+  const titleCounts = new Map<string, number>()
+  for (const f of unresolvableFindings) {
+    titleCounts.set(f.title, (titleCounts.get(f.title) ?? 0) + 1)
+  }
+  const missingFacts = [...titleCounts.entries()].map(([title, count]) =>
+    count > 1 ? `${title} (×${count} pages affected)` : title,
+  )
+
+  return {
+    cells: [identity, category, offer, proof, action, recency],
+    missingFacts,
+  }
 }

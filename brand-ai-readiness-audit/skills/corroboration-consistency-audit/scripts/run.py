@@ -2,7 +2,6 @@
 """Thin skill wrapper; implementation lives in scripts/lib."""
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 
@@ -11,8 +10,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 
 def _main(skill: str) -> int:
-    print(json.dumps({"skill": skill, "note": "Invoke via audit-orchestrator; skills consume a crawl snapshot."}))
-    return 0
+    from lib.skill_cli import main
+    return main(skill)
 
 
 if __name__ == "__main__":

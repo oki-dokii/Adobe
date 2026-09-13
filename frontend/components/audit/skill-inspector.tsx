@@ -83,6 +83,37 @@ export function SkillInspector({
         </div>
       </div>
 
+      {/* Composable Marketplace Contract */}
+      {def.contract && (
+        <div className="space-y-2 rounded-lg border border-white/8 bg-black/40 p-3">
+          <div className="flex items-center justify-between border-b border-white/6 pb-1.5">
+            <span className="font-mono text-[9px] font-bold text-signal uppercase tracking-wider">
+              COMPOSABLE MARKETPLACE CONTRACT
+            </span>
+            <span className="rounded bg-white/5 border border-white/10 px-1.5 py-0.2 font-mono text-[8px] text-muted-foreground uppercase">
+              {def.contract.standardRef ?? 'W3C Standard'}
+            </span>
+          </div>
+          <div className="space-y-1.5 text-[11px]">
+            <div>
+              <span className="font-mono text-[9px] text-muted-foreground uppercase">Author: </span>
+              <span className="font-medium text-foreground">{def.contract.author}</span>
+            </div>
+            <div className="rounded border border-white/6 bg-white/[0.02] p-2 font-mono text-[10px] space-y-1">
+              <div className="text-muted-foreground">
+                <span className="text-signal">IN:</span> {def.contract.input}
+              </div>
+              <div className="text-muted-foreground">
+                <span className="text-amber-400">TX:</span> {def.contract.transform}
+              </div>
+              <div className="text-muted-foreground">
+                <span className="text-emerald-400">OUT:</span> {def.contract.output}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Evaluation Checks List */}
       <div className="space-y-2">
         <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">

@@ -3,20 +3,20 @@
 import { motion } from 'motion/react'
 import { isResolved, STATUS_STYLE } from '@/lib/audit/status'
 import type { Site, SkillId } from '@/lib/audit/types'
-import { SKILL_MAP, RUN_ORDER, DIMENSIONS } from '@/lib/audit/skills'
+import { SKILL_MAP, RUN_ORDER, DIMENSIONS, POST_PROCESSING_SKILLS } from '@/lib/audit/skills'
 import { cn } from '@/lib/utils'
 
 const SKILL_OUTPUT_SUMMARY: Record<SkillId, string> = {
   'audit-orchestrator': 'Reconciling findings',
-  'site-type-classifier': 'SaaS / Marketing taxonomy',
-  'crawl-access-audit': '4 AI bot directives checked',
-  'render-extract-audit': 'Dual-fetch ratio evaluated',
-  'entity-identity-audit': 'Identity graph parsed',
-  'citation-extractability-audit': 'Self-containment verified',
-  'ai-answerability-audit': 'Query clarity mapped',
-  'freshness-audit': 'Temporal recency checked',
-  'corroboration-consistency-audit': 'Cross-claim consistency verified',
-  'engagement-handoff-audit': 'Machine-legible handoff verified',
+  'site-type-classifier': 'Site cluster and gating flags classified',
+  'crawl-access-audit': 'Robots, access, and coverage checked',
+  'render-extract-audit': 'Raw/rendered extractability checked',
+  'entity-identity-audit': 'On-page identity evidence checked',
+  'citation-extractability-audit': 'Claim and schema extractability checked',
+  'ai-answerability-audit': 'Supporting buyer-question spans checked',
+  'freshness-audit': 'Date and typed-fact consistency checked',
+  'corroboration-consistency-audit': 'Explicit linked-source consistency checked',
+  'engagement-handoff-audit': 'Viewport identity and wayfinding checked',
 }
 
 export function RunningView({
@@ -30,8 +30,10 @@ export function RunningView({
   skippedSkillIds?: SkillId[]
 }) {
   const active = focusedSite.skills.find((s) => s.status === 'running')
-  const doneCount = focusedSite.skills.filter((s) => isResolved(s.status)).length
-  const totalCount = RUN_ORDER.length
+  const detectionDoneCount = focusedSite.skills.filter((s) => isResolved(s.status)).length
+  const impactDone = focusedSite.phase === 'completed' || focusedSite.phase === 'partial'
+  const doneCount = detectionDoneCount + (impactDone ? POST_PROCESSING_SKILLS.length : 0)
+  const totalCount = RUN_ORDER.length + POST_PROCESSING_SKILLS.length
 
   const phaseLabel =
     focusedSite.phase === 'validating'
@@ -154,6 +156,38 @@ export function RunningView({
               </div>
             )
           })}
+          {POST_PROCESSING_SKILLS.map((layer) => {
+            const status = impactDone ? ('completed' as const) : focusedSite.phase === 'consolidating' ? ('running' as const) : ('queued' as const)
+            const style = STATUS_STYLE[status]
+            const isRunning = status === 'running'
+            const isDone = status === 'completed'
+            return (
+              <div
+                key={layer.id}
+                className={cn(
+                  'rounded-lg border p-2.5 transition-all duration-200',
+                  isRunning
+                    ? 'border-signal/40 bg-signal/10 shadow-[0_0_15px_rgba(56,189,248,0.15)]'
+                    : isDone
+                      ? 'border-white/6 bg-white/[0.02]'
+                      : 'border-white/4 bg-transparent opacity-40',
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 truncate">
+                    <span className="size-1.5 rounded-full shrink-0" style={{ background: style.color }} />
+                    <span className={cn('truncate text-xs font-medium', isRunning ? 'text-signal font-semibold' : isDone ? 'text-foreground' : 'text-muted-foreground')}>
+                      {layer.short}
+                    </span>
+                  </div>
+                  <span className="text-[9px] uppercase tracking-wider px-1 py-0.2 rounded font-semibold" style={{ color: style.color, backgroundColor: `${style.color}15` }}>
+                    {isRunning ? 'RUNNING' : isDone ? 'DONE' : 'QUEUED'}
+                  </span>
+                </div>
+                <div className="mt-1 text-[9px] text-muted-foreground/70 truncate">{layer.summary}</div>
+              </div>
+            )
+          })}
         </div>
 
         {/* Footnote */}
@@ -174,4 +208,3 @@ export function RunningView({
     </div>
   )
 }
-

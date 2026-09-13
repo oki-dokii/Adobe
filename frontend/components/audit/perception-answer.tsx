@@ -102,13 +102,18 @@ export function PerceptionAnswer({
                   reduced && 'transition-none',
                   span.grounding === 'supported' && 'border-l-[3px] border-l-emerald-400',
                   span.grounding === 'inferred' && 'border-l-[3px] border-l-sky-400',
-                  span.grounding === 'unsupported' && 'border-l-[3px] border-l-amber-400',
+                  span.grounding === 'unsupported' && 'border-l-[3px] border-l-amber-500 bg-amber-500/[0.04] border-amber-500/25',
                   isSelected
                     ? 'border-signal bg-signal/10 ring-1 ring-signal/60 shadow-sm'
                     : 'border-white/10 hover:border-white/25',
                   hasSiblingHover && !isSelected && 'opacity-70',
                 )}
               >
+                {span.grounding === 'unsupported' && (
+                  <span className="mr-1.5 inline-block rounded bg-amber-500/20 text-amber-300 px-1 py-0.2 font-mono text-[8px] font-bold uppercase">
+                    UNGROUNDED
+                  </span>
+                )}
                 <span>{span.text}</span>
                 {span.skillIds.length > 0 && (
                   <span className="ml-1.5 inline-block font-mono text-[9px] text-muted-foreground/70 uppercase">

@@ -176,6 +176,20 @@ export function buildDemoResult(url: string): AuditResult {
         'On sampled pages the main content area is populated by client-side scripts. Agents that do not execute JavaScript receive a largely empty document.',
       whyItMatters:
         'Many AI crawlers and answer engines do not fully render JavaScript. If the substance only exists after hydration, it is invisible to them.',
+      businessImpact: {
+        technicalFinding: 'Primary pricing and feature matrices are rendered exclusively via client-side JavaScript hydration without static server-rendered fallback.',
+        businessInterpretation: 'Enterprise procurement bots and AI search engines (ChatGPT Search, Perplexity, Claude) indexing the site receive empty DOM shells, causing the brand to be silently excluded from automated vendor evaluations.',
+        whyAiSystemsCare: 'AI crawlers operate with strict sub-second execution budgets and bypass JavaScript evaluation to minimize compute costs. If content is absent in raw HTML, it does not enter retrieval context.',
+        whoIsAffected: 'Enterprise Sales, Demand Generation, and Prospective B2B Software Buyers.',
+        potentialConsequence: 'Disqualification from RFP shortlists before sales reps are contacted; high-intent category pipeline bleeds to competitors with pre-rendered pricing matrices.',
+        categories: ['pipeline', 'discoverability', 'conversion'],
+        quantifiedImpact: '15 of 18 sampled pages (83%) fail headless SSR evaluation. 100% of commercial pricing tables affected.',
+        assumptions: [
+          'Assumes 20-35% of B2B software discovery initiates via LLM search interfaces.',
+          'Directional estimate based on verified headless crawler fetch logs, not estimated dollar volume.',
+        ],
+        expectedOutcomeAfterFix: '100% DOM indexation by non-JS crawlers; complete parity between browser users and AI ingestion pipelines.',
+      },
       evidence: [
         { id: 'e-render-1', label: 'Server-rendered main content', detail: '3 / 18 sampled pages', signal: 'main-ratio', confidence: 'high' },
         { id: 'e-render-2', label: 'Content injected post-hydration', detail: '15 / 18 sampled pages', signal: 'hydration', url: `${url.replace(/\/$/, '')}/pricing`, confidence: 'high' },
@@ -204,6 +218,20 @@ export function buildDemoResult(url: string): AuditResult {
         'Pricing information is fragmented across interactive widgets and lacks structured data, so it cannot be quoted as a single attributable fact.',
       whyItMatters:
         'When a fact is not self-contained, an AI cannot cite it confidently and will either omit it or paraphrase a competitor.',
+      businessImpact: {
+        technicalFinding: 'Pricing tiers lack Schema.org Offer/PriceSpecification JSON-LD microdata and stable anchor IDs (#tier-pro).',
+        businessInterpretation: 'When AI engines answer user questions like "How much does this product cost?", they cannot extract an atomic factual quote and either cite outdated third-party review sites or refuse to answer.',
+        whyAiSystemsCare: 'Generative models require atomic, high-confidence bounding quotes to generate citation pills without risking hallucination penalties.',
+        whoIsAffected: 'Revenue Operations, Growth Marketing, Self-Serve Conversion Funnels.',
+        potentialConsequence: 'Third-party aggregators capture the high-intent referral click, or prospective buyers receive inaccurate legacy pricing that delays contract signing.',
+        categories: ['direct_revenue', 'recommendation', 'brand_trust'],
+        quantifiedImpact: '12 of 18 sampled pages lack structured atomic claims; zero Offer JSON-LD nodes detected.',
+        assumptions: [
+          'LLMs prefer direct first-party citation when Schema.org PriceSpecification matches visible text.',
+          'Third-party aggregator referral traffic carries 25-40% lower conversion than direct canonical visits.',
+        ],
+        expectedOutcomeAfterFix: 'Direct attribution with official domain citation badges; automated pricing extraction accuracy increased to >95%.',
+      },
       evidence: [
         { id: 'e-cit-1', label: 'Pages with extractable pricing', detail: '6 / 18 sampled pages', signal: 'citation-window', confidence: 'high' },
         { id: 'e-cit-2', label: 'Structured data (Offer/Product)', detail: 'Not detected', signal: 'json-ld' },
@@ -232,6 +260,19 @@ export function buildDemoResult(url: string): AuditResult {
         'The organization identity is under-specified and overlaps with other entities sharing the name, weakening disambiguation.',
       whyItMatters:
         'If machines cannot confidently resolve the brand as a distinct entity, answers get attributed to the wrong organization.',
+      businessImpact: {
+        technicalFinding: 'Organization schema lacks authoritative sameAs cross-references (Wikidata, Crunchbase) resulting in elevated entity ambiguity.',
+        businessInterpretation: 'AI assistants confuse the company with similarly named firms, occasionally blending product capabilities or attributing negative press from unrelated organizations.',
+        whyAiSystemsCare: 'LLM knowledge graphs rely on linked open data (Wikidata URIs) to anchor entity nodes and resolve homonyms during retrieval.',
+        whoIsAffected: 'Corporate Communications, Brand Marketing, Investor Relations.',
+        potentialConsequence: 'Dilution of brand reputation and inaccurate product capability summaries served to executive decision-makers.',
+        categories: ['brand_trust', 'discoverability'],
+        quantifiedImpact: '4 named-entity collisions detected in major LLM knowledge graphs across 14 inspected pages.',
+        assumptions: [
+          'Wikidata and Schema.org sameAs linkage establishes deterministic entity disambiguation across GPT-4 and Gemini base models.',
+        ],
+        expectedOutcomeAfterFix: 'Unambiguous entity resolution across all major AI search providers; elimination of competitor attribute blending.',
+      },
       evidence: [
         { id: 'e-ent-1', label: 'Organization structured data', detail: 'Partial — missing sameAs links' },
         { id: 'e-ent-2', label: 'Named-entity collisions', detail: '4 competing entities' },
@@ -260,6 +301,20 @@ export function buildDemoResult(url: string): AuditResult {
         'For a representative set of brand questions, the site could not supply a grounded answer and the model fell back to external sources.',
       whyItMatters:
         'When the brand cannot answer for itself, an aggregator or competitor becomes the cited source of truth.',
+      businessImpact: {
+        technicalFinding: 'Core brand value proposition and technical differentiation queries fail closed-book site-grounded extraction.',
+        businessInterpretation: 'Prospective customers asking AI assistants "Why choose this product?" receive answers sourced from competitor marketing or forum commentary rather than official documentation.',
+        whyAiSystemsCare: 'When the brand site lacks direct, concise question-answer pairs, the model\'s retrieval layer falls back to the broader web corpus where competitor claims dominate.',
+        whoIsAffected: 'Product Marketing, Sales Engineering, Competitive Intelligence.',
+        potentialConsequence: 'Competitors control the narrative and positioning criteria during high-intent evaluation prompts.',
+        categories: ['pipeline', 'recommendation', 'conversion'],
+        quantifiedImpact: '7 of 12 benchmark buyer questions (58%) triggered fallback to external aggregator sources.',
+        assumptions: [
+          'Evaluated against 12 standardized enterprise buyer query templates.',
+          'Zero synthesized revenue numbers; impact measured strictly in question answering failure rates.',
+        ],
+        expectedOutcomeAfterFix: 'Brand\'s own voice and factual specifications become the primary grounded citation in over 90% of category comparisons.',
+      },
       evidence: [
         { id: 'e-ans-1', label: 'Questions answered from site', detail: '5 / 12 questions', signal: 'closed-book', confidence: 'high' },
         { id: 'e-ans-2', label: 'Answers grounded in a citation', detail: '4 / 12 questions', signal: 'grounding' },
@@ -288,6 +343,19 @@ export function buildDemoResult(url: string): AuditResult {
         'Most pages expose no published or modified date, so machines cannot judge how current the information is.',
       whyItMatters:
         'Without recency signals, current information may be treated as stale and de-prioritized.',
+      businessImpact: {
+        technicalFinding: 'Factual product specifications lack ISO 8601 dateModified metadata and visible changelog timestamps.',
+        businessInterpretation: 'AI models treat current product specs as potentially outdated, giving preference to recent third-party blog posts that may contain obsolete feature comparisons.',
+        whyAiSystemsCare: 'Modern RAG pipelines calculate temporal decay scores; pages without explicit freshness signals are heavily down-weighted during retrieval.',
+        whoIsAffected: 'Product Marketing, Documentation and Developer Relations teams.',
+        potentialConsequence: 'Deprecated product limitations are reported as current, deterring prospective enterprise buyers.',
+        categories: ['brand_trust', 'content_maintenance'],
+        quantifiedImpact: '15 of 18 sampled pages (83%) omit machine-readable dateModified headers.',
+        assumptions: [
+          'Search engine AI crawlers enforce temporal freshness penalties on technical specifications older than 180 days without verified updates.',
+        ],
+        expectedOutcomeAfterFix: 'Guaranteed recency indexing; AI engines prioritize first-party docs over outdated third-party commentary.',
+      },
       evidence: [
         { id: 'e-fr-1', label: 'Pages with a modified date', detail: '3 / 18 sampled pages' },
         { id: 'e-fr-2', label: 'Detectable update cadence', detail: 'None' },
@@ -313,6 +381,20 @@ export function buildDemoResult(url: string): AuditResult {
         'The pricing shown on the marketing page does not match the pricing page for two tiers, creating a contradiction.',
       whyItMatters:
         'Contradictory claims lower machine trust and make it unclear which figure is canonical.',
+      businessImpact: {
+        technicalFinding: 'Direct factual contradiction: Tier pricing differs between marketing and pricing pages, and assets lack verifiable provenance credentials.',
+        businessInterpretation: 'Conflicting pricing signals erode machine confidence, triggering uncertainty warnings or complete omission from AI comparison summaries.',
+        whyAiSystemsCare: 'Contradiction detection heuristics trigger safety fallbacks in AI answer synthesizers to avoid presenting verifiably false financial terms.',
+        whoIsAffected: 'Sales Operations, Customer Support, Legal & Compliance.',
+        potentialConsequence: 'Customer disputes during checkout, increased support ticket volume regarding inconsistent quotes, and lost trust in automated pricing quotes.',
+        categories: ['brand_trust', 'support_cost', 'direct_revenue'],
+        quantifiedImpact: '2 conflicting claim pairs detected across 4 sampled pages. Missing cryptographic provenance manifests.',
+        assumptions: [
+          'Pricing divergence detected between marketing hero copy and checkout subtext.',
+          'Impact measured in contradiction frequency and provenance absence, not speculative churn rates.',
+        ],
+        expectedOutcomeAfterFix: 'Single canonical truth established; 100% corroboration score and verifiable asset authenticity.',
+      },
       evidence: [
         { id: 'e-co-1', label: 'Contradictory claim pairs', detail: '2 detected' },
         { id: 'e-co-2', label: 'Canonical source declared', detail: 'No' },
@@ -339,6 +421,19 @@ export function buildDemoResult(url: string): AuditResult {
         'A clear primary action exists but is implemented as a generic control without descriptive, machine-readable labeling.',
       whyItMatters:
         'An assistant needs legible actions to hand a user off; ambiguous controls reduce successful routing.',
+      businessImpact: {
+        technicalFinding: 'Primary conversion CTA uses dynamic generic JavaScript event handlers without machine-legible aria-label or intent schema.',
+        businessInterpretation: 'AI assistants cannot complete transactional handoffs (e.g. "Book a demo" or "Start free trial"), leaving users stranded in the chat interface without a direct entry link.',
+        whyAiSystemsCare: 'Action-oriented AI agents (e.g. Operator, ChatGPT actions) parse deep link intent schemas to execute user requests.',
+        whoIsAffected: 'Demand Generation, Growth Engineering, Direct Sales.',
+        potentialConsequence: 'Abandonment at the critical handoff point between AI discovery and first-party conversion funnels.',
+        categories: ['conversion', 'pipeline'],
+        quantifiedImpact: '6 of 18 pages lack machine-legible action targets; high-intent user handoff friction.',
+        assumptions: [
+          'Directional impact on AI-assisted referral traffic completing signup funnels.',
+        ],
+        expectedOutcomeAfterFix: 'Seamless 1-click machine handoff from AI agents directly into scheduled demo or checkout flow.',
+      },
       evidence: [
         { id: 'e-eng-1', label: 'Primary action detected', detail: 'Yes' },
         { id: 'e-eng-2', label: 'Descriptive accessible name', detail: 'Partial' },
@@ -364,6 +459,19 @@ export function buildDemoResult(url: string): AuditResult {
         'The account area returned a challenge response, so it was not audited.',
       whyItMatters:
         'This is a limitation of the audit, not necessarily a defect of the site. Results exclude this section.',
+      businessImpact: {
+        technicalFinding: 'Audit crawler encountered WAF rate-limiting or anti-bot challenge on enterprise documentation subpaths.',
+        businessInterpretation: 'Overly aggressive security configurations designed to stop scrapers are inadvertently blocking legitimate AI search indexers from cataloging documentation.',
+        whyAiSystemsCare: 'When HTTP 403/429 status codes are returned, AI ingestion pipelines drop the URL from the index rather than solving CAPTCHAs.',
+        whoIsAffected: 'DevOps, Security, Documentation Engineering.',
+        potentialConsequence: 'Total AI blindness to technical documentation and API capabilities.',
+        categories: ['discoverability', 'support_cost'],
+        quantifiedImpact: 'Diagnostic limitation observed on 2 subpaths due to Bot Management rules.',
+        assumptions: [
+          'Confirmed via simulated GPTBot and ClaudeBot user-agent requests.',
+        ],
+        expectedOutcomeAfterFix: 'Verified AI bot allowlist in robots.txt and WAF rules; full documentation discoverability restored.',
+      },
       evidence: [
         { id: 'e-lim-1', label: 'Origin response', detail: '403 challenge on /app/*', url: `${url.replace(/\/$/, '')}/app`, signal: 'access-kind' },
         { id: 'e-lim-2', label: 'Pages skipped', detail: '2 routes', signal: 'coverage' },

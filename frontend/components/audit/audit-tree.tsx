@@ -812,10 +812,10 @@ export function AuditTree({
               />
               {labelOf && (
                 <div
-                  className="pointer-events-none absolute -translate-x-1/2 text-center"
+                  className="pointer-events-none absolute z-40 -translate-x-1/2 text-center"
                   style={{ left: cx, top: cy + 32 }}
                 >
-                  <motion.p className="text-[13px] font-semibold tracking-tight text-foreground">{labelOf}</motion.p>
+                  <motion.p className="whitespace-nowrap text-[13px] font-semibold tracking-tight text-foreground">{labelOf}</motion.p>
                   <p className="mt-0.5 font-mono text-[10px] tracking-wide text-muted-foreground">
                     {awakened && sitePhase !== 'completed' && sitePhase !== 'partial'
                       ? `${Math.round(rootProgress * 100)}% · ${rootStatusLabel}`
@@ -823,6 +823,22 @@ export function AuditTree({
                   </p>
                 </div>
               )}
+              <div
+                className="pointer-events-none absolute z-40 -translate-x-1/2 text-center"
+                style={{ left: cx, top: cy - 112 }}
+              >
+                <span className="inline-flex whitespace-nowrap rounded border border-signal/45 bg-black/95 px-2.5 py-1 font-mono text-[8px] font-bold tracking-[0.14em] text-signal uppercase shadow-[0_2px_14px_rgba(0,0,0,0.8)]">
+                  Orchestrator · 10/10
+                </span>
+              </div>
+              <div
+                className="pointer-events-none absolute z-40 -translate-x-1/2 text-center"
+                style={{ left: cx, top: cy + 96 }}
+              >
+                <span className="inline-flex whitespace-nowrap rounded border border-signal/25 bg-black/95 px-2 py-0.5 font-mono text-[8px] font-semibold tracking-wider text-signal uppercase shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
+                  Business Impact · {sitePhase === 'completed' || sitePhase === 'partial' ? 'COMPOSED' : 'POST-PROCESSING'}
+                </span>
+              </div>
             </>
           )}
 

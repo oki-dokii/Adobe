@@ -28,7 +28,7 @@ export function AppHeader({
             Brand AI Readiness
           </span>
           <span className="hidden sm:inline-block rounded border border-white/8 bg-surface-2/60 px-1.5 py-0.5 font-mono text-[9px] font-medium text-muted-foreground uppercase">
-            9 SKILLS · EVIDENCE-BACKED
+            10 AUDIT LAYERS · EVIDENCE-BACKED
           </span>
         </div>
       </div>

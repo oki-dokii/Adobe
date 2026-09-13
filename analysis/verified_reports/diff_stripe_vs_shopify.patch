@@ -1,0 +1,83 @@
+--- stripe.com
++++ shopify.com
+- L1: # 🧠 Brand AI Readiness Diagnostic — stripe.com
++ L1: # 🧠 Brand AI Readiness Diagnostic — shopify.com
+- L4:   Site         : https://stripe.com/
++ L4:   Site         : https://shopify.com/
+- L5:   Audit ID     : stripe-saas-audit-run
++ L5:   Audit ID     : shopify-ecom-audit-run
+- L6:   Generated    : 2026-09-13T04:59:58.757Z
++ L6:   Generated    : 2026-09-13T04:59:58.760Z
+- L22: | **AI Readiness Index** | **71 / 100** (Grade **B**) |
++ L22: | **AI Readiness Index** | **86 / 100** (Grade **A−**) |
+- L23: | **Overall Verdict** | **Mostly ready** |
++ L23: | **Overall Verdict** | **AI-ready** |
+- L24: | **Defect Register** | 2 Critical · 13 High · 0 Medium · 0 Low |
++ L24: | **Defect Register** | 1 Critical · 0 High · 0 Medium · 1 Low |
+- L25: | **Total Findings** | 15 actionable findings |
++ L25: | **Total Findings** | 2 actionable findings |
+- L29: | **HTTP Requests** | 54 |
++ L29: | **HTTP Requests** | 46 |
+- L30: | **Templates Identified** | 7 |
++ L30: | **Templates Identified** | 3 |
+- L32: | **Total Wall-Clock** | 75.98s |
++ L32: | **Total Wall-Clock** | 45.98s |
+- L36: > "Price amount is separated from its qualifying condition" represents the primary citation barrier in Trust (15/100). Resolving this is the highest leverage action to ensure automated AI engines cite and surface this domain accurately.
++ L36: > "On-site typed facts disagree (prices)" represents the primary citation barrier in Trust (76/100). Resolving this is the highest leverage action to ensure automated AI engines cite and surface this domain accurately.
+- L40: ██████████████░░░░░░ 71/100 (B)
++ L40: █████████████████░░░ 86/100 (A−)
+- L52: ### 1. 🔴 [CRITICAL] Price amount is separated from its qualifying condition
++ L52: ### 1. 🔴 [CRITICAL] On-site typed facts disagree (prices)
+- L54: - **Recommended Fix:** Put the amount and its condition in one self-contained sentence. — RAG windows can cite the amount without the condition. https://stripe.com/au/pricing
++ L54: - **Recommended Fix:** Reconcile current prices and mark superseded pages (e.g. old press) as historical. — Internal knowledge conflict; this is not an off-site corroboration finding.
+- L55: - **Exposure Drivers:** High Funnel (decision) · Cluster Reach (12/40 pages, 30%)
++ L55: - **Exposure Drivers:** High Funnel (decision) · Cluster Reach (5/40 pages, 13%)
+- L56: - **Business Consequence:** AI assistants will quote your headline price while stripping out mandatory qualifications and conditions, creating misinformed buyer expectations and high-friction sales discussions.
++ L56: - **Business Consequence:** Internal factual contradictions across your pages destroy citation confidence, causing AI assistants to flag your numbers as unreliable and recommend competitors or third-party aggregators instead.
+- L60: ### 2. 🔴 [CRITICAL] Price amount is separated from its qualifying condition
++ L60: ### 2. 🟡 [MEDIUM] Publish direct answers for 1 core buyer questions (K3)
+- L62: - **Recommended Fix:** Put the amount and its condition in one self-contained sentence. — RAG windows can cite the amount without the condition. https://stripe.com/en-at/pricing
++ L62: - **Recommended Fix:** Add visible, extractable answers on intent-matched canonical landing pages — Deploy concise declarative sentences answering K3 to prevent conversational AI inquiry abandonment.
+- L63: - **Exposure Drivers:** High Funnel (decision) · Cluster Reach (3/40 pages, 8%)
++ L63: - **Exposure Drivers:** Low (Awareness) Funnel · Broad Query Reach (K3)
+- L64: - **Business Consequence:** AI assistants will quote your headline price while stripping out mandatory qualifications and conditions, creating misinformed buyer expectations and high-friction sales discussions.
++ L64: - **Business Consequence:** Prospective buyers querying AI assistants cannot qualify your offering, pricing, or contact path, leading assistants to redirect traffic to competitors.
+- L68: ### 3. 🟠 [HIGH] Price amount is separated from its qualifying condition
++ L68: ---
+- L70: - **Recommended Fix:** Put the amount and its condition in one self-contained sentence. — RAG windows can cite the amount without the condition. https://stripe.com/au/pricing
++ L70: 
+- L71: - **Exposure Drivers:** High Funnel (decision) · Isolated Reach (1/40 pages, 3%)
++ L71: ## 3. 📈 Corpus Benchmark (38-Site Empirical Distribution)
+- L72: - **Business Consequence:** AI assistants will quote your headline price while stripping out mandatory qualifications and conditions, creating misinformed buyer expectations and high-friction sales discussions.
++ L72: 
+- L73: - **Estimated Effort:** `LOW`
++ L73: | Position | Score | Status |
+- L74: 
++ L74: |---|---|---|
+- L75: 
++ L75: | **This Brand** | 86 / 100 | Grade A− |
+- L76: ---
++ L76: | Corpus Median | 67 / 100 | ✅ Above median (+19 pts) |
+- L77: 
++ L77: | Top Quartile (75th percentile) | 82 / 100 | 🏆 Citation Leader |
+- L78: 
++ L78: | Corpus Best | 91 / 100 | Reference Benchmark |
+- L79: ## 3. 📈 Corpus Benchmark (38-Site Empirical Distribution)
++ L79: 
+- L81: | Position | Score | Status |
++ L81: ---
+- L82: |---|---|---|
++ L82: 
+- L83: | **This Brand** | 71 / 100 | Grade B |
++ L83: 
+- L84: | Corpus Median | 67 / 100 | ✅ Above median (+4 pts) |
++ L84: ## 4. 🔬 Causal Dimension Breakdown
+- L85: | Top Quartile (75th percentile) | 82 / 100 | 11 pts gap to top quartile |
++ L85: 
+- L86: | Corpus Best | 91 / 100 | Reference Benchmark |
++ L86: | Dimension | Score | Visual | Status | Description |
+- L87: 
++ L87: |---|---|---|---|---|
+- L88: 
++ L88: | **Discoverability** | 90/100 | `███████████░` | ✅ STRONG | Can automated systems reach and read the site at all? |
+Total differing lines: 1372

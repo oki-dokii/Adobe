@@ -1,0 +1,83 @@
+--- shopify.com
++++ docs.python.org
+- L1: # 🧠 Brand AI Readiness Diagnostic — shopify.com
++ L1: # 🧠 Brand AI Readiness Diagnostic — docs.python.org
+- L4:   Site         : https://shopify.com/
++ L4:   Site         : https://docs.python.org/3/
+- L5:   Audit ID     : shopify-ecom-audit-run
++ L5:   Audit ID     : python-docs-audit-run
+- L6:   Generated    : 2026-09-13T04:59:58.760Z
++ L6:   Generated    : 2026-09-13T04:59:58.761Z
+- L22: | **AI Readiness Index** | **86 / 100** (Grade **A−**) |
++ L22: | **AI Readiness Index** | **87 / 100** (Grade **A−**) |
+- L24: | **Defect Register** | 1 Critical · 0 High · 0 Medium · 1 Low |
++ L24: | **Defect Register** | 0 Critical · 1 High · 0 Medium · 1 Low |
+- L29: | **HTTP Requests** | 46 |
++ L29: | **HTTP Requests** | 42 |
+- L30: | **Templates Identified** | 3 |
++ L30: | **Templates Identified** | 19 |
+- L32: | **Total Wall-Clock** | 45.98s |
++ L32: | **Total Wall-Clock** | 10.07s |
+- L36: > "On-site typed facts disagree (prices)" represents the primary citation barrier in Trust (76/100). Resolving this is the highest leverage action to ensure automated AI engines cite and surface this domain accurately.
++ L36: > "Closed-book: site does not answer K6 (What does it cost / how is it priced?)" represents the primary citation barrier in Understanding (79/100). Resolving this is the highest leverage action to ensure automated AI engines cite and surface this domain accurately.
+- L40: █████████████████░░░ 86/100 (A−)
++ L40: █████████████████░░░ 87/100 (A−)
+- L52: ### 1. 🔴 [CRITICAL] On-site typed facts disagree (prices)
++ L52: ### 1. 🟡 [MEDIUM] Publish direct answers for 1 core buyer questions (K3)
+- L54: - **Recommended Fix:** Reconcile current prices and mark superseded pages (e.g. old press) as historical. — Internal knowledge conflict; this is not an off-site corroboration finding.
++ L54: - **Recommended Fix:** Add visible, extractable answers on intent-matched canonical landing pages — Deploy concise declarative sentences answering K3 to prevent conversational AI inquiry abandonment.
+- L55: - **Exposure Drivers:** High Funnel (decision) · Cluster Reach (5/40 pages, 13%)
++ L55: - **Exposure Drivers:** Low (Awareness) Funnel · Broad Query Reach (K3)
+- L56: - **Business Consequence:** Internal factual contradictions across your pages destroy citation confidence, causing AI assistants to flag your numbers as unreliable and recommend competitors or third-party aggregators instead.
++ L56: - **Business Consequence:** Prospective buyers querying AI assistants cannot qualify your offering, pricing, or contact path, leading assistants to redirect traffic to competitors.
+- L60: ### 2. 🟡 [MEDIUM] Publish direct answers for 1 core buyer questions (K3)
++ L60: ---
+- L62: - **Recommended Fix:** Add visible, extractable answers on intent-matched canonical landing pages — Deploy concise declarative sentences answering K3 to prevent conversational AI inquiry abandonment.
++ L62: 
+- L63: - **Exposure Drivers:** Low (Awareness) Funnel · Broad Query Reach (K3)
++ L63: ## 3. 📈 Corpus Benchmark (38-Site Empirical Distribution)
+- L64: - **Business Consequence:** Prospective buyers querying AI assistants cannot qualify your offering, pricing, or contact path, leading assistants to redirect traffic to competitors.
++ L64: 
+- L65: - **Estimated Effort:** `LOW`
++ L65: | Position | Score | Status |
+- L66: 
++ L66: |---|---|---|
+- L67: 
++ L67: | **This Brand** | 87 / 100 | Grade A− |
+- L68: ---
++ L68: | Corpus Median | 67 / 100 | ✅ Above median (+20 pts) |
+- L69: 
++ L69: | Top Quartile (75th percentile) | 82 / 100 | 🏆 Citation Leader |
+- L70: 
++ L70: | Corpus Best | 91 / 100 | Reference Benchmark |
+- L71: ## 3. 📈 Corpus Benchmark (38-Site Empirical Distribution)
++ L71: 
+- L73: | Position | Score | Status |
++ L73: ---
+- L74: |---|---|---|
++ L74: 
+- L75: | **This Brand** | 86 / 100 | Grade A− |
++ L75: 
+- L76: | Corpus Median | 67 / 100 | ✅ Above median (+19 pts) |
++ L76: ## 4. 🔬 Causal Dimension Breakdown
+- L77: | Top Quartile (75th percentile) | 82 / 100 | 🏆 Citation Leader |
++ L77: 
+- L78: | Corpus Best | 91 / 100 | Reference Benchmark |
++ L78: | Dimension | Score | Visual | Status | Description |
+- L79: 
++ L79: |---|---|---|---|---|
+- L80: 
++ L80: | **Discoverability** | 90/100 | `███████████░` | ✅ STRONG | Can automated systems reach and read the site at all? |
+- L81: ---
++ L81: | **Understanding** | 79/100 | `█████████░░░` | ✅ STRONG | Can machines parse what the brand is and what it offers? |
+- L82: 
++ L82: | **Trust** | 90/100 | `███████████░` | ✅ STRONG | Is the information consistent, corroborated and current? |
+- L83: 
++ L83: | **Engagement** | 90/100 | `███████████░` | ✅ STRONG | Can an AI hand a user off to the right next action? |
+- L84: ## 4. 🔬 Causal Dimension Breakdown
++ L84: 
+- L86: | Dimension | Score | Visual | Status | Description |
++ L86: ---
+- L87: |---|---|---|---|---|
++ L87: 
+Total differing lines: 411

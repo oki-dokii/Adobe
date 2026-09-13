@@ -54,7 +54,7 @@ export function LandingView({
           >
             <span className="size-1.5 rounded-full bg-signal" />
             <span className="font-mono text-[10px] font-medium tracking-wider text-muted-foreground uppercase">
-              READ-ONLY · 9 SKILLS · EVIDENCE-BACKED
+              READ-ONLY · 10 AUDIT LAYERS · EVIDENCE-BACKED
             </span>
           </motion.div>
 

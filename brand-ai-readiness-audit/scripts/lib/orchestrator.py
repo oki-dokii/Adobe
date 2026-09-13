@@ -12,6 +12,7 @@ from typing import Callable, Optional
 from urllib.parse import urlparse
 
 from lib.admit import admit
+from lib.business_impact import annotate as annotate_business_impact
 from lib.clock import PROTECT_LIST, Clock, plan_skip_ladder
 from lib.crawl import crawl
 from lib.findings import reset_ids
@@ -285,6 +286,9 @@ def run_audit(
         },
     )
     report["findings"] = [f.to_handout() for f in user]
+    # Presentation-only enrichment; no new findings or fabricated estimates.
+    report.update(annotate_business_impact(user, int(fetched)))
+    # Serialize enriched metrics as well as the canonical internal Finding shape.
     report["findings_internal"] = [f.to_internal() for f in user]
     report["skill_status"] = skill_status
     report["markdown"] = render_markdown(report)

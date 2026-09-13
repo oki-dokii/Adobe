@@ -4,6 +4,7 @@ import { motion } from 'motion/react'
 import type { AuditResult, DimensionScore } from '@/lib/audit/types'
 import { DIMENSIONS } from '@/lib/audit/skills'
 import { WhyHint } from './why-hint'
+import { AudienceBriefings } from './audience-briefings'
 
 const LABEL_COLOR: Record<DimensionScore['label'], string> = {
   strong: 'var(--success)',
@@ -13,7 +14,7 @@ const LABEL_COLOR: Record<DimensionScore['label'], string> = {
 }
 
 export function ScoreOverview({ result, host }: { result: AuditResult; host: string }) {
-  const avgScore = Math.round(
+  const avgScore = result.overallIndex ?? Math.round(
     result.dimensionScores.reduce((acc, d) => acc + d.score, 0) / (result.dimensionScores.length || 1),
   )
 
@@ -28,7 +29,13 @@ export function ScoreOverview({ result, host }: { result: AuditResult; host: str
     avgScore >= 60 ? 'C+' :
     avgScore >= 50 ? 'C' : 'D'
 
-  const percentile = Math.min(99, Math.max(14, Math.round(avgScore * 0.96)))
+  // Empirical reference percentile against benchmark corpus (median=67, top quartile=82, best=91)
+  const percentile =
+    avgScore >= 91 ? 95 :
+    avgScore >= 82 ? Math.round(75 + ((avgScore - 82) / 9) * 20) :
+    avgScore >= 67 ? Math.round(50 + ((avgScore - 67) / 15) * 25) :
+    avgScore >= 50 ? Math.round(25 + ((avgScore - 50) / 17) * 25) :
+    Math.max(10, Math.round((avgScore / 50) * 25))
 
   return (
     <section aria-labelledby="overview-heading" className="space-y-6">
@@ -115,7 +122,7 @@ export function ScoreOverview({ result, host }: { result: AuditResult; host: str
         <div className="mt-3.5 rounded-lg border border-white/6 bg-white/[0.02] p-3 space-y-2">
           <div className="flex items-center justify-between font-mono text-[9px]">
             <span className="text-muted-foreground/80 uppercase tracking-wider font-semibold">
-              EVALUATION BENCHMARK (38 SITES)
+              REFERENCE BENCHMARK (38-SITE CORPUS)
             </span>
             <span className="text-signal font-semibold">{percentile}th PERCENTILE</span>
           </div>
@@ -156,6 +163,15 @@ export function ScoreOverview({ result, host }: { result: AuditResult; host: str
           </span>
         </div>
       </div>
+
+      {/* Stakeholder Briefings (Executive, CMO, SEO/GEO, Engineering, Revenue Risk) */}
+      <AudienceBriefings
+        result={result}
+        host={host}
+        avgScore={avgScore}
+        letterGrade={letterGrade}
+        percentile={percentile}
+      />
 
       {/* 4 Causal Dimensions Measurement Tracks */}
       <div className="space-y-3">
@@ -251,31 +267,53 @@ export function ScoreOverview({ result, host }: { result: AuditResult; host: str
       <div className="rounded-xl border border-white/8 bg-surface/50 p-3.5 space-y-2.5">
         <div className="flex items-center justify-between">
           <span className="font-mono text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
-            AUDIT COVERAGE
+            AUDIT COVERAGE & TELEMETRY
           </span>
           <span className="font-mono text-[9px] text-signal font-medium tracking-wide uppercase">
-            SCOPE BOUNDARIES
+            {result.timing?.totalMs ? `${(result.timing.totalMs / 1000).toFixed(1)}s EXECUTION` : 'REAL RUN'}
           </span>
         </div>
 
         <div className="grid grid-cols-4 gap-2 text-center font-mono">
           <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2">
-            <div className="text-sm font-bold text-foreground">18</div>
+            <div className="text-sm font-bold text-foreground">
+              {result.coverage?.pagesFetched ?? Math.max(1, result.findings.filter(f => !f.isLimitation).length > 0 ? 1 : 0)}
+            </div>
             <div className="text-[9px] text-muted-foreground uppercase mt-0.5">SAMPLED</div>
           </div>
           <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2">
-            <div className="text-sm font-bold text-emerald-400">15</div>
-            <div className="text-[9px] text-muted-foreground uppercase mt-0.5">INSPECTED</div>
+            <div className="text-sm font-bold text-emerald-400">
+              {result.coverage?.pagesRendered ?? result.coverage?.pagesFetched ?? 1}
+            </div>
+            <div className="text-[9px] text-muted-foreground uppercase mt-0.5">RENDERED</div>
           </div>
           <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2">
-            <div className="text-sm font-bold text-amber-400">2</div>
+            <div className="text-sm font-bold text-amber-400">
+              {result.coverage?.limitedCount ?? result.findings.filter((f) => f.isLimitation).length}
+            </div>
             <div className="text-[9px] text-muted-foreground uppercase mt-0.5">LIMITED</div>
           </div>
           <div className="rounded-lg border border-white/6 bg-surface-2/40 p-2">
-            <div className="text-sm font-bold text-muted-foreground">1</div>
+            <div className="text-sm font-bold text-muted-foreground">
+              {result.coverage?.skippedCount ?? 0}
+            </div>
             <div className="text-[9px] text-muted-foreground uppercase mt-0.5">SKIPPED</div>
           </div>
         </div>
+
+        {(result.coverage?.httpRequests || result.coverage?.robotsStatus || result.coverage?.stoppedReason) && (
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/6 pt-2 font-mono text-[9px] text-muted-foreground/70">
+            {result.coverage?.httpRequests ? (
+              <span>HTTP REQUESTS: <strong className="text-foreground/80">{result.coverage.httpRequests}</strong></span>
+            ) : null}
+            {result.coverage?.robotsStatus ? (
+              <span>ROBOTS.TXT: <strong className="text-foreground/80 uppercase">{result.coverage.robotsStatus}</strong></span>
+            ) : null}
+            {result.coverage?.stoppedReason ? (
+              <span>STOP: <strong className="text-foreground/80 uppercase">{result.coverage.stoppedReason}</strong></span>
+            ) : null}
+          </div>
+        )}
       </div>
     </section>
   )

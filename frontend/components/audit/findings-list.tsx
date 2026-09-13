@@ -80,27 +80,35 @@ export function FindingsList({
           </div>
 
           <div className="space-y-3 pt-1">
-            {limitations.map((f) => (
-              <div key={f.id} className="rounded-lg border border-white/6 bg-black/30 p-3 space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-xs font-semibold text-foreground/90">{f.title}</p>
-                  <span className="rounded border border-white/8 bg-white/4 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground uppercase">
-                    BOUNDARY
-                  </span>
+            {limitations.map((f) => {
+              const text = f.limitationReason ?? f.description
+              const distinctEvidence = f.evidence.filter(
+                (e) => e.detail && e.detail.trim() !== text.trim() && e.detail !== f.title
+              )
+              return (
+                <div key={f.id} className="rounded-lg border border-white/6 bg-black/30 p-3 space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-medium text-foreground/90">{f.title}</p>
+                    <span className="rounded border border-white/8 bg-white/4 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground uppercase">
+                      BOUNDARY
+                    </span>
+                  </div>
+                  <p className="text-xs leading-relaxed text-muted-foreground">
+                    {text}
+                  </p>
+                  {distinctEvidence.length > 0 && (
+                    <ul className="space-y-1 pt-1 border-t border-white/6">
+                      {distinctEvidence.map((e) => (
+                        <li key={e.id} className="flex items-baseline justify-between gap-3 font-mono text-[10px]">
+                          <span className="text-muted-foreground/80">{e.label}</span>
+                          <span className="text-foreground/70">{e.detail}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  {f.limitationReason ?? f.description}
-                </p>
-                <ul className="space-y-1 pt-1 border-t border-white/6">
-                  {f.evidence.map((e) => (
-                    <li key={e.id} className="flex items-baseline justify-between gap-3 font-mono text-[10px]">
-                      <span className="text-muted-foreground/80">{e.label}</span>
-                      <span className="text-foreground/70">{e.detail}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </section>
       )}
