@@ -332,7 +332,203 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Part 2: Behavioral Clusters, Handoff, Reasoning Quality & Verification (Soham)
+### Part 2: Entity Recognition, Trust, Content Quality, Performance & Accessibility (Harsh)
+
+#### Topic F — Entity Recognition & Entity Resolution
+
+**Primary / peer-reviewed sources:**
+1. Pham, Ngo, Luu & Nguyen — "Who's Who: Large Language Models Meet Knowledge Conflicts in Practice" (WhoQA benchmark), arXiv 2410.15737
+2. Buonocore, Gastaldi & Marani — "Disambiguation of Company Names via Deep Recurrent Networks," arXiv 2303.05391
+3. "Insights into Entity Name Evolution on Wikipedia," arXiv 1702.01172
+4. Muther & Smith — entity-linking homograph/synonym framing, arXiv 2209.00133
+5. Martinez — "Optimizing Visibility in Generative Engines: A Critical Survey of Generative Engine Optimization (2023–2026)," arXiv 2607.14035
+6. Hoffart et al. — "Robust Disambiguation of Named Entities in Text," EMNLP 2011 (CoNLL-AIDA/YAGO benchmark)
+7. LINDEN entity-linking framework (contextual-similarity candidate ranking)
+8. TAC KBP 2010 shared task (entity linking)
+9. Wikidata completeness literature: arXiv 2103.01986, 1908.11153, 1909.01109, 2311.15781, 2003.02320 (schema/property/population/linkability completeness; multilingual coverage bias)
+10. US Patent 12,169,508 — "System and method for entity disambiguation for customer relationship management"
+11. US Patent 12,182,083 / 12,380,080 (same patent family — brand/parent/subsidiary `connection_type` modeling)
+
+**Vendor / standards documentation:**
+12. Google Search Central — Organization structured-data documentation (developers.google.com/search)
+13. Google Search Central — General structured-data policies/guidelines
+14. Google Knowledge Graph Search API documentation (`kgsearch.googleapis.com`)
+15. schema.org vocabulary specification (`sameAs`, `@id`, `Organization`, `Person`, `Product`, `Brand`)
+16. W3C / OWL — `owl:sameAs` Linked Data primitive
+
+**Reviewed and explicitly rejected (unreliable commercial content):** OrganiKPI, Verlua, Schemaengineai, 5W, Squin, Stackmatix, andresseo.expert, Parse, Kalicube, lseo.com, Maria Dykstra — cited only as a documented example of the source-quality problem (Finding F-00), not as evidence.
+
+---
+
+#### Topic H — Trust, Authority & Corroboration
+
+**Primary / peer-reviewed sources:**
+1. Xu, Qi et al. — "Knowledge Conflicts for LLMs: A Survey," arXiv 2403.08319 (citing Xie et al. 2023; Jin et al. 2024a; Wan et al. 2024 within)
+2. "Whose Facts Win? LLM Source Preferences under Knowledge Conflicts," ACL Anthology 2026 (2026.acl-long.1357)
+
+**Vendor / standards documentation:**
+3. Google Search Central — "Search Rater Guidelines" blog post (developers.google.com/search/blog/2022/12/google-raters-guidelines-e-e-a-t)
+4. Google Search Central — "Creating Helpful, Reliable, People-First Content"
+5. Google Search Quality Rater Guidelines (full PDF, services.google.com/fh/files/misc/hsw-sqrg.pdf)
+
+**Flagged as a source-quality risk case (not used as evidence):** groundingpage.com (a page self-described as engineered to be machine-ingested as "corroboration" — cited only in Finding H-04 as a risk example); "DollarPocket (2025)" E-E-A-T ranking-weight statistic — explicitly rejected, not merely downgraded.
+
+---
+
+#### Topic P — Cross-Web Consistency
+
+**Primary / peer-reviewed sources:**
+1. "When Benchmarks Age: Temporal Misalignment through Large Language Model Factuality Evaluation," arXiv 2510.07238
+2. "Temporal Validity in Retrieval Memory: Eliminating Stale-Fact Errors for AI Agents over Evolving Knowledge," arXiv 2606.26511
+3. "Right Knowledge, Wrong Answer: Test-Time Steering for Temporal Fact Conflicts in Open-Weight Language Models," arXiv 2606.20959
+4. Barth — "Detecting Stale Data in Wikipedia Infoboxes," EDBT 2023 workshop (openproceedings.org)
+
+**Vendor / standards documentation:**
+5. Wikipedia — `Template:Infobox company` documentation (en.wikipedia.org, local-value-overrides-Wikidata fallback rule)
+6. Wikipedia — Conflict-of-interest editing policy (`{{edit COI}}` / Talk-page request mechanism)
+
+**Reviewed, partially credited (procedural claims verified independently, statistics not):** Five Blocks, The Mather Group (PR/reputation-management firm content — COI-editing-process description checked against and consistent with Wikipedia's own policy, treated as OBSERVATION-tier per this document's own discussion).
+
+---
+
+#### Topic M — On-site Engagement
+
+**Primary / peer-reviewed sources:**
+1. Lindgaard, Fernandes, Dudek & Brown — "Attention web designers: You have 50 milliseconds to make a good first impression!", *Behaviour & Information Technology*, 2006
+2. Robins & Holmes (2008) — credibility-assessment stabilization at ~3.42 seconds (cited within multiple independent peer-reviewed reviews)
+3. Fogg et al. — Stanford Web Credibility Research program; Prominence-Interpretation Theory
+4. Peer-reviewed "amelioration effect" study (identical content, varied visual treatment, credibility judged differently)
+5. Pirolli & Card — "Information Foraging," *Psychological Review* 106(4), 1999
+6. Card, Pirolli, Van Der Wege et al. — CHI 2001 (Information Foraging Theory refinement)
+7. Chi, Rosien, Suppattanasiri, Williams, Royer, Chow et al. — BLOODHOUND, CHI 2003
+8. Blackmon, Polson, Kitajima, Lewis — Cognitive Walkthrough for the Web (CWW)
+9. Nielsen Norman Group — synthesis of first-impression research (premature high-commitment CTA anti-pattern)
+
+**Reviewed and explicitly rejected (unreliable commercial content):** Midas Touch Infotech, Made For Web, Aspiration Marketing, SAMPS — the widely-circulated "75%/94%/38%" statistics cluster, explicitly not used as evidentiary support anywhere in this document.
+
+---
+
+#### Topic T — Root-Cause Analysis
+
+**Primary / peer-reviewed / foundational sources:**
+1. Allspaw, John — "Each necessary, but only jointly sufficient," kitchensoap.com (2012), directly citing and quoting:
+2. Hollnagel, Woods, Dekker & Cook — *Resilience Engineering* (introduction; "each necessary, but only jointly sufficient" causation model)
+3. Reason, James — "Swiss Cheese" model of accident causation (referenced via the above lineage)
+4. SafetyCulture practitioner guide — documented "5 Whys" single-sufficient-cause-assumption limitation (converging independent source)
+
+**Note:** this topic explicitly documents a mid-research pivot away from an initial line of investigation (industrial/process-engineering fault-tree and Bayesian-network RCA literature) after determining it was a poor mechanistic fit for this problem's discrete, symbolic shape — that literature is referenced in the document's own methodology note but not relied upon as evidence.
+
+---
+
+#### Topic G — Structured Data & Semantic Web
+
+**Vendor / standards documentation (primary, directly fetched):**
+1. Google Search Central — "General structured data guidelines," developers.google.com/search/docs/appearance/structured-data/sd-policies (full text directly fetched; source of the Technical/Quality guideline split, the content-mismatch rule, the Relevance/type-mismatch rule, the completeness and `@id`-linking rules)
+
+**Cross-referenced from this document series' own prior work (not independently re-sourced):**
+2. Topic F's F13-F16/F32-F36 scaffolding (Google Organization documentation, `sameAs`/`@id` primitive, Knowledge Graph API — see Topic F citations above)
+3. Topic P §4's shared comparison infrastructure
+
+**Reviewed, mixed reliability (procedural claims more accurate than in other topics; one specific dated claim rejected):** Schema Engine AI, Penaltyhammer, Over The Top SEO, Cognitive SEO, Hillweb Creations, Digital Applied — the general technical/quality-guideline and completeness claims from this cluster were independently confirmed against Google's own fetched documentation and credited at FACT tier via the primary source; a specific "Digital Applied" claim about a named March 2026 policy change was explicitly flagged as unverified and not corroborated by the live documentation.
+
+---
+
+#### Topic J — Content Quality & Knowledge Density
+
+**Primary / peer-reviewed sources:**
+1. VAGO framework: arXiv 2110.14780 (original, fake-news-detection context); arXiv 2309.06132 ("Measuring vagueness and subjectivity in texts: from symbolic to neural VAGO"); arXiv 2407.03770 (CLEF CheckThat! 2024 shared-task paper)
+2. Hedging-detection literature (deception-detection research), Springer, 2021
+3. "Beyond Fog: Measuring managerial obfuscation using LLMs," ScienceDirect, 2026
+4. RETSim — "Resilient and Efficient Text Similarity," arXiv 2311.17264 (MinHash/SimHash benchmark against NEWS-COPY and CORE datasets)
+5. Fröbe, Hagen et al. — "The Impact of Main Content Extraction on Near-Duplicate Detection," arXiv 2111.10864
+6. Weissman, Ayhan, Bradley & Lin — "Identifying Duplicate and Contradictory Information in Wikipedia," arXiv 1406.1143
+
+**Vendor / secondary (OBSERVATION-tier, attributed and not independently re-verified):**
+7. Matt Cutts (Google, then head of webspam/search-quality) — "worthless content" quote, cited consistently across independent secondary sources
+8. Google Search Central — "Creating Helpful, Reliable, People-First Content" (cross-referenced from the master research map's own citation)
+
+**Reviewed, moderate reliability:** Morningscore, ITHelps, Visively — general MinHash/canonicalization concepts confirmed accurate at a less rigorous but not clearly unreliable level.
+
+---
+
+#### Topic L — Technical Search / Discovery Signals
+
+**Vendor / standards documentation (primary, directly fetched):**
+1. Google Search Central — developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls
+2. Google Search Central — developers.google.com/search/docs/crawling-indexing/canonicalization
+3. Google Search Central — developers.google.com/search/docs/advanced/guidelines/duplicate-content
+4. Google Search Central — meta description / title tag documentation (classical CTR/snippet role, long-established)
+
+**Cross-referenced from this document series' own prior work (not independently re-sourced):**
+5. Pulkit's Topic A, Findings A17/A19 (SIGIR 2026 "What Gets Cited" study — competitive citation-selection evidence used as the mechanism justification for canonical-fragmentation concern)
+6. Topic J §1 (VAGO-based specificity scoring, reused directly for title/meta-description evaluation)
+7. Topic G §1 (content-mismatch mechanism, reused directly for title/meta-description evaluation)
+
+**Reviewed and explicitly rejected (unreliable commercial content — the clearest instance of this pattern in the whole series):** getpassionfruit.com, siteimprove.com, discoveredlabs.com, shantanaranng.com, metaflow.life, linkbuildinghq.com — the "canonical tags are AI citation IDs" narrative, treated as SPECULATION with zero primary-source support.
+
+---
+
+#### Topic S — Scoring & Severity
+
+**Primary / peer-reviewed sources:**
+1. "On the Validity of Traditional Vulnerability Scoring Systems for Adversarial Attacks against LLMs," arXiv 2412.20087
+2. "Confidently Wrong: Severity-Aware Calibration of Prompt-Injection Detectors under Attack Shift," arXiv 2606.22659
+3. "ZeroFalse: Improving Precision in Static Analysis with LLMs," arXiv 2510.02534
+
+**Vendor / standards / industry documentation:**
+4. CVSS (Common Vulnerability Scoring System) specification, maintained by FIRST — Base/Temporal/Environmental metric decomposition
+5. US Patent 9,317,692 — vulnerability-risk-analysis system (composite vs. aggregate scoring distinction)
+6. Veracode — documented layered-verification approach to static-analysis false-positive mitigation
+
+**Internally sourced (this document series' own prior work, audited directly as primary evidence for this topic):**
+7. Direct textual audit of the "Cross-references for the Combine & Code phase" sections of Topics F, H, P, M, T, G, J, L (cited by specific finding ID throughout §1)
+
+---
+
+#### Topic N — Accessibility as AI / Human Readability
+
+**Vendor / standards documentation (primary):**
+1. W3C — WCAG 2.2, Success Criterion 1.1.1 ("Non-text Content")
+2. W3C-adjacent guidance — WCAG 1.4.5 ("Avoid images of text"), including the explicit "text embedded in images is not directly accessible to search engine crawlers" statement
+3. WebAIM — alt-text technique documentation (webaim.org/techniques/alttext)
+
+**Primary empirical study:**
+4. WebAIM Million — webaim.org/projects/million/ (2026 report) and webaim.org/projects/million/2025 (seven-year, million-homepage annual accessibility study; 53.1% missing-alt-text prevalence figure; 25–35% automated-detection-ceiling statement; "questionable or repetitive alternative text" 13.4% figure, 2025 report, via Vance Bell's direct analysis)
+
+**Cross-referenced from this document series' own prior work (not independently re-sourced):**
+5. Topic F, Finding/unit F17 (image-locked-relationship false-negative risk, directly closed by this document)
+6. Topic J §1 (VAGO-based specificity scoring, reused directly for alt-text evaluation)
+7. Pulkit's Topic A, A11/A22 (raw-HTML/rendered-DOM extraction and template-clustering infrastructure, reused directly)
+
+---
+
+#### Topic O — Performance & Technical Experience
+
+**Vendor / standards documentation (primary, directly fetched):**
+1. Google Search Central — developers.google.com/search/docs/appearance/core-web-vitals (LCP/INP/CLS definitions, thresholds, and the "aligns with what our core ranking systems seek to reward" framing)
+
+**Cross-referenced from this document series' own prior work (not independently re-sourced — this topic's central method):**
+2. Pulkit's Topic A, Finding A-01 (`crawl-render-audit` — the existing rendering-dependency mechanism this document argues is largely redundant with LCP/INP)
+3. Topic M §1 (Lindgaard 2006; Robins & Holmes 2008; Fogg's Prominence-Interpretation Theory — used to justify folding the CLS-adjacent proxy into Topic M's engagement check)
+4. Topic T §3 (single-sufficient-cause classification pattern, applied to the LCP/INP-vs-rendering-dependency relationship)
+
+**Reviewed and explicitly rejected (unreliable commercial content):** corewebvitals.io, databuddy.cc, weblogic.ie — the "Core Web Vitals are a confirmed ranking factor" blanket framing, contrasted against Google's own more hedged primary-source language.
+
+---
+
+#### Cross-topic Note on Recurring Evidence-Quality Findings
+
+Five documents in this series (F, H, L, and implicitly G and O) independently identified the same pattern — a real, documented mechanism systematically overclaimed by adjacent SEO/GEO commercial content with no traceable primary-source support:
+- Topic F, Finding F-02 (structured data / schema completeness)
+- Topic H, Finding H-02 (E-E-A-T)
+- Topic L, Findings L-01/L-02 (canonical tags / title-meta tags)
+- Topic O, Finding O-01 (Core Web Vitals)
+
+This recurring finding is itself cited across the series' cross-reference sections as a candidate for a formally adopted, named review practice during the Combine phase (first proposed in Topic L §4, reinforced in Topic S §4).
+
+---
+
+### Part 3: Behavioral Clusters, Handoff, Reasoning Quality & Verification (Soham)
 
 #### Topic V — Site-Type Differentiation
 
@@ -351,7 +547,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic W — User Query → Page Matching
+#### Topic W — User Query → Page Matching
 
 **Academic:**
 - Broder, *"A Taxonomy of Web Search"* — SIGIR Forum, 2002 (sigir.org/files/forum/F2002/broder.pdf)
@@ -371,7 +567,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic X — AI-to-Human Handoff
+#### Topic X — AI-to-Human Handoff
 
 **Academic:**
 - Pirolli & Card, Information Foraging Theory (1999) — en.wikipedia.org/wiki/Information_foraging; sciencedirect.com/topics/computer-science/information-foraging; apa.org/monitor/2012/03/information; ResearchGate (Information Foraging in Information Access Environments)
@@ -387,7 +583,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic Y — Context Retention
+#### Topic Y — Context Retention
 
 **Academic:**
 - Morville & Rosenfeld, *Information Architecture for the World Wide Web* (1998–2015 editions) — en.wikipedia.org/wiki/Peter_Morville
@@ -402,7 +598,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic Z — Agent Skill Design
+#### Topic Z — Agent Skill Design
 
 **Primary specification:**
 - Agent Skills specification — github.com/agentskills/agentskills/blob/main/docs/specification.mdx
@@ -411,7 +607,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic AA — Agent Reasoning Quality
+#### Topic AA — Agent Reasoning Quality
 
 **Academic (confidence calibration):**
 - *"Overconfidence is Key: Verbalized Uncertainty Evaluation in Large Language and Vision-Language Models"* — arXiv:2405.02917
@@ -424,7 +620,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic AB — Report Design
+#### Topic AB — Report Design
 
 **Writing convention:**
 - BLUF (Bottom Line Up Front) — en.wikipedia.org/wiki/BLUF_(communication); thinkinsights.net/consulting/bottomline-upfront-bluf; legalclarity.org
@@ -437,7 +633,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic AC — Proactive Recommendations
+#### Topic AC — Proactive Recommendations
 
 **Industry methodology:**
 - seohandbook.co.uk/content-strategy/content-gap-analysis
@@ -447,7 +643,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic AD — Security / Robustness
+#### Topic AD — Security / Robustness
 
 **Foundational prompt-injection research:**
 - Greshake et al., *"Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection"* — arXiv:2302.12173
@@ -466,7 +662,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic AF — Website Template / Pattern Detection
+#### Topic AF — Website Template / Pattern Detection
 
 **Academic:**
 - ResearchGate-indexed publications on DOM-tree-path / LSH-based web-page template detection and clustering
@@ -477,7 +673,7 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Topic U — False Positives & False Negatives
+#### Topic U — False Positives & False Negatives
 
 **Regulatory precedent (U9, PDF appropriateness):**
 - SEC EDGAR filing FAQs — newsfilecorp.com/filing/edgar/faqs.php
@@ -488,6 +684,6 @@ Consolidated bibliography and empirical foundation across all research documents
 
 ---
 
-### Note on Methodology
+#### Note on Methodology
 
 Several findings across this project (marked "OBSERVATION" or "FINDING" with live-test evidence) come from direct, live web searches and fetches performed during research rather than pre-existing literature — e.g., Stripe's/Linear's actual site structure, the Harvard/MIT Coop and seven other institutions' bookstore arrangements, the Notion/Asana and Progressive/GEICO comparison-page tests. These are documented as primary-source observations with fetch/search dates noted in the originating document, distinct from cited secondary literature.
