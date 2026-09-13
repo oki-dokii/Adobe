@@ -269,9 +269,45 @@ The package has been verified end-to-end:
 
 ## Research Sources & Citations
 
-Consolidated bibliography across all research documents (Topics V, W, X, Y, Z, AA, AB, AC, AD, AF, AH, U). Organized by topic. Full documents are in the research folder; this is the citation index for the README.
+Consolidated bibliography and empirical foundation across all research documents and project investigations (Topics A–U, V–AH). Organized across foundational retrieval/standards literature and topic-specific research investigations.
 
-### Topic V — Site-Type Differentiation
+### Part 1: AI Vendor Specifications, Standards & Information Retrieval Foundations (Pulkit)
+
+#### 1. Primary AI Vendor Documentation & Technical Specifications
+- **OpenAI Developer Documentation & Bot Specifications**: Documented crawler tokens for `GPTBot` (training data collection), `OAI-SearchBot` (search indexing and citation retrieval), and `ChatGPT-User` (real-time, user-initiated direct link fetches). Details vendor-specific User-agent matching, IP ranges, and explicit search opt-out mechanics, including documented uncertainty regarding `ChatGPT-User` compliance with standard robots exclusions.
+- **Anthropic Technical & Support Documentation**: Crawler token specifications for `ClaudeBot` (training crawler), `Claude-User` (user-triggered link fetching), and `Claude-SearchBot` (live retrieval for search capabilities). Access controls, network range declarations, and rules governing agent token precedence.
+- **Google Search Central Technical Guidelines**: Sitemap protocol & `lastmod` validation operational heuristics detailing how search engines detect and discount uniform or fabricated `lastmod` timestamps; indexing and technical infrastructure specifications covering canonicalization precedence, soft 404 heuristic triggers, HTTP response code handling, JavaScript rendering queues, and crawl-budget allocation models.
+- **IETF RFC 9309 (Robots Exclusion Protocol)**: Formal syntax definitions, wildcard semantics (`*` and `$`), directive precedence (exact path length matching vs. allow/disallow precedence), and rule parsing constraints across compliant crawlers.
+
+#### 2. Peer-Reviewed Academic Literature
+- **Aggarwal et al. (2023 / 2024)** — *"GEO: Generative Engine Optimization"*: Empirical evaluation framework for content visibility in AI search engines, demonstrating how structural readability and evidence placement alter citation likelihood relative to traditional search engine optimization.
+- **Liu et al. (2023)** — *"Lost in the Middle: How Language Models Use Long Contexts"* (TACL): Identifies a U-shaped performance curve in LLM context processing, proving that models preferentially retrieve and cite facts located at the extreme beginning or end of input context windows, frequently missing information buried in the middle.
+- **Gao et al. (2023)** — *"ALCE: Enabling Large Language Models to Generate Text with Citations"* (EMNLP 2023): Benchmark formalizing citation quality metrics (fluency, correctness, and claim-source alignment), proving that explicit semantic reranking substantially improves citation accuracy compared to basic dense retrieval.
+- **Manku, Jain, & Sarma (2007)** — *"Detecting Near-Duplicates for Web Crawling"* (ACM SIGIR / Google Engineering): Describes Google's production deployment of 64-bit SimHash fingerprinting for near-duplicate page detection and template clustering at an 8-billion-page scale, validating the standard Hamming distance threshold ($\le 3$ bits out of 64).
+- **Chen et al. (2021)** — *"Evaluating Entity Disambiguation with AmbER"* (ACL 2021): Demonstrates popularity bias in information retrieval models, showing retrievers are twice as likely to pull wrong documents for lesser-known entities sharing names with prominent entities.
+- **Foundational Focused Crawling & Graph Centrality Literature**:
+  - *De Bra & Post (1994) / Hersovici et al. (1998)*: Formal algorithms for Fish-Search and Shark-Search in priority web crawling.
+  - *Kleinberg (1999)*: The HITS algorithm (Hubs and Authorities eigenvector centrality definitions).
+  - *Page et al. (1999)*: The PageRank Markov-chain model and bounds on random-surfer topic drift.
+
+#### 3. Empirical Studies & Benchmark Datasets
+- **SIGIR 2026 Controlled Citation Study (252,000-Trial Dataset)**: Multi-model controlled trial establishing that citation generation functions as a third, independent post-ranking gate, proving high search rank does not guarantee an output citation.
+- **SourceCheckup Medical & Scientific Attribution Replication Study**: Domain-specific replication study showing that 50% to 90% of citations in complex RAG-generated text are not fully supported by the underlying source passage pulled by the retriever.
+- **Yang et al. (2026)** — *"Navigating the Shift: Evaluating Generative Search Engines"* (arXiv:2601.16858): Comparative analysis of domain popularity, freshness bias, and pre-training data weight across GPT-4, Claude, Gemini, and Perplexity against standard Google search results.
+
+#### 4. Practitioner Controlled Experiments
+- **Mark Williams-Cook Controlled Schema Experiment ("The Duck Test")**: Implanted unique synthetic facts exclusively inside invalid JSON-LD code vs. visible HTML text to observe model behavior, proving that live LLM web search agents extract information directly from visible rendered text rather than parsing isolated JSON-LD structured metadata blocks at query time.
+- **SearchVIU 8-Scenario Schema & Extraction Test**: Multi-platform testing confirming that structured data markup does not independently increase LLM citation probability unless the content is mirrored in the body text.
+
+#### 5. Web Archiving & Graph Analysis Engineering Standards
+- **Spider Trap Taxonomy (Web Archiving & IR Literature)**: Formal engineering taxonomy for infinite crawler loops, specifically dynamic session IDs, recursive calendar pages, and combinatorial faceted navigation paths.
+- **Graph Theory Connectivity Definitions**: Network topology mathematical definitions distinguishing strongly connected components, weakly connected components (treating directed links as undirected), isolated orphan nodes (zero links in/out), and dead-end nodes.
+
+---
+
+### Part 2: Behavioral Clusters, Handoff, Reasoning Quality & Verification (Soham)
+
+#### Topic V — Site-Type Differentiation
 
 **Academic / authoritative:**
 - Google Search Quality Rater Guidelines (YMYL / E-E-A-T framework) — coverage, 2026
