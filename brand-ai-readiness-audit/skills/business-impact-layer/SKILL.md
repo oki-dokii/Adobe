@@ -8,10 +8,21 @@ license: MIT
 Use only after findings have been admitted and merged. It is separate from detection because it translates already-observed evidence into report ordering and never inspects a site.
 
 ## Inputs
-Canonical `Finding[]` JSON and the shared crawl's sampled-page count.
+This is a downstream presentation layer, not an independent URL crawler. It
+requires canonical `Finding[]` JSON from the upstream audit skills and the
+shared crawl's sampled-page count:
+
+- `--findings-json <canonical-findings.json>`
+- `--sampled-pages <n>`
+
+It is intentionally **not** invokable with `--url`; it has no site-fetching
+contract and depends on upstream skill output. A self-contained input fixture
+is provided at `references/example-findings.json`.
 
 ## Procedure
 1. Run `scripts/run.py --findings-json <canonical-findings.json> --sampled-pages <n>`.
+   For an independent contract check, use
+   `references/example-findings.json` as the findings input.
 2. The script invokes `scripts/lib/business_impact.py`, the executable port of the existing business-impact presentation code; it assigns ordinal exposure and computes dimension/overall scores from canonical findings.
 
 ## Output

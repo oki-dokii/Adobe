@@ -1,0 +1,24 @@
+[
+  {
+    "id": "F-EXAMPLE-001",
+    "skill_id": "ai-answerability-audit",
+    "finding_type": "wrong_page",
+    "finding_key": "example-wrong-page",
+    "title": "Example answer is on the wrong page",
+    "severity": "medium",
+    "evidence": "The answer appears only on a secondary page.",
+    "suggested_action": {
+      "summary": "Place the answer on the intent-matched landing page.",
+      "priority": "medium",
+      "what": "Direct answer",
+      "where": "Canonical landing page",
+      "how": "Add a concise declarative answer.",
+      "why": "Improves intent matching.",
+      "cost_tier": "content",
+      "proactive": false
+    },
+    "confidence": "high",
+    "affected_pages_count": 1,
+    "metrics": {}
+  }
+]

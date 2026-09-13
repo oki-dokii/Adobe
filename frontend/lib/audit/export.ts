@@ -473,7 +473,7 @@ export function generateAuditMarkdown(
   }
 
   lines.push(
-    '> ℹ️ **How Severity is Calculated:** Business-Exposure Severity is derived from an ordinal matrix combining **Funnel Priority** (High: Decision-stage e.g. pricing, purchasing, contact; Medium: Consideration-stage e.g. audience, geography, specifications; Low: Awareness-stage e.g. discovery, crawl access, identity) and **Reach Tier** (Broad: ≥50% pages affected or global directive; Cluster: 10–49% pages affected; Isolated: <10% pages affected). Broad Decision issues evaluate to CRITICAL; Isolated Decision / Broad Consideration evaluate to HIGH; Isolated Consideration / Broad Awareness evaluate to MEDIUM; Isolated Awareness evaluates to LOW.',
+    '> ℹ️ **How Severity is Calculated:** Business-Exposure Severity uses **Funnel Priority** (High = Decision, Medium = Consideration, Low = Awareness) and **Reach Tier**. Reach is **Broad** when the finding is a global access directive (`robots_fail_closed` or `ai_token_disallow`) or `affectedPages / max(sampledPages, 1) >= 0.5`; otherwise it is **Cluster** when that ratio is `>= 0.1` or `affectedPages > 1`; otherwise it is **Isolated**. The exact matrix is: Decision → Broad **CRITICAL (90)**, Cluster **CRITICAL (80)**, Isolated **HIGH (70)**; Consideration → Broad **HIGH (60)**, Cluster **HIGH (50)**, Isolated **MEDIUM (40)**; Awareness → Broad **MEDIUM (30)**, Cluster **LOW (20)**, Isolated **LOW (10)**.',
     '',
   )
 

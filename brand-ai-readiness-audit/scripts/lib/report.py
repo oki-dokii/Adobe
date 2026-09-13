@@ -117,6 +117,12 @@ def render_markdown(report: dict[str, Any]) -> str:
         lines.append("## Appendix (overflow)")
         for f in report["appendix_overflow"]:
             lines.append(f"- {f['id']}: {f['title']}")
+    lines += [
+        "",
+        "## Evidence status",
+        f"- Missing facts: {report.get('missingFacts', 'Not assessed') if isinstance(report.get('missingFacts'), str) else 'See finding objects'}",
+        f"- Corroboration: {report.get('corroboration', 'Not assessed') if isinstance(report.get('corroboration'), str) else 'See finding objects'}",
+    ]
     ss = report.get("skill_status") or report.get("metrics", {}).get("skill_status") or {}
     if ss:
         lines += [

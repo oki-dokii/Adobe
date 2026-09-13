@@ -17,5 +17,5 @@ The runtime strategy is a single crawl snapshot, a 40-page/40-render default cap
 Run:
 
 ```sh
-PYTHONPATH=scripts python3 skills/audit-orchestrator/scripts/run_audit.py --url https://example.org/ --json-out report.json
+PYTHONPATH=scripts python3 skills/audit-orchestrator/scripts/run.py --url https://your-domain.example/ --json-out report.json
 ```

@@ -72,7 +72,7 @@ def run(snapshot: CrawlSnapshot, client: HttpClient | None = None, fetch_sameas:
             action=SuggestedAction(
                 summary='Add an early sentence of the form “{Brand} is a {category} in {geo}.”',
                 where=home.url,
-                why="WhoQA-style mix-ups; Wikidata absence is not a defect.",
+                why="Entity-resolution mix-ups; absence of an external knowledge-base entry is not a defect.",
             ),
             urls=[home.url],
             category="entity",

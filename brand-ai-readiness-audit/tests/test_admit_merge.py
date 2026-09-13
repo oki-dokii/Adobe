@@ -44,10 +44,10 @@ def test_u12_non_citation():
     assert y.suppressed and y.suppress_reason == "U12"
 
 
-def test_wikipedia_absence_not_high():
-    x = f(ft="uncorroborated", title="No Wikipedia page", ev="missing wikipedia", sev="high")
+def test_optional_profile_absence_does_not_change_severity():
+    x = f(ft="uncorroborated", title="No optional external profile page", ev="missing external profile", sev="high")
     y = admit(x, SiteType())
-    assert y.severity == "low"
+    assert y.severity == "high"
 
 
 def test_parent_child_js_lock():

@@ -17,13 +17,11 @@ from lib.url import same_registrable
 
 def _source_kind(url: str) -> str:
     u = url.lower()
-    if "wikipedia.org" in u:
-        return "wikipedia_infobox"
     if any(x in u for x in ("linkedin", "twitter", "facebook", "instagram")):
         return "company_profile"
-    if "wikidata.org" in u:
-        return "wikidata"
-    return "other"
+    # Linked sameAs sources are deliberately treated as one generic public
+    # profile channel. No specific knowledge-base domain is required.
+    return "linked_public_profile"
 
 
 def run(snapshot: CrawlSnapshot, client: HttpClient | None = None, max_gets: int = 5) -> SkillResult:

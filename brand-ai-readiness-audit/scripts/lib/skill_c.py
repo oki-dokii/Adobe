@@ -190,7 +190,7 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
             continue
         url_keys = {canonical_key(p.final_url or p.url) for p in grp}
         can_keys = {canonical_key(p.canonical) for p in grp if p.canonical}
-        if len(url_keys) < 2 or (can_keys and len(can_keys) < 2):
+        if len(url_keys) < 2:
             continue
         # Localized template copies (/about vs /au/about vs /by/about vs /in/pricing)
         # are legitimate country/language variants with matching canonicals, not broken duplicate pages.
@@ -198,14 +198,27 @@ def run(snapshot: CrawlSnapshot) -> SkillResult:
         stripped_url_paths = {locale_stripped_path(p.final_url or p.url) for p in grp}
         if len(stripped_url_paths) == 1:
             base_path = next(iter(stripped_url_paths))
-            # Verify that canonical targets are also consistent with this base path or self-referential
+            # A localized copy is safe only when each source URL's canonical
+            # preserves its own locale segment. A single shared canonical for
+            # several locales is signal dilution, not a harmless template copy.
+            def locale_segment(url: str) -> str:
+                parts = [part for part in urlparse(url).path.split('/') if part]
+                return parts[0].lower() if parts and is_locale_path_segment(parts[0]) else ''
+
+            # A missing canonical remains an unknown/omitted signal for this
+            # template-copy guard (the legacy behavior covered by the
+            # localized-template test). A present canonical must be checked
+            # per source URL below.
+            if not can_keys:
+                continue
             is_locale_cluster = True
             for p in grp:
-                if p.canonical:
-                    can_stripped = locale_stripped_path(p.canonical)
-                    if can_stripped != base_path:
-                        is_locale_cluster = False
-                        break
+                if not p.canonical or locale_stripped_path(p.canonical) != base_path:
+                    is_locale_cluster = False
+                    break
+                if locale_segment(p.final_url or p.url) != locale_segment(p.canonical):
+                    is_locale_cluster = False
+                    break
             if is_locale_cluster:
                 continue
         f = make_finding(

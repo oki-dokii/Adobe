@@ -288,6 +288,22 @@ def run_audit(
     report["findings"] = [f.to_handout() for f in user]
     # Presentation-only enrichment; no new findings or fabricated estimates.
     report.update(annotate_business_impact(user, int(fetched)))
+    gap_findings = [
+        f for result in (rd, rcit, rk)
+        for f in result.findings
+        if f.severity in ("high", "critical")
+    ]
+    report["missingFacts"] = (
+        [f.to_handout() for f in gap_findings]
+        if gap_findings
+        else "No High/Critical answerability, extractability, or render gaps detected"
+    )
+    if rh is None:
+        report["corroboration"] = "Corroboration checks not run (budget skip)"
+    elif rh.findings:
+        report["corroboration"] = [f.to_handout() for f in rh.findings]
+    else:
+        report["corroboration"] = "No corroboration issues detected"
     # Serialize enriched metrics as well as the canonical internal Finding shape.
     report["findings_internal"] = [f.to_internal() for f in user]
     report["skill_status"] = skill_status

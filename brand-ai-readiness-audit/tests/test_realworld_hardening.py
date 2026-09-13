@@ -122,7 +122,7 @@ def test_classify_http_status_matrix():
     assert classify_http_access(status=403, headers={}, body="  ") == "empty"
     cap = classify_http_access(
         status=403,
-        headers={"server": "cloudflare"},
+        headers={"cf-ray": "test-ray"},
         body="<html>please complete the captcha hcaptcha</html>",
     )
     assert cap == "captcha"
@@ -134,7 +134,7 @@ def test_classify_http_status_matrix():
     assert ch == "challenge"
     cf = classify_http_access(
         status=403,
-        headers={"server": "cloudflare"},
+        headers={"cf-ray": "test-ray"},
         body="<html>short</html>",
     )
     assert cf == "challenge"

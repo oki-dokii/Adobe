@@ -99,11 +99,6 @@ def admit(finding: Finding, site_type: SiteType, pages_verified: int = 1, covera
         finding.admission = {"emitted": "suppressed", "rule": "U10"}
         return finding
 
-    # Wikipedia absence
-    if ft == "uncorroborated" and "wikipedia" in finding.title.lower() and "contradict" not in finding.title.lower():
-        if finding.severity in ("high", "critical"):
-            finding.severity = "low"
-
     # Unknown cluster: do not suppress pricing
     if cluster == "unknown" and finding.suppress_reason.startswith("V-F"):
         finding.suppressed = False

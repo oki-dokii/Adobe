@@ -34,7 +34,7 @@ _CAPTCHA = re.compile(
     r"(?:captcha|hcaptcha|recaptcha|g-recaptcha|h-captcha|funcaptcha|arkose)",
     re.I,
 )
-_CF_RAY = re.compile(r"\bcf-ray\b|cloudflare", re.I)
+_CF_RAY = re.compile(r"\bcf-ray\b", re.I)
 
 
 def classify_http_access(
@@ -60,7 +60,7 @@ def classify_http_access(
 
     captcha = bool(_CAPTCHA.search(blob))
     challenge = bool(_CHALLENGE.search(blob))
-    cf = bool(_CF_RAY.search(blob) or "cloudflare" in headers.get("server", "").lower())
+    cf = bool(_CF_RAY.search(blob))
     cf_mitigated = "cf-mitigated" in headers or "challenge" in headers.get("cf-mitigated", "").lower()
 
     if captcha and (status in (401, 403, 429, 503) or challenge or cf):
