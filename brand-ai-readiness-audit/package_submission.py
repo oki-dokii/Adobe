@@ -23,7 +23,6 @@ EXCLUDE_DIRS = {
     ".pytest_cache",
     ".git",
     "evaluation",
-    "tests",
     "docs",
     ".idea",
     ".vscode",
@@ -71,9 +70,11 @@ def create_zip(output_path: Path) -> int:
     include_paths = [
         ROOT / "marketplace.json",
         ROOT / "README.md",
+        ROOT / "pytest.ini",
         ROOT / "skills",
         ROOT / "scripts",
         ROOT / "references",
+        ROOT / "tests",
     ]
 
     total_files = 0
