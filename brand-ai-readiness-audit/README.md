@@ -261,6 +261,170 @@ Technical severity is anchored to direct evidence:
 ## Verification & Submission Integrity
 
 The package has been verified end-to-end:
-- **156 Automated Tests Passing**: Comprehensive test suite verifying all skills, timeout ladders, edge cases, and CLI handlers.
-- **Root-Level Compliance**: Generated zip package (`brand-ai-readiness-audit-submission.zip`, 0.11 MB) contains `marketplace.json` and `README.md` at root level.
+- **180 Automated Tests Passing**: Comprehensive test suite verifying all skills, timeout ladders, edge cases, and CLI handlers.
+- **Root-Level Compliance**: Generated zip package (`brand-ai-readiness-audit-submission.zip`, 0.15 MB) contains `marketplace.json`, `README.md`, `pytest.ini`, and `skills/` at root level.
 - **Clean Read-Only Network Behavior**: Enforces read-only HTTP GET/HEAD requests, strictly respecting target server policies.
+
+---
+
+## Research Sources & Citations
+
+Consolidated bibliography across all research documents (Topics V, W, X, Y, Z, AA, AB, AC, AD, AF, AH, U). Organized by topic. Full documents are in the research folder; this is the citation index for the README.
+
+### Topic V — Site-Type Differentiation
+
+**Academic / authoritative:**
+- Google Search Quality Rater Guidelines (YMYL / E-E-A-T framework) — coverage, 2026
+- Aggarwal et al., *"GEO: Generative Engine Optimization"* — arXiv:2311.09735
+
+**Live-verified primary sources (real sites, fetched/searched directly):**
+- stripe.com (footer/domain-family structure) + linear.app/docs (contrasting docs-hosting pattern)
+- en.wikipedia.org/wiki/Harvard/MIT_Cooperative_Society; businesswire.com (2021 Coop release); ask.library.harvard.edu — plus 7 more institutions independently checked: library.mcla.edu, bookstore.sdccd.edu, deanza.edu/bookstore, ccny.cuny.edu/bookstore, stjohns.edu, wilmington.edu, sjf.edu
+
+**Local-SEO / NAP practitioner sources:**
+- theedigital.com, diib.com, dentalroi.com, citationstack.com (NAP consistency/normalization)
+- Candid/GuideStar transparency-seal widget documentation; donorbox.org, nptechforgood.com (named nonprofit examples: Maya's Hope, Panthera, The Hunger Project)
+- Yelp business-listing structure, via Yext/ReviewTrackers guides
+
+---
+
+### Topic W — User Query → Page Matching
+
+**Academic:**
+- Broder, *"A Taxonomy of Web Search"* — SIGIR Forum, 2002 (sigir.org/files/forum/F2002/broder.pdf)
+- ORCAS-I dataset paper — arXiv:2205.00926
+- searchstudies.org, "Deriving Query Intents" survey
+- Yun, Kapoor, Mackert, Kouzy, Xu, Li, Wallace, *"This Treatment Works, Right? Evaluating LLM Sensitivity to Patient Question Framing in Medical QA"* — arXiv:2604.05051, 2026 (controlled experiment, 8 LLMs including Claude Sonnet 4.5 / GPT-5.1, 6,614 query pairs)
+
+**Journalism / industry coverage:**
+- Search Engine Journal / Stan Ventures coverage of the Dragon Metrics featured-snippet contradiction study (2024)
+- TechCrunch coverage of Google's 2018 multifaceted-snippets update and MUM-based snippet update
+- theoutline.com (2017 snippet-failure investigation)
+
+**Live-verified primary sources:**
+- notion.com/en-gb/compare-against/comparison-notion-vs-asana (vendor comparison page)
+- cloudwards.net, jotform.com, agencysupply.co, breeze.pm (independent third-party Notion/Asana comparisons)
+- choosefi.com, blakeinsurancegroup.com, insurancebrokers.com, learnandserve.org, insurancebrokersgroup.com, nerdwallet.com (Progressive vs. GEICO cross-industry test)
+
+---
+
+### Topic X — AI-to-Human Handoff
+
+**Academic:**
+- Pirolli & Card, Information Foraging Theory (1999) — en.wikipedia.org/wiki/Information_foraging; sciencedirect.com/topics/computer-science/information-foraging; apa.org/monitor/2012/03/information; ResearchGate (Information Foraging in Information Access Environments)
+- Fogg, Soohoo, Danielson, Marable, Stanford, Tauber, *"How Do People Evaluate a Web Site's Credibility?"* — Stanford Persuasive Technology Lab / Consumer WebWatch, 2003 (credibility.stanford.edu)
+- Prominence-Interpretation Theory — nngroup.com/articles/prominence-interpretation-theory; en.wikipedia.org/wiki/Stanford_Web_Credibility_Project
+
+**Technical standards:**
+- Scroll-To-Text-Fragment spec — developer.mozilla.org (MDN); github.com/WICG/scroll-to-text-fragment
+
+**Journalism / industry:**
+- phonearena.com (Danny Sullivan / Google featured-snippet highlight rollout, 2018-19)
+- seroundtable.com (Google "Jump to" snippet-link testing, Oct 2025)
+
+---
+
+### Topic Y — Context Retention
+
+**Academic:**
+- Morville & Rosenfeld, *Information Architecture for the World Wide Web* (1998–2015 editions) — en.wikipedia.org/wiki/Peter_Morville
+- uxmatters.com, Information Wayfinding series (Lynch's wayfinding theory applied to IA)
+- nngroup.com/articles/breadcrumb-navigation-useful (Nielsen's direct quote on breadcrumb reliability)
+
+**Explicitly flagged as lower-confidence (not adopted as fact):**
+- blog.hubspot.com, appmaster.io — specific breadcrumb-usage percentages traced to these secondary/marketing sources, deliberately excluded from this project's evidentiary claims
+
+**Project's own constraint document:**
+- Round 3 handout (read-only / stateless-crawl constraints underlying the Y-01 scoping finding)
+
+---
+
+### Topic Z — Agent Skill Design
+
+**Primary specification:**
+- Agent Skills specification — github.com/agentskills/agentskills/blob/main/docs/specification.mdx
+- agentpatterns.ai/tool-engineering/skill-frontmatter-reference
+- docs.rs/crate/agent-skills
+
+---
+
+### Topic AA — Agent Reasoning Quality
+
+**Academic (confidence calibration):**
+- *"Overconfidence is Key: Verbalized Uncertainty Evaluation in Large Language and Vision-Language Models"* — arXiv:2405.02917
+- *"ADVICE: Answer-Dependent Verbalized Confidence Estimation"* — arXiv:2510.10913
+- *"On Verbalized Confidence Scores for LLMs"* — arXiv:2412.14737
+- *"Taming Overconfidence in LLMs: Reward Calibration in RLHF"* — arXiv:2410.09724
+
+**Academic (agentic reasoning):**
+- Yao et al., *"ReAct: Synergizing Reasoning and Acting in Language Models"* — arXiv:2210.03629 (react-lm.github.io; citation record via Semantic Scholar)
+
+---
+
+### Topic AB — Report Design
+
+**Writing convention:**
+- BLUF (Bottom Line Up Front) — en.wikipedia.org/wiki/BLUF_(communication); thinkinsights.net/consulting/bottomline-upfront-bluf; legalclarity.org
+
+**Industry precedent (report structure validation):**
+- glama.ai/mcp/servers/@AgentDeskAI/browser-tools-mcp (Lighthouse-based SEO report schema)
+- glama.ai/mcp/servers/@mizchi/lighthouse-mcp (MCP tools catalog — "quick wins," "effort vs. impact matrix")
+- dribbble.com/services/141619-UI-UX-Audit-That-Unlocks-Growth (professional audit service listing)
+- justinlevitt.medium.com (first-person account of an AI-generated SEO audit's prioritization matrix)
+
+---
+
+### Topic AC — Proactive Recommendations
+
+**Industry methodology:**
+- seohandbook.co.uk/content-strategy/content-gap-analysis
+- leadwalnut.com/blog/content-gap-analysis
+- trysight.ai/blog/content-gap-analysis-ahrefs
+- hashmeta.com (content gap analysis methodology)
+
+---
+
+### Topic AD — Security / Robustness
+
+**Foundational prompt-injection research:**
+- Greshake et al., *"Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection"* — arXiv:2302.12173
+- OWASP Gen AI Security Project — LLM01: Prompt Injection
+- 2026 systematic survey of LLM-agent attack surfaces — arXiv:2604.23338 (citing WIPI, InjecAgent, Agent Security Bench)
+
+**Detection-evasion research (pressure-test findings):**
+- PhantomLint — arXiv:2508.17884 (hidden-prompt detection must be technique-agnostic)
+- Prompt-injection evasion study — arXiv:2504.11168 (character-level Unicode obfuscation)
+- Cross-domain detection-technique study — arXiv:2604.18248 (35–45% recall ceiling on subtle attacks)
+
+**Real-world incidents (journalism/industry):**
+- Lin, arXiv:2507.06185 (hidden "positive review only" instructions in 18 arXiv manuscripts, July 2025)
+- Duke University / USENIX Security study (concealed instructions in 1% of 200,000 real resumes)
+- Search Engine Journal, July 2026 coverage (Microsoft's finding of 31 companies hiding prompt injections in "Summarize with AI" buttons; also covers the academic peer-review, resume-screening, and Connecticut court-filing incidents)
+
+---
+
+### Topic AF — Website Template / Pattern Detection
+
+**Academic:**
+- ResearchGate-indexed publications on DOM-tree-path / LSH-based web-page template detection and clustering
+- USPTO patent document describing the SiteLevel(θ) template-detection algorithm
+
+**Real-world engineering precedent:**
+- github.com/d-zero-dev/nitpicker, PR #230 (open-source web-audit tool's page-template classification feature)
+
+---
+
+### Topic U — False Positives & False Negatives
+
+**Regulatory precedent (U9, PDF appropriateness):**
+- SEC EDGAR filing FAQs — newsfilecorp.com/filing/edgar/faqs.php
+- SEC PDF accessibility guidance — skynettechnologies.com/blog/sec-regulations-for-pdf-accessibility
+- Federal Register, 2025 rule on electronic submission formats — federalregister.gov
+
+*(All other findings in Topic U and Topic AH are internal syntheses cross-referencing the above sources across the other eleven documents — see each document's own "Sources" field for the specific upstream citation.)*
+
+---
+
+### Note on Methodology
+
+Several findings across this project (marked "OBSERVATION" or "FINDING" with live-test evidence) come from direct, live web searches and fetches performed during research rather than pre-existing literature — e.g., Stripe's/Linear's actual site structure, the Harvard/MIT Coop and seven other institutions' bookstore arrangements, the Notion/Asana and Progressive/GEICO comparison-page tests. These are documented as primary-source observations with fetch/search dates noted in the originating document, distinct from cited secondary literature.
