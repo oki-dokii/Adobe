@@ -382,6 +382,9 @@ def run_audit(
         "total": len(rh.findings) if rh else 0,
         "high_critical": sum(1 for finding in (rh.findings if rh else []) if finding.severity in ("high", "critical")),
     }
+    # Re-index user-facing findings consecutively so suppressed internal IDs never leak
+    for idx, f in enumerate(user, start=1):
+        f.id = f"F-{idx:03d}"
     report = build_report(
         site=urlparse(url).hostname or url,
         findings=user + [f for f in merged if f.suppressed],

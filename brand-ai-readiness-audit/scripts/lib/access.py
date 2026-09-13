@@ -26,6 +26,8 @@ _CHALLENGE = re.compile(
     r"bot detection|ddos protection by|"
     r"please wait(?: while )?(?:we )?verif|"
     r"unblocked\.to|"
+    r"client challenge|<title>\s*client challenge\s*</title>|"
+    r"_fs-ch-|datadome|perimeterx|"
     r"</noscript>\s*<div class=\"cf-"
     r")",
     re.I,

@@ -263,9 +263,11 @@ def run(snapshot: CrawlSnapshot, question_ids: list[str] | None = None) -> Skill
                 evidence=f"No supporting span in crawled corpus for {spec['id']}. Coverage: {cov_summary}. "
                 + ("K6" if spec["id"] == "K6" else ""),
                 action=SuggestedAction(
-                    summary="Add a visible, extractable sentence that answers this question on the intent-matched page.",
-                    what=spec["q"],
-                    why="Completeness gap, not a quotation-window issue.",
+                    summary=f"Add a clear, visible statement answering '{spec['q']}' on the primary landing page.",
+                    what=f"Explicit answer to: {spec['q']}",
+                    where=home.url if home else (snapshot.seed_url if snapshot else ""),
+                    how=f"Add an extractable paragraph or FAQ entry directly addressing {spec['q'].lower()}.",
+                    why="Completeness gap: AI assistants cannot synthesize an answer without a direct factual span.",
                 ),
                 urls=[home.url] if home else [snapshot.seed_url],
                 category="answerability",

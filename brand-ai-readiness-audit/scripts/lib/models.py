@@ -69,14 +69,15 @@ class SuggestedAction:
     proactive: bool = False
 
     def to_public(self) -> dict[str, Any]:
-        return {
+        out = {
             "summary": self.summary,
             "priority": self.priority,
-            "what": self.what,
-            "where": self.where,
-            "how": self.how,
-            "why": self.why,
         }
+        for fld in ("what", "where", "how", "why"):
+            val = getattr(self, fld, "")
+            if val:
+                out[fld] = val
+        return out
 
 
 @dataclass
@@ -143,6 +144,8 @@ class Finding:
                 "summary": str(sa),
                 "priority": "medium",
             }
+        ev = self.evidence or ""
+        ev_summary = ev[:120].rstrip() + ("…" if len(ev) > 120 else "")
         output = {
             "id": self.id,
             "title": self.title,
